@@ -8,7 +8,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "dayjs": "^1.8.13",
+    "dayjs": "^1.8.20",
     "fast-deep-equal": "^2.0.1",
     "mitt": "^1.1.3",
     "moment": "^2.24.0",

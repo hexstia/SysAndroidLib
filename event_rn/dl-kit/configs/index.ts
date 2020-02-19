@@ -1,5 +1,4 @@
 import { UserModel } from 'global';
-import { Dimensions, ScaledSize } from 'react-native';
 
 
 interface ConfigStyle {
@@ -10,20 +9,21 @@ interface ConfigStyle {
   /**
   *  用户信息
   */
-  userInfo: UserModel,
+  userInfo?: UserModel,
   /**
-  *  window 尺寸
+  *   临时token
   */
-  windowSize: ScaledSize
+  tempToken?: string,
+  /**
+  *  时间戳
+  */
+ timestamp?:number
 }
-
-let windowSize = Dimensions.get('window')
 
 
 const Config: ConfigStyle = {
-  apiHost: 'http://wmt.flyinke.cn',
-  userInfo: {} as UserModel,
-  windowSize
+  apiHost: 'http://test.91lanjiang.com/tcss-api',
+  userInfo: {} as UserModel
 };
 
 

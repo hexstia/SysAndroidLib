@@ -5,7 +5,7 @@ import BaseComponent from './base/baseComponent';
 import BaseNavNavgator from './base/baseNavNavgator';
 import TemplateText from './base/baseText';
 import configs from './configs';
-import constact from './configs/contacts';
+import constant from './configs/constant';
 import defaultStyle from './configs/defaultStyle';
 import ActionSheetModal from './modules/actionSheet/index';
 import audio from './modules/audio/index';
@@ -43,6 +43,6 @@ Text.defaultProps = Object.assign({}, Text.defaultProps, { allowFontScaling: fal
 console.disableYellowBox = true;
 
 
-export { Icon, ImageViewer, DatePicker, Form, BaseComponent, audio, VideoView, Region, Picker, InputArea, TemplateText, Input, createNavNavigator, createTabNavigator, msg, BaseNavNavgator, imagePicker, request, tips, configs, DefaultListView, defaultStyle, createTabRoute, DefaultModal, SearchBar, validator, constact, DefaultScrollView, ActionSheetModal, imageCamera, ImageBtn, deepEqual };
+export { Icon, ImageViewer, DatePicker, Form, BaseComponent, audio, VideoView, Region, Picker, InputArea, TemplateText, Input, createNavNavigator, createTabNavigator, msg, BaseNavNavgator, imagePicker, request, tips, configs, DefaultListView, defaultStyle, createTabRoute, DefaultModal, SearchBar, validator, constant, DefaultScrollView, ActionSheetModal, imageCamera, ImageBtn, deepEqual };
 
 

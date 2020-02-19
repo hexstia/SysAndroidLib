@@ -8,7 +8,7 @@
  * @format
  */
 
-import { createNavNavigator, createTabNavigator } from 'dl-kit';
+import { createNavNavigator } from 'dl-kit';
 import { UserModel } from 'global';
 import React, { Component } from 'react';
 import routes from './router';
@@ -28,8 +28,7 @@ export default class App extends Component<Props, {}> {
   render() {
 
 
-    let Nav = createNavNavigator(routes, 'A')
-    let Tab = createTabNavigator(routes)
+    let Nav = createNavNavigator(routes, 'Login')
     return (
       <Nav />
     );

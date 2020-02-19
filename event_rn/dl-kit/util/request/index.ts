@@ -4,7 +4,7 @@
  * Created by apple on 2017/1/3.
  */
 
-import { configs } from 'dl-kit';
+
 import Config from '../../configs';
 import msg from '../msg';
 import tips from '../tip';
@@ -24,12 +24,17 @@ interface Request {
 // 响应体
 interface Response {
 	/**
-	*  响应码   200：成功  201：token失效  500：服务器报错   404：接口找不到
+	*  响应码   200：成功  
 	*/
-	code: number,
+	status: number,
+	/**
+	*  响应数据
+	*/
 	data: any,
-	msg: string,
-	exit: any
+	/**
+	*  服务端返回的消息
+	*/
+	message: string
 }
 
 type ApiCallback = (data: Param, success: boolean) => void
@@ -81,8 +86,13 @@ export default class request {
 
 	/**
 	*  http请求参以及响应处理
+	uri:接口
+	method:请求方法
+	params：请求参数
+	loding：是否显示转动指示器
+	rreprocessing：对象应是否预处理
 	*/
-	static requestTask(url: string, method: 'POST' | 'GET', params: Param = {}, loding: boolean = false) {
+	static requestTask(url: string, method: 'POST' | 'GET', params: Param = {}, loding: boolean = false,rreprocessing:boolean=true) {
 
 		/* 处理url */
 		if (url.substring(0, 4) != "http") {
@@ -98,9 +108,7 @@ export default class request {
 			headers: {
 				Accept: 'application/json',
 				'Content-Type': method == 'GET' ? 'application/x-www-form-urlencoded;charset=UTF-8' : 'application/x-www-form-urlencoded;charset=UTF-8',
-				Authorization: Config.userInfo.token ? Config.userInfo.token : '',
-				tokenuid: configs.userInfo.id,
-				signature: configs.userInfo.token
+				Authorization: Config.userInfo.token ? Config.userInfo.token : ''
 			},
 			body: method != 'GET' && this.getParamsArray(params).join('&'),
 		};
@@ -108,7 +116,6 @@ export default class request {
 		if (loding) {
 			tips.showLoading()
 		}
-		console.log('访问参数:', requestData)
 		return new Promise<any>((resolve, reject) => {
 			this.http(url, requestData).then(
 				(res: any) => {
@@ -117,23 +124,30 @@ export default class request {
 					// 测试环境打印访问结果
 					if (__DEV__) {
 						console.log('访问接口:' + method + '==>' + url)
+						console.log('访问参数:', requestData)
 						console.log('响应数据', response)
 					}
 					if (loding) {
 						tips.hideLoading()
 					}
-					if (response.code == 200) { // 成功
-						resolve(response.data)
 
-					} else if (response.code == 201) {
-						msg.emit('logout', { code: 201, msg: 'token 失效' })
-						reject('token 失效')
-					} else { // 其他错误
-						if (loding) {
-							tips.showTips(response.msg);
+					if(rreprocessing){
+						if (response.status == 200) { // 成功
+							resolve(response.data)
+	
+						} else if (response.status == 201) {
+							msg.emit('logout', { code: 201, msg: 'token 失效' })
+							reject('token 失效')
+						} else { // 其他错误
+							if (loding) {
+								tips.showTips(response.message);
+							}
+							reject({ message: response.message });
 						}
-						reject({ message: response.msg });
+					}else{
+						resolve(response)
 					}
+					
 				},
 				(error: any) => {
 					if (__DEV__) {
@@ -156,15 +170,24 @@ export default class request {
 	*  POST 请求
 	*/
 	static post(url: string, params: Param = {}, loding: boolean = false) {
-		return this.requestTask(url, 'POST', params, loding);
+		return this.requestTask(url, 'POST', params, loding,true);
 	}
 
 	/**
 	*  GET 请求
 	*/
 	static get(url: string, params: Param = {}, loding: boolean = false) {
-		return this.requestTask(url, 'GET', params, loding);
+		return this.requestTask(url, 'GET', params, loding,true);
 	}
+
+	/**
+	*  http请求 不处理响应型
+	*/
+	static postDefault(url: string, params: Param = {}, loding: boolean = false) {
+		return this.requestTask(url, 'POST', params, loding,false);
+	}
+
+
 
 	/**
 	*  上传
@@ -191,9 +214,7 @@ export default class request {
 			headers: {
 				Accept: 'application/json',
 				'Content-Type': 'Multipart/form-data',
-				Authorization: Config.userInfo.token ? Config.userInfo.token : '',
-				tokenuid: configs.userInfo.id,
-				signature: configs.userInfo.token
+				Authorization: Config.userInfo.token ? Config.userInfo.token : ''
 			},
 			body: formData
 		}
@@ -217,15 +238,15 @@ export default class request {
 					if (loding) {
 						tips.hideLoading()
 					}
-					if (response.code == 200) { // 成功
+					if (response.status == 200) { // 成功
 						resolve(response.data)
 
-					} else if (response.code == 201) {
+					} else if (response.status == 201) {
 						reject('token 失效');
 						msg.emit('logout', { code: 201, msg: 'token 失效' })
 					} else { // 其他错误
 						if (loding) {
-							tips.showTips(response.msg);
+							tips.showTips(response.message);
 						}
 						reject({ message: '网络差，请稍后再试。' })
 					}

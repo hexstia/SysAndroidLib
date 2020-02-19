@@ -1,0 +1,6 @@
+framework module LJMobileSDK {
+  umbrella header "LJMobileSDK.h"
+
+  export *
+  module * { export * }
+}

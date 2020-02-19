@@ -1,0 +1,27 @@
+{
+  "name": "dl-kit",
+  "version": "1.0.0",
+  "description": "dingle",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "fast-deep-equal": "^2.0.1",
+    "mitt": "^1.1.3",
+    "dayjs": "^1.8.13",
+    "moment": "^2.24.0",
+    "native-base": "^2.12.1",
+    "react-native-image-crop-picker": "^0.23.1",
+    "react-native-image-zoom-viewer": "^2.2.25",
+    "react-native-picker": "^4.3.7",
+    "react-native-root-siblings": "^3.1.7",
+    "react-native-root-toast": "^3.0.2",
+    "react-native-sound": "^0.10.12",
+    "react-native-video": "^4.4.1",
+    "react-navigation": "^3.7.1",
+    "validator": "^11.1.0"
+  },
+  "author": "dingle",
+  "license": "ISC"
+}

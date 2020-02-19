@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">LanJiang_SDKDemo</string>
+    <string name="lanJiangTx">蓝将</string>
+    <string name="tiaoZ">正在跳转，请稍后……</string>
+</resources>

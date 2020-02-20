@@ -9,18 +9,12 @@ import BindAccount from '../view/login/bindAccount';
 */
 import Login from '../view/login/login';
 /**
-*  快速注册
+*  快速注册 或者找回密码
 */
-import Register from '../view/login/register';
-/**
-*  找回密码
-*/
-import RetrievePassword from '../view/login/retrievePassword';
+import RegisterOrFindAccount from '../view/login/registerOrFindAccount';
 
 export default {
   Login: { screen: Login },
-  RetrievePassword: { screen: RetrievePassword },
-  Register: { screen: Register },
+  RegisterOrFindAccount: { screen: RegisterOrFindAccount },
   BindAccount: { screen: BindAccount },
-
 }

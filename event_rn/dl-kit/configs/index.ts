@@ -11,19 +11,26 @@ interface ConfigStyle {
   */
   userInfo?: UserModel,
   /**
+  *  token
+  */
+  token?: string,
+  /**
+  *  刷新token
+  */
+  refreshToken?:string,
+  /**
   *   临时token
   */
   tempToken?: string,
   /**
   *  时间戳
   */
- timestamp?:number
+  timestamp?: number
 }
 
 
 const Config: ConfigStyle = {
   apiHost: 'http://test.91lanjiang.com/tcss-api',
-  userInfo: {} as UserModel
 };
 
 

@@ -108,7 +108,7 @@ export default class request {
 			headers: {
 				Accept: 'application/json',
 				'Content-Type': method == 'GET' ? 'application/x-www-form-urlencoded;charset=UTF-8' : 'application/x-www-form-urlencoded;charset=UTF-8',
-				Authorization: Config.userInfo.token ? Config.userInfo.token : ''
+				Authorization: Config.token || ''
 			},
 			body: method != 'GET' && this.getParamsArray(params).join('&'),
 		};
@@ -124,7 +124,7 @@ export default class request {
 					// 测试环境打印访问结果
 					if (__DEV__) {
 						console.log('访问接口:' + method + '==>' + url)
-						console.log('访问参数:', requestData)
+						console.log('访问参数:', params)
 						console.log('响应数据', response)
 					}
 					if (loding) {
@@ -135,9 +135,15 @@ export default class request {
 						if (response.status == 200) { // 成功
 							resolve(response.data)
 	
-						} else if (response.status == 201) {
+						}  else if (response.status == 40001) {
+							reject('token 需要刷新');
+							
+							
+	
+						}  else if (response.status == 40002) {
+	
+							reject('token 失效');
 							msg.emit('logout', { code: 201, msg: 'token 失效' })
-							reject('token 失效')
 						} else { // 其他错误
 							if (loding) {
 								tips.showTips(response.message);
@@ -214,7 +220,7 @@ export default class request {
 			headers: {
 				Accept: 'application/json',
 				'Content-Type': 'Multipart/form-data',
-				Authorization: Config.userInfo.token ? Config.userInfo.token : ''
+				Authorization: Config.token ? Config.token : ''
 			},
 			body: formData
 		}
@@ -241,7 +247,13 @@ export default class request {
 					if (response.status == 200) { // 成功
 						resolve(response.data)
 
-					} else if (response.status == 201) {
+					} else if (response.status == 40001) {
+						reject('token 需要刷新');
+						
+						
+
+					}  else if (response.status == 40002) {
+
 						reject('token 失效');
 						msg.emit('logout', { code: 201, msg: 'token 失效' })
 					} else { // 其他错误

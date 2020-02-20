@@ -2,7 +2,8 @@
 import { BaseNavNavgator, defaultStyle, request, tips } from 'dl-kit';
 import React from 'react';
 import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { getTempToken, isPhoneNum } from '../../module/publicFunc';
+import CheckImgCode from '../../module/checkImgCode';
+import { getTempToken, isPhoneNum, saveLoginInfo } from '../../module/publicFunc';
 
 interface State {
     loginType: 'passwordLogin' | 'verCode',
@@ -25,6 +26,7 @@ export default class Login extends BaseNavNavgator {
     }
 
     interval: NodeJS.Timeout | undefined = undefined;
+    checkImgCode: CheckImgCode | null = null;
 
     constructor(props: any) {
         super(props)
@@ -59,6 +61,7 @@ export default class Login extends BaseNavNavgator {
                             <TextInput
                                 style={{ padding: 0, flex: 1, fontSize: 16 }}
                                 autoCapitalize='none'
+                                secureTextEntry={true}
                                 autoCorrect={false}
                                 underlineColorAndroid="transparent"
                                 placeholder='请输入密码'
@@ -125,6 +128,13 @@ export default class Login extends BaseNavNavgator {
                     </TouchableOpacity>
                 </View>
 
+
+                {/* 图形验证码 */}
+                <CheckImgCode
+                    ref={modal => this.checkImgCode = modal}
+                    passCallback={this.imgCodePass}
+                />
+
             </View>
         );
     }
@@ -135,10 +145,24 @@ export default class Login extends BaseNavNavgator {
     sendVcode = () => {
 
         if (this.state.minutes > 0) { return }
+        let mobile = this.state.phone
 
-        if (isPhoneNum(this.state.phone)) {
+        if (isPhoneNum(mobile)) {
+            this.checkImgCode && this.checkImgCode.show()
+        }
+    }
+
+
+    /**
+    *  图形验证码通过
+    */
+    imgCodePass = (imageId: string) => {
+        if (this.state.minutes > 0) { return }
+
+        let mobile = this.state.phone
+        if (isPhoneNum(mobile)) {
             getTempToken((token, timestamp) => {
-                let param = { token, timestamp, mobile: this.state.phone, type: 1, sendType: 5, from: 1 }
+                let param = { token, timestamp, mobile, type: 1, sendType: 5, from: 1 }
                 request.post('/tcssPlatform/vcode/send', param, true).then(result => {
                     console.log(result)
                     tips.showTips('验证码发送成功')
@@ -146,10 +170,10 @@ export default class Login extends BaseNavNavgator {
                         minutes: 60,
                     }, this.startInterval)
                 })
-
             })
         }
     }
+
 
     /**
     *  开始计时
@@ -176,7 +200,7 @@ export default class Login extends BaseNavNavgator {
     *  跳转 找回密码
     */
     gotoRetrievePassword = () => {
-        this.navigate('RetrievePassword',{title:'找回密码'})
+        this.navigate('RegisterOrFindAccount', { title: '找回密码', type: 'FIND' })
     }
 
     /**
@@ -198,9 +222,7 @@ export default class Login extends BaseNavNavgator {
 
                 let param = { token, timestamp, mobile: phone, password, from: 1, vcode: verCode, loginType: loginType == 'passwordLogin' ? 0 : 1 }
                 request.post('/tcssPlatform/user/loginApp', param, true).then(result => {
-                    console.log(result)
-                }).catch(err => {
-                    console.log(err)
+                    saveLoginInfo(result)
                 })
             })
         }
@@ -210,7 +232,7 @@ export default class Login extends BaseNavNavgator {
     *  跳转注册页面
     */
     gotoRegisterPage = () => {
-        this.navigate('Register',{title:'快速注册'})
+        this.navigate('RegisterOrFindAccount', { title: '快速注册', type: 'REGISTER' })
     }
 
     /**

@@ -6,7 +6,9 @@
 
 const constact = {
     locationSaveKey:{
-        userInfo:'userInfo'
+        userInfo:'userInfo',
+        refreshToken:'refreshToken',
+        token:'token'
     }
 };
 

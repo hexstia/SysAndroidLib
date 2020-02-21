@@ -11,6 +11,7 @@
 import { createNavNavigator } from 'dl-kit';
 import { UserModel } from 'global';
 import React, { Component } from 'react';
+import { loadLoginInfoFromLocal } from '../module/publicFunc';
 import routes from './router';
 
 
@@ -21,8 +22,15 @@ export default class App extends Component<Props, {}> {
 
   constructor(props: Props) {
     super(props)
-    let cc:UserModel
+    let cc: UserModel
 
+    loadLoginInfoFromLocal((success => {
+      if (success) {
+
+      } else {
+
+      }
+    }))
   }
 
   render() {

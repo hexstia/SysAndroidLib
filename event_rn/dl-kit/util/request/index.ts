@@ -5,6 +5,8 @@
  */
 
 
+import { configs } from 'dl-kit';
+import { saveLoginInfo } from '../../../apps/src/module/publicFunc';
 import Config from '../../configs';
 import msg from '../msg';
 import tips from '../tip';
@@ -92,7 +94,7 @@ export default class request {
 	loding：是否显示转动指示器
 	rreprocessing：对象应是否预处理
 	*/
-	static requestTask(url: string, method: 'POST' | 'GET', params: Param = {}, loding: boolean = false,rreprocessing:boolean=true) {
+	static requestTask(url: string, method: 'POST' | 'GET', params: Param = {}, loding: boolean = false, rreprocessing: boolean = true) {
 
 		/* 处理url */
 		if (url.substring(0, 4) != "http") {
@@ -131,17 +133,25 @@ export default class request {
 						tips.hideLoading()
 					}
 
-					if(rreprocessing){
+					if (rreprocessing) {
 						if (response.status == 200) { // 成功
 							resolve(response.data)
-	
-						}  else if (response.status == 40001) {
-							reject('token 需要刷新');
-							
-							
-	
-						}  else if (response.status == 40002) {
-	
+
+						} else if (response.status == 40001) {
+							if (configs.refreshToken) {
+								// token过时 刷新一下
+								let refreshParam = { token: configs.tempToken, timestamp: configs.timestamp, refreshToken: configs.refreshToken }
+								let refreshPromise = this.requestTask('/tcssPlatform/user/refreshToken', 'POST', refreshParam, true, true).then(result => {
+									saveLoginInfo(result);
+									return this.post(url, params, loding)
+								})
+								resolve(refreshPromise) 
+							} else {
+								reject('token 失效');
+								msg.emit('logout', { code: 201, msg: 'token 失效' });
+							}
+						} else if (response.status == 40002) {
+
 							reject('token 失效');
 							msg.emit('logout', { code: 201, msg: 'token 失效' })
 						} else { // 其他错误
@@ -150,10 +160,10 @@ export default class request {
 							}
 							reject({ message: response.message });
 						}
-					}else{
+					} else {
 						resolve(response)
 					}
-					
+
 				},
 				(error: any) => {
 					if (__DEV__) {
@@ -176,21 +186,21 @@ export default class request {
 	*  POST 请求
 	*/
 	static post(url: string, params: Param = {}, loding: boolean = false) {
-		return this.requestTask(url, 'POST', params, loding,true);
+		return this.requestTask(url, 'POST', params, loding, true);
 	}
 
 	/**
 	*  GET 请求
 	*/
 	static get(url: string, params: Param = {}, loding: boolean = false) {
-		return this.requestTask(url, 'GET', params, loding,true);
+		return this.requestTask(url, 'GET', params, loding, true);
 	}
 
 	/**
 	*  http请求 不处理响应型
 	*/
 	static postDefault(url: string, params: Param = {}, loding: boolean = false) {
-		return this.requestTask(url, 'POST', params, loding,false);
+		return this.requestTask(url, 'POST', params, loding, false);
 	}
 
 
@@ -249,10 +259,10 @@ export default class request {
 
 					} else if (response.status == 40001) {
 						reject('token 需要刷新');
-						
-						
 
-					}  else if (response.status == 40002) {
+
+
+					} else if (response.status == 40002) {
 
 						reject('token 失效');
 						msg.emit('logout', { code: 201, msg: 'token 失效' })

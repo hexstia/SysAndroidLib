@@ -5,7 +5,7 @@
 
 
 import dayjs from 'dayjs';
-import { configs, request, tips, validator } from 'dl-kit';
+import { configs, msg, request, tips, validator } from 'dl-kit';
 import constact from 'dl-kit/configs/constant';
 import { UserModel } from 'global';
 import { AsyncStorage } from 'react-native';
@@ -46,6 +46,44 @@ let isPhoneNum = (phoneNum: any) => {
 
 
 /**
+*  刷新token
+*/
+let refreshToken = () => {
+
+  let refreshPromise = new Promise<any>((resolve, reject) => {
+
+    if (configs.refreshToken) {
+
+      getTempToken((tempToken, timestamp) => {
+        let refreshParam = { token: tempToken, timestamp: timestamp, refreshToken: configs.refreshToken }
+        request.postDefault('/tcssPlatform/user/refreshToken', refreshParam, true).then(result => {
+          if (result.status == 200) {
+            saveLoginInfo(result);
+            resolve('成功')
+          } else {
+            msg.emit('logout', { code: 40001, message: '身份信息过期，请重新登录' });
+            reject({ message: '刷新token失败，请重新登录' })
+          }
+
+        }).catch(err => {
+          msg.emit('logout', { code: 40001, message: '身份信息过期，请重新登录' });
+          reject({ message: '刷新token失败，请重新登录' })
+        })
+      })
+
+    } else {
+
+      reject('token 失效');
+      msg.emit('logout', { code: 40001, message: '身份信息缺失，请重新登录' });
+
+    }
+
+  })
+
+  return refreshPromise
+}
+
+/**
 *  保存登录信息
 */
 let saveLoginInfo = (loginResult: { refreshToken: string, token: string, userInfo: UserModel }) => {
@@ -61,7 +99,7 @@ let saveLoginInfo = (loginResult: { refreshToken: string, token: string, userInf
 /**
 *  从本地获取登录信息
 */
-let loadLoginInfoFromLocal = async (callBack:(success:boolean)=>void) => {
+let loadLoginInfoFromLocal = async (callBack: (success: boolean) => void) => {
   let refreshToken = await AsyncStorage.getItem(constact.locationSaveKey.refreshToken)
   let token = await AsyncStorage.getItem(constact.locationSaveKey.token)
   let userInfoStr = await AsyncStorage.getItem(constact.locationSaveKey.userInfo)
@@ -74,6 +112,7 @@ let loadLoginInfoFromLocal = async (callBack:(success:boolean)=>void) => {
       configs.refreshToken = refreshToken
       configs.token = token
       callBack(true)
+      console.log('从本地获取了用户信息', userInfo);
     } catch (error) {
       callBack(false)
     }
@@ -84,5 +123,19 @@ let loadLoginInfoFromLocal = async (callBack:(success:boolean)=>void) => {
   }
 }
 
-export { getTempToken, isPhoneNum, saveLoginInfo, loadLoginInfoFromLocal };
+
+/**
+*  退出登陆 并清除数据
+*/
+let logoutAndClear = () => {
+  configs.refreshToken = undefined
+  configs.token = undefined
+  configs.userInfo = undefined
+
+  AsyncStorage.removeItem(constact.locationSaveKey.refreshToken)
+  AsyncStorage.removeItem(constact.locationSaveKey.token)
+  AsyncStorage.removeItem(constact.locationSaveKey.userInfo)
+}
+
+export { getTempToken, isPhoneNum, saveLoginInfo, loadLoginInfoFromLocal, logoutAndClear, refreshToken };
 

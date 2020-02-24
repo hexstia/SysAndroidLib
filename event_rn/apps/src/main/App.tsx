@@ -8,9 +8,10 @@
  * @format
  */
 
-import { createNavNavigator } from 'dl-kit';
-import { UserModel } from 'global';
+import { createNavNavigator, msg, tips } from 'dl-kit';
+import { TRouterName, UserModel } from 'global';
 import React, { Component } from 'react';
+import { View } from 'react-native';
 import { loadLoginInfoFromLocal } from '../module/publicFunc';
 import routes from './router';
 
@@ -18,7 +19,16 @@ import routes from './router';
 interface Props {
   name: string
 }
+
+interface State {
+  rootRoute?: TRouterName
+
+}
+
 export default class App extends Component<Props, {}> {
+
+  state: State = {
+  }
 
   constructor(props: Props) {
     super(props)
@@ -26,20 +36,40 @@ export default class App extends Component<Props, {}> {
 
     loadLoginInfoFromLocal((success => {
       if (success) {
-
+        this.setState({ rootRoute: 'TabNavigator' })
       } else {
-
+        this.setState({ rootRoute: 'Login' })
       }
     }))
+
+    // 登出事件监听
+    msg.on('logout', (e: any) => {
+      this.setState({ rootRoute: 'Login' }, () => {
+        tips.showTips(e.message)
+      })
+    })
+
+    // 切换底层路由
+    msg.on('changeRootRoute', (e: any) => {
+      this.setState({ rootRoute: e.rootRoute })
+    })
+    
   }
 
   render() {
 
+    let { rootRoute } = this.state;
 
-    let Nav = createNavNavigator(routes, 'Login')
-    return (
-      <Nav />
-    );
+    if (rootRoute) {
+      let Nav = createNavNavigator(routes, this.state.rootRoute)
+      return (
+        <View style={{ flex: 1 }}>
+          <Nav />
+        </View>
+      );
+    } else {
+      return (<View style={{ flex: 1, backgroundColor: '#fff' }} />)
+    }
   }
 }
 

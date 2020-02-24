@@ -8,7 +8,7 @@ export default function createTabNavigator(routes: NavigationRouteConfigMap) {
   const TabNavigator = createBottomTabNavigator(routes, {
     tabBarOptions: {
       //当前选中的tab bar的文本颜色和图标颜色
-      activeTintColor: '#F21E29',
+      activeTintColor: '#6498FF',
       //当前未选中的tab bar的文本颜色和图标颜色
       inactiveTintColor: '#666',
       //是否显示tab bar的图标，默认是false
@@ -52,7 +52,7 @@ export default function createTabNavigator(routes: NavigationRouteConfigMap) {
     backBehavior: 'none',
     //通过释放非活动选项卡使用的资源来减少内存使用的优化
     removeClippedSubviews: false,
-
+    initialRouteName:'CloudPhone',
     // 自定义底部tabbar
     // tabBarComponent: props => <CustomTabBar {...props} />
   })

@@ -5,8 +5,8 @@
  */
 
 
-import { configs } from 'dl-kit';
-import { saveLoginInfo } from '../../../apps/src/module/publicFunc';
+
+import { refreshToken } from '../../../apps/src/module/publicFunc';
 import Config from '../../configs';
 import msg from '../msg';
 import tips from '../tip';
@@ -101,9 +101,16 @@ export default class request {
 			url = Config.apiHost + url
 		}
 
+		/* 没有token 就给加一个 */
+		if (!params.token) {
+			params.token = Config.token || ''
+		}
+
 		if (method == 'GET') {
 			url = url + '?' + this.getParamsArray(params).join('&');
 		}
+
+
 
 		var requestData = {
 			method,
@@ -134,32 +141,30 @@ export default class request {
 					}
 
 					if (rreprocessing) {
+
 						if (response.status == 200) { // 成功
 							resolve(response.data)
 
 						} else if (response.status == 40001) {
-							if (configs.refreshToken) {
-								// token过时 刷新一下
-								let refreshParam = { token: configs.tempToken, timestamp: configs.timestamp, refreshToken: configs.refreshToken }
-								let refreshPromise = this.requestTask('/tcssPlatform/user/refreshToken', 'POST', refreshParam, true, true).then(result => {
-									saveLoginInfo(result);
-									return this.post(url, params, loding)
-								})
-								resolve(refreshPromise) 
-							} else {
-								reject('token 失效');
-								msg.emit('logout', { code: 201, msg: 'token 失效' });
-							}
+
+							// token过时 刷新一下
+							let refreshPromise = refreshToken().then(res => {
+								return this.post(url, params, loding)
+							})
+							resolve(refreshPromise)
+
 						} else if (response.status == 40002) {
 
 							reject('token 失效');
-							msg.emit('logout', { code: 201, msg: 'token 失效' })
+							msg.emit('logout', { code: 40002, message: '身份信息失效，请重新登录' })
 						} else { // 其他错误
 							if (loding) {
 								tips.showTips(response.message);
 							}
 							reject({ message: response.message });
 						}
+
+
 					} else {
 						resolve(response)
 					}
@@ -202,8 +207,6 @@ export default class request {
 	static postDefault(url: string, params: Param = {}, loding: boolean = false) {
 		return this.requestTask(url, 'POST', params, loding, false);
 	}
-
-
 
 	/**
 	*  上传

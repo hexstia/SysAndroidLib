@@ -1,5 +1,5 @@
 
-import { BaseNavNavgator, defaultStyle, request, tips } from 'dl-kit';
+import { BaseNavNavgator, defaultStyle, msg, request, tips } from 'dl-kit';
 import React from 'react';
 import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import CheckImgCode from '../../module/checkImgCode';
@@ -223,6 +223,7 @@ export default class Login extends BaseNavNavgator {
                 let param = { token, timestamp, mobile: phone, password, from: 1, vcode: verCode, loginType: loginType == 'passwordLogin' ? 0 : 1 }
                 request.post('/tcssPlatform/user/loginApp', param, true).then(result => {
                     saveLoginInfo(result)
+                    msg.emit('changeRootRoute', { rootRoute: 'TabNavigator' })
                 })
             })
         }

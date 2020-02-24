@@ -6,6 +6,7 @@ import { Text, View } from 'react-native';
 interface State {
 }
 export default class CloudPhone extends BaseNavNavgator {
+    static navigationOptions = { header: null }
 
     state: State = {
     }

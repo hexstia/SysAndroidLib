@@ -164,7 +164,6 @@ export default class request {
 							reject({ message: response.message });
 						}
 
-
 					} else {
 						resolve(response)
 					}

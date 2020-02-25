@@ -56,24 +56,24 @@ let refreshToken = () => {
 
       getTempToken((tempToken, timestamp) => {
         let refreshParam = { token: tempToken, timestamp: timestamp, refreshToken: configs.refreshToken }
-        request.postDefault('/tcssPlatform/user/refreshToken', refreshParam, true).then(result => {
-          if (result.status == 200) {
-            saveLoginInfo(result);
+        request.postDefault('/tcssPlatform/user/refreshToken', refreshParam, true).then(response => {
+          if (response.status == 200) {
+            saveLoginInfo(response.data);
             resolve('成功')
           } else {
-            msg.emit('logout', { code: 40001, message: '身份信息过期，请重新登录' });
+            msg.emit('logout', { code: 40001, message: '刷新token失败，请重新登录' });
             reject({ message: '刷新token失败，请重新登录' })
           }
 
         }).catch(err => {
-          msg.emit('logout', { code: 40001, message: '身份信息过期，请重新登录' });
-          reject({ message: '刷新token失败，请重新登录' })
+          msg.emit('logout', { code: 40001, message: '无法刷新token，请重新登录' });
+          reject({ message: '无法刷新token，请重新登录' })
         })
       })
 
     } else {
 
-      reject('token 失效');
+      reject({ message: '身份信息缺失，请重新登录' });
       msg.emit('logout', { code: 40001, message: '身份信息缺失，请重新登录' });
 
     }
@@ -87,13 +87,17 @@ let refreshToken = () => {
 *  保存登录信息
 */
 let saveLoginInfo = (loginResult: { refreshToken: string, token: string, userInfo: UserModel }) => {
-  configs.refreshToken = loginResult.refreshToken
-  configs.token = loginResult.token
-  configs.userInfo = loginResult.userInfo
+  try {
+    let userInfoStr = JSON.stringify(loginResult.userInfo)
+    configs.refreshToken = loginResult.refreshToken
+    configs.token = loginResult.token
+    configs.userInfo = loginResult.userInfo
 
-  AsyncStorage.setItem(constact.locationSaveKey.refreshToken, loginResult.refreshToken)
-  AsyncStorage.setItem(constact.locationSaveKey.token, loginResult.token)
-  AsyncStorage.setItem(constact.locationSaveKey.userInfo, JSON.stringify(loginResult.userInfo))
+    AsyncStorage.setItem(constact.locationSaveKey.refreshToken, loginResult.refreshToken)
+    AsyncStorage.setItem(constact.locationSaveKey.token, loginResult.token)
+    AsyncStorage.setItem(constact.locationSaveKey.userInfo, userInfoStr)
+  } catch (error) {
+  }
 }
 
 /**
@@ -113,6 +117,8 @@ let loadLoginInfoFromLocal = async (callBack: (success: boolean) => void) => {
       configs.token = token
       callBack(true)
       console.log('从本地获取了用户信息', userInfo);
+      console.log('本地token：', token);
+      console.log('本地刷新token：', refreshToken);
     } catch (error) {
       callBack(false)
     }

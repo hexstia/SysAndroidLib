@@ -1,14 +1,19 @@
 
 import { BaseNavNavgator, request } from 'dl-kit';
+import { CloudPhoneModal } from 'global';
 import React from 'react';
 import { Text, View } from 'react-native';
 
 interface State {
+    showType:'viewType' | 'listType',
+    phoneList:CloudPhoneModal[],
 }
 export default class CloudPhone extends BaseNavNavgator {
     static navigationOptions = { header: null }
 
     state: State = {
+        showType:'viewType',
+        phoneList:[]
     }
 
     constructor(props: any) {
@@ -20,11 +25,11 @@ export default class CloudPhone extends BaseNavNavgator {
     *  获取云手机列表
     */
     loadData = () => {
-        let param = {}
+        let param = {page:1,pageSize:1000}
         request.post('/cloudPhone/phone/list', param, true).then(result => {
-            console.log(result)
+            console.log('获取云手机列表',result)
         }).catch(err => {
-            console.log(err)
+            console.log('获取云手机列表',err)
         })
     }
 

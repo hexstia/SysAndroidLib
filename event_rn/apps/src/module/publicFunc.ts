@@ -59,7 +59,7 @@ let refreshToken = () => {
         request.postDefault('/tcssPlatform/user/refreshToken', refreshParam, true).then(response => {
           if (response.status == 200) {
             saveLoginInfo(response.data);
-            resolve('成功')
+            resolve(response.data)
           } else {
             msg.emit('logout', { code: 40001, message: '刷新token失败，请重新登录' });
             reject({ message: '刷新token失败，请重新登录' })

@@ -39,7 +39,7 @@ export default class Login extends BaseNavNavgator {
         return (
             <View style={{ flex: 1 }}>
                 {/* logo */}
-                <Image style={{ marginTop: defaultStyle.navMarginTop() + 25, width: 75, height: 75, borderRadius: 8, backgroundColor: '#eee', alignSelf: 'center' }} />
+                <Image style={{ marginTop: defaultStyle.safeArea.navMarginTop + 25, width: 75, height: 75, borderRadius: 8, backgroundColor: '#eee', alignSelf: 'center' }} />
 
                 {/* 手机号 */}
                 <View style={{ marginTop: 25, marginHorizontal: 15, height: 45, backgroundColor: '#fff', borderRadius: 5, paddingHorizontal: 10 }}>

@@ -149,6 +149,7 @@ export default class request {
 
 							// token过时 刷新一下
 							let refreshPromise = refreshToken().then(res => {
+								params.token = res.token
 								return this.post(url, params, loding)
 							})
 							resolve(refreshPromise)

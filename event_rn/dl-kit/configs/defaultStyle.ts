@@ -3,6 +3,14 @@ let screenWidth = Dimensions.get('window').width;
 let screenHeight = Dimensions.get('window').height;
 let isHaveCatHeader = Platform.OS === 'ios' && (Math.floor(screenHeight / screenWidth * 100) === 216)
 
+let navMarginTopFunc = () => {
+    if (Platform.OS == 'android') {
+        return 0;
+    } else {
+        return isHaveCatHeader ? 44 : 20
+    }
+}
+
 export default {
 
     /**
@@ -28,16 +36,12 @@ export default {
         width: Dimensions.get('window').width,
         height: Dimensions.get('window').height
     },
-
-    navMarginTop: () => {
-        if (Platform.OS == 'android') {
-            return 0;
-        } else {
-            return isHaveCatHeader ? 44 : 20
-        }
+    
+    
+    safeArea:{
+        navMarginTop:navMarginTopFunc(),
+        navMarginBottom: isHaveCatHeader ? 34 : 0,
     },
-
-    navMarginBottom: isHaveCatHeader ? 34 : 0,
 
     isIphoneX: () => {
 

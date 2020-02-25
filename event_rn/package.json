@@ -26,6 +26,7 @@
     "react-native-section-list-get-item-layout": "^2.2.3",
     "react-native-sound": "^0.10.12",
     "react-native-svg": "^9.4.0",
+    "react-native-swiper": "^1.5.14",
     "react-native-video": "^4.4.1",
     "react-navigation": "^3.7.1",
     "validator": "^11.1.0"

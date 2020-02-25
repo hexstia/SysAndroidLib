@@ -1,12 +1,15 @@
 import React from 'react';
-import { Image, TouchableOpacity, ViewStyle } from 'react-native';
+import { Image, ImageSourcePropType, TouchableOpacity, ViewStyle } from 'react-native';
 import BaseComponent from '../../base/baseComponent';
 
 interface Props {
   style?: ViewStyle,
-  image: any,
-  onPress: () => void
-
+  source: ImageSourcePropType,
+  imgWidth: number,
+  imgHeight: number,
+  width?: number,
+  height?: number,
+  onPress: () => void,
 }
 
 export default class ImageBtn extends BaseComponent<Props> {
@@ -19,11 +22,11 @@ export default class ImageBtn extends BaseComponent<Props> {
 
   render() {
     return (
-      <TouchableOpacity style={{ ...this.props.style }} onPress={this.props.onPress}>
+      <TouchableOpacity style={{ ...this.props.style, width: this.props.width, height: this.props.height }} onPress={this.props.onPress}>
         <Image
-          style={{ flex: 1 }}
+          style={{ flex: 1, alignSelf: 'stretch', width: this.props.imgWidth, height: this.props.imgHeight }}
           resizeMode='contain'
-          source={this.props.image} />
+          source={this.props.source} />
       </TouchableOpacity>
     );
   }

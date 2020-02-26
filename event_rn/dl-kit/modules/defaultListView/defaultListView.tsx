@@ -122,9 +122,11 @@ export default class DefaultListView extends BaseComponent<Props> {
     }
 
     componentDidMount() {
-        setTimeout(() => {
-            this.onRefresh()
-        }, 500);
+        if (!this.props.useExternalSource) {
+            setTimeout(() => {
+                this.onRefresh()
+            }, 500);
+        }
     }
 
 
@@ -259,6 +261,14 @@ export default class DefaultListView extends BaseComponent<Props> {
         })
     }
 
+    /**
+    *  结束刷新
+    */
+    endRefresh = () => {
+        this.setState({
+            refreshing: false
+        })
+    }
 
     /**
   *  上拉加载数据

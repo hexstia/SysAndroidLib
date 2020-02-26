@@ -6,7 +6,7 @@ import { Image, ImageBackground, Text, TouchableOpacity, View } from 'react-nati
 import Swiper from 'react-native-swiper';
 import CloudPhoneSettingModal from '../../module/cloudPhoneSettingModal';
 import EditPhoneNameModal from '../../module/editPhoneNameModal';
-
+import TipModal from '../../module/tipModal';
 
 interface State {
     showType: 'viewType' | 'listType',
@@ -26,6 +26,7 @@ export default class CloudPhone extends BaseNavNavgator {
 
     editPhoneNameModal: EditPhoneNameModal | null = null;
     cloudPhoneSettingModal: CloudPhoneSettingModal | null = null;
+    tipModal: TipModal | null = null;
 
     constructor(props: any) {
         super(props)
@@ -71,13 +72,13 @@ export default class CloudPhone extends BaseNavNavgator {
                                     {
                                         (nowSelectPhone && nowSelectPhone.id) ? (
                                             <TouchableOpacity style={{ width: 30, height: 30, justifyContent: 'center', alignItems: 'center' }}
-                                                onPress={this.settingBtnClick}>
+                                                onPress={() => this.cloudPhoneSettingModal?.showModal(nowSelectPhone)}>
                                                 <Image style={{ width: 20, height: 20 }} resizeMode='contain' source={require('#/home/setting.png')} />
                                             </TouchableOpacity>
                                         ) : null
                                     }
                                     <TouchableOpacity style={{ width: 30, height: 30, marginLeft: 10, marginRight: 10, justifyContent: 'center', alignItems: 'center' }}
-                                        onPress={this.refreshBtnClick}>
+                                        onPress={this.loadData}>
                                         <Image style={{ width: 20, height: 20 }} resizeMode='contain' source={require('#/home/refresh.png')} />
                                     </TouchableOpacity>
                                 </View>
@@ -93,13 +94,16 @@ export default class CloudPhone extends BaseNavNavgator {
                 {/* 修改手机名称的modal */}
                 <EditPhoneNameModal
                     ref={pm => this.editPhoneNameModal = pm}
-                    placeholder={nowSelectPhone.deviceName}
-                    onChangePhoneName={this.onChangePhoneName} />
+                    updatePhoneName={this.updatePhoneName} />
 
                 {/* 手机设置弹窗 */}
                 <CloudPhoneSettingModal
-                    ref={sm => this.cloudPhoneSettingModal = sm}
-                    cloudPhone={nowSelectPhone} />
+                    ref={sm => this.cloudPhoneSettingModal = sm} />
+
+                {/* 提示框 */}
+                <TipModal
+                    ref={tm => this.tipModal = tm}
+                />
             </View>
         );
     }
@@ -134,12 +138,16 @@ export default class CloudPhone extends BaseNavNavgator {
                                         <View style={{ flex: 1, marginLeft: 15, justifyContent: 'center' }}>
                                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                                 <Text style={{ color: '#fff', fontSize: 14 }}>手机名称：{nowSelectPhone.deviceName} </Text>
-                                                <ImageBtn imgWidth={15} imgHeight={15} source={require('#/home/write.png')} onPress={this.editBtnClick} />
+                                                <ImageBtn style={{ marginLeft: 10 }}
+                                                    imgWidth={15}
+                                                    imgHeight={15}
+                                                    source={require('#/home/write.png')}
+                                                    onPress={this.editBtnClick.bind(this, nowSelectPhone)} />
                                             </View>
                                             <Text style={{ color: '#fff', fontSize: 14 }}>剩余时间：{nowSelectPhone.remainingTime}</Text>
                                         </View>
 
-                                        <ImageBtn style={{ marginRight: 13 }} imgWidth={64} imgHeight={29} source={require('#/home/xufei.png')} onPress={this.renewBtnClick} />
+                                        <ImageBtn style={{ marginRight: 13 }} imgWidth={64} imgHeight={29} source={require('#/home/xufei.png')} onPress={this.renewBtnClick.bind(this, nowSelectPhone)} />
                                     </View>
 
                                     {/* 图片 page */}
@@ -185,15 +193,34 @@ export default class CloudPhone extends BaseNavNavgator {
     *  加载 列表内容
     */
     loadListContent = () => {
-        let { phoneList, contentHeight, phoneIndex } = this.state
+        let { phoneList } = this.state
 
         return (
             <View style={{ flex: 1 }}>
                 <DefaultListView
-                useExternalSource={true}
-                dataSource={{data:phoneList,pageNum:0}}
-                renderItem={this.renderCloudPhoneCell}
-                listEmptyComponent={this.renderListEmptyComponent} />
+                    useExternalSource={true}
+                    dataSource={{ data: phoneList, pageNum: 0 }}
+                    renderItem={this.renderCloudPhoneCell}
+                    listEmptyComponent={this.renderListEmptyComponent}
+                    listHeaderComponent={this.renderListHeader} />
+            </View>
+        )
+    }
+
+    /**
+    *  列表头部
+    */
+    renderListHeader = () => {
+        let { phoneList } = this.state
+
+        return (
+            <View>
+                {
+                    phoneList.length > 0 ? (
+                        <ImageBtn style={{ marginTop: 14 }} imgWidth={134} imgHeight={39} source={require('#/home/buyPhoneBlue.png')} onPress={this.addCloudPhoneClick} />
+                    ) : null
+                }
+                <Text style={{ marginTop: 12, marginLeft: 15, color: '#999', fontSize: 16 }}>所有设备（{phoneList.length}台）</Text>
             </View>
         )
     }
@@ -201,10 +228,26 @@ export default class CloudPhone extends BaseNavNavgator {
     /**
     *  加载云手机cell
     */
-    renderCloudPhoneCell = (item:CloudPhone,index:number)=>{
+    renderCloudPhoneCell = (item: CloudPhoneModal, index: number) => {
         return (
-            <View style={{}}>
-                
+            <View style={{ marginTop: 10, marginHorizontal: 15, backgroundColor: '#fff', borderRadius: 5, flexDirection: 'row', alignItems: 'center', overflow: 'hidden' }}>
+                <Image style={{ width: 26, height: 44, marginLeft: 8 }} resizeMode='contain' source={require('#/home/phone_img.png')} />
+                <View style={{ marginLeft: 10, flex: 1 }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Text style={{ color: '#333', fontSize: 16 }}>手机名称：{item.deviceName}</Text>
+                        <ImageBtn style={{ marginLeft: 10 }}
+                            imgWidth={15}
+                            imgHeight={15}
+                            source={require('#/home/edit_grey.png')}
+                            onPress={this.editBtnClick.bind(this, item)} />
+                    </View>
+                    <Text style={{ color: '#999', fontSize: 16, marginTop: 6 }}>剩余时间：{item.remainingTime}</Text>
+                </View>
+                <ImageBtn style={{ marginRight: 15 }}
+                    imgWidth={40}
+                    imgHeight={40}
+                    source={require('#/home/player.png')}
+                    onPress={this.enterCloudPhone.bind(this, item)} />
             </View>
         )
     }
@@ -212,53 +255,38 @@ export default class CloudPhone extends BaseNavNavgator {
     /**
     *  加载空列表页面
     */
-    renderListEmptyComponent = ()=>{
+    renderListEmptyComponent = () => {
         return (
-            <View style={{flex:1}}>
-
+            <View style={{ flex: 1, alignItems: 'center' }}>
+                <Image style={{ width: 180, height: 175, marginTop: 75 }} resizeMode='contain' source={require('#/home/emptyList.png')} />
+                <ImageBtn style={{ marginTop: 9 }} imgWidth={223} imgHeight={63} source={require('#/home/buyPhone.png')}
+                    onPress={this.addCloudPhoneClick} />
             </View>
         )
-    }
-
-    /**
-    *  设置按钮点击事件
-    */
-    settingBtnClick = () => {
-        this.cloudPhoneSettingModal?.showModal();
-    }
-
-    /**
-    *  刷新按钮点击事件
-    */
-    refreshBtnClick = () => {
-        this.loadData()
     }
 
     /**
     *  添加云手机
     */
     addCloudPhoneClick = () => {
-        console.log('添加云手机');
-
+        this.navigate('PayCloudPhone', { title: '购买云手机' })
     }
 
     /**
     *  编辑按钮点击事件
     */
-    editBtnClick = () => {
-        this.editPhoneNameModal?.showModal()
+    editBtnClick = (phone: CloudPhoneModal) => {
+        this.editPhoneNameModal?.showModal(phone)
     }
 
+
     /**
-    *  确定修改手机名称
+    *  更新设备名称
     */
-    onChangePhoneName = (name: string) => {
-        let { phoneList, phoneIndex } = this.state
+    updatePhoneName = (name: string, deviceId: number) => {
 
-        let nowSelectPhone = phoneList[phoneIndex]
-
-        request.post('/cloudPhone/phone/updateDeviceName', { deviceName: name, id: nowSelectPhone.id }, true).then(newPhone => {
-            let newPhoneList = phoneList.map(pm => {
+        request.post('/cloudPhone/phone/updateDeviceName', { deviceName: name, id: deviceId }, true).then(newPhone => {
+            let newPhoneList = this.state.phoneList.map(pm => {
                 if (pm.id == newPhone.id) {
                     return newPhone
                 }
@@ -273,7 +301,14 @@ export default class CloudPhone extends BaseNavNavgator {
     /**
     *  续费按钮点击事件
     */
-    renewBtnClick = () => {
+    renewBtnClick = (cloudPhone: CloudPhoneModal) => {
+        this.navigate('PayCloudPhone', { cloudPhone, title: '续费' })
+    }
+
+    /**
+    *  进入手机
+    */
+    enterCloudPhone = (phone: CloudPhoneModal) => {
 
     }
 
@@ -283,6 +318,5 @@ export default class CloudPhone extends BaseNavNavgator {
     */
     onIndexChanged = (index: number) => {
         this.setState({ phoneIndex: index })
-        console.log(index);
     }
 }

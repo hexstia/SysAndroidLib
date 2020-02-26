@@ -38,12 +38,14 @@ export interface UserModel {
 
 }
 
-
+/**
+*  云手机
+*/
 export interface CloudPhoneModal {
     /**
     *  开始时间
     */
-    beginTime:string,
+    beginTime: string,
     /**
     *  企业编号
     */
@@ -101,6 +103,58 @@ export interface CloudPhoneModal {
     statusStr: string,
     toStatus: number,
     typeId: number,
+    /**
+    *  更新时间
+    */
+    updateTime: string,
+}
+
+
+/**
+*  商品
+*/
+export interface Product {
+    childList: any[],
+    /**
+    *  创建时间
+    */
+    createTime: string,
+    deviceId: number,
+    hoursDesc: string,
+    hoursType: string,
+    /**
+    *  id
+    */
+    id: number,
+    orderNum: string,
+    parentId: number,
+    proCode: number,
+    /**
+    *  描述
+    */
+    proDesc: string,
+    proHours: number,
+    /**
+    *  商品图片
+    */
+    proImg: string,
+    /**
+    *  商品名字
+    */
+    proName: string,
+    /**
+    *  商品价格
+    */
+    proPrice: number,
+    /**
+    *  商品状态
+    */
+    proStatus: number,
+    /**
+    *  类型id
+    */
+    typeId: number,
+    typeName: string,
     /**
     *  更新时间
     */

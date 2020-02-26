@@ -1,30 +1,22 @@
 
 import { BaseComponent } from 'dl-kit';
+import { CloudPhoneModal } from 'global';
 import React from 'react';
-import { Modal, Text, TextInput, TouchableOpacity, View, ViewStyle } from 'react-native';
+import { Modal, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 
 
 interface Props {
   /**
-  *  样式
+  *  修改云手机名称
   */
-  style?: ViewStyle,
-
-  /**
-  *  占位符
-  */
-  placeholder?: string,
-
-  /**
-  *  点击空白处是否隐藏model
-  */
-  onChangePhoneName: (name: string) => void,
+  updatePhoneName: (name: string, deviceId: number) => void,
 }
 
 interface State {
   visible: boolean,
   value: string,
+  phone?: CloudPhoneModal
 }
 /**
 *  编辑手机名称
@@ -39,12 +31,12 @@ export default class EditPhoneNameModal extends BaseComponent<Props> {
 
   }
   render() {
-    let { value } = this.state
+    let { visible, value, phone } = this.state
     return (
-      <Modal visible={this.state.visible}
+      <Modal visible={visible}
         transparent={true}
         animationType='none'>
-        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'flex-end', ...this.props.style }}>
+        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'flex-end' }}>
           <View style={{ marginHorizontal: 55, borderRadius: 5, marginBottom: 350, backgroundColor: '#fff', overflow: 'hidden' }}>
             {/* 标题 */}
             <Text style={{ color: '#000', fontSize: 16, fontWeight: '700', marginTop: 10, marginBottom: 14, alignSelf: 'center' }}>修改名称</Text>
@@ -55,7 +47,7 @@ export default class EditPhoneNameModal extends BaseComponent<Props> {
                 autoCapitalize='none'
                 autoCorrect={false}
                 underlineColorAndroid="transparent"
-                placeholder={this.props.placeholder || '请输入'}
+                placeholder={phone?.deviceName || '请输入'}
                 value={value}
                 onChangeText={text => this.setState({ value: text })}
                 maxLength={10}
@@ -92,16 +84,19 @@ export default class EditPhoneNameModal extends BaseComponent<Props> {
   */
   onConfirmClick = () => {
     this.setState({ visible: false }, () => {
-      this.props.onChangePhoneName && this.props.onChangePhoneName(this.state.value)
+      this.props.updatePhoneName(this.state.value, this.state.phone!.id)
     })
   }
 
   /**
   *  显示弹窗
   */
-  showModal = () => {
-    this.setState({ visible: true, value: '' })
+  showModal = (phone: CloudPhoneModal) => {
+    if (phone) {
+      this.setState({ visible: true, value: '', phone })
+    } else {
+      console.error('没有传云手机对象')
+    }
   }
-
 
 }

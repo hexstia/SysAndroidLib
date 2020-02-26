@@ -22,9 +22,9 @@ export default class ImageBtn extends BaseComponent<Props> {
 
   render() {
     return (
-      <TouchableOpacity style={{ ...this.props.style, width: this.props.width, height: this.props.height }} onPress={this.props.onPress}>
+      <TouchableOpacity style={{ ...this.props.style, width: this.props.width, height: this.props.height, justifyContent: 'center', alignItems: 'center' }} onPress={this.props.onPress}>
         <Image
-          style={{ flex: 1, alignSelf: 'stretch', width: this.props.imgWidth, height: this.props.imgHeight }}
+          style={{ width: this.props.imgWidth, height: this.props.imgHeight }}
           resizeMode='contain'
           source={this.props.source} />
       </TouchableOpacity>

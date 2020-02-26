@@ -6,6 +6,10 @@ import { createTabNavigator, createTabRoute } from 'dl-kit';
 */
 import CloudPhone from '../view/cloudPhone/cloudPhone';
 /**
+*  购买云手机
+*/
+import PayCloudPhone from '../view/cloudPhone/payCloudPhone';
+/**
 *  客服页面
 */
 import CustomerService from '../view/customerService/customerService';
@@ -25,6 +29,7 @@ import RegisterOrFindAccount from '../view/login/registerOrFindAccount';
 *  我的页面
 */
 import Mine from '../view/mine/mine';
+
 
 
 
@@ -62,5 +67,6 @@ export default {
   Login: { screen: Login },
   RegisterOrFindAccount: { screen: RegisterOrFindAccount },
   BindAccount: { screen: BindAccount },
-  TabNavigator:{screen:TabNavigator,navigationOptions: { header: null }}
+  TabNavigator: { screen: TabNavigator, navigationOptions: { header: null } },
+  PayCloudPhone: { screen: PayCloudPhone },
 }

@@ -5,11 +5,12 @@ import React from 'react';
 import { ImageSourcePropType, Modal, Text, View } from 'react-native';
 
 interface Props {
-  cloudPhone?: CloudPhoneModal
+
 }
 
 interface State {
   visible: boolean,
+  cloudPhone?: CloudPhoneModal
 
 }
 
@@ -91,6 +92,9 @@ export default class CloudPhoneSettingModal extends BaseComponent<Props> {
     );
   }
 
+  /**
+  *  关闭
+  */
   close = () => {
     this.setState({ visible: false })
   }
@@ -98,8 +102,8 @@ export default class CloudPhoneSettingModal extends BaseComponent<Props> {
   /**
   *  显示弹窗
   */
-  showModal = () => {
-    this.setState({ visible: true })
+  showModal = (cloudPhone: CloudPhoneModal) => {
+    this.setState({ visible: true, cloudPhone })
   }
 
   /**

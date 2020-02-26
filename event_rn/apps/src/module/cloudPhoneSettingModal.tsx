@@ -24,7 +24,7 @@ interface Item {
 */
 export default class CloudPhoneSettingModal extends BaseComponent<Props> {
   state: State = {
-    visible: true,
+    visible: false,
 
   }
   constructor(props: any) {
@@ -56,7 +56,6 @@ export default class CloudPhoneSettingModal extends BaseComponent<Props> {
 
   render() {
     let itemWidth = (defaultStyle.device.width - 50 * 2) / 3 - 1
-    console.log('itemWidth', itemWidth)
     return (
       <Modal visible={this.state.visible}
         transparent={true}
@@ -79,13 +78,12 @@ export default class CloudPhoneSettingModal extends BaseComponent<Props> {
                   return (
                     <View style={{ width: itemWidth, alignItems: 'center' }}>
                       <ImageBtn style={{ marginTop: 18 }} width={26} height={26} imgWidth={26} imgHeight={26} source={item.image} onPress={this.itemClick.bind(this, item)} />
-                      <Text style={{ color: '#999', fontSize: 12, marginTop: 8 }}>{item.title}</Text>
+                      <Text style={{ color: '#999', fontSize: 12, marginTop: 8 }} onPress={this.itemClick.bind(this, item)} >{item.title}</Text>
                     </View>
                   )
                 })
               }
             </View>
-
           </View>
 
         </View>
@@ -104,6 +102,9 @@ export default class CloudPhoneSettingModal extends BaseComponent<Props> {
     this.setState({ visible: true })
   }
 
+  /**
+  *  item 点击事件
+  */
   itemClick = (item: Item) => {
     this.setState({ visible: false }, () => {
       switch (item.action) {

@@ -1,5 +1,5 @@
 
-import { BaseNavNavgator, defaultStyle, ImageBtn, request } from 'dl-kit';
+import { BaseNavNavgator, DefaultListView, defaultStyle, ImageBtn, request } from 'dl-kit';
 import { CloudPhoneModal } from 'global';
 import React from 'react';
 import { Image, ImageBackground, Text, TouchableOpacity, View } from 'react-native';
@@ -185,8 +185,36 @@ export default class CloudPhone extends BaseNavNavgator {
     *  加载 列表内容
     */
     loadListContent = () => {
+        let { phoneList, contentHeight, phoneIndex } = this.state
+
         return (
             <View style={{ flex: 1 }}>
+                <DefaultListView
+                useExternalSource={true}
+                dataSource={{data:phoneList,pageNum:0}}
+                renderItem={this.renderCloudPhoneCell}
+                listEmptyComponent={this.renderListEmptyComponent} />
+            </View>
+        )
+    }
+
+    /**
+    *  加载云手机cell
+    */
+    renderCloudPhoneCell = (item:CloudPhone,index:number)=>{
+        return (
+            <View style={{}}>
+                
+            </View>
+        )
+    }
+
+    /**
+    *  加载空列表页面
+    */
+    renderListEmptyComponent = ()=>{
+        return (
+            <View style={{flex:1}}>
 
             </View>
         )

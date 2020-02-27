@@ -5,7 +5,7 @@ import React from 'react';
 import { ImageSourcePropType, Modal, Text, View } from 'react-native';
 
 interface Props {
-
+  onPhoneSettingAction: (action: 'reStart' | 'upFile' | 'upApp' | 'renew', cloudPhone: CloudPhoneModal) => void
 }
 
 interface State {
@@ -17,7 +17,7 @@ interface State {
 interface Item {
   image: ImageSourcePropType,
   title: string,
-  action: string,
+  action: 'reStart' | 'upFile' | 'upApp' | 'renew',
 }
 
 /**
@@ -111,21 +111,8 @@ export default class CloudPhoneSettingModal extends BaseComponent<Props> {
   */
   itemClick = (item: Item) => {
     this.setState({ visible: false }, () => {
-      switch (item.action) {
-        case 'reStart':
-          break;
-
-        case 'upFile':
-          break;
-
-        case 'upApp':
-          break;
-
-        case 'renew':
-          break;
-      }
+      this.props.onPhoneSettingAction && this.props.onPhoneSettingAction(item.action, this.state.cloudPhone!)
     })
-
   }
 
 

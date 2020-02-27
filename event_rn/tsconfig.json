@@ -16,7 +16,7 @@
     "baseUrl": "./",
     "paths": {
       "dl-kit": [
-        "./dl-kit/index.ts"
+        "./dl-kit/index.ts",
       ]
     }
   },

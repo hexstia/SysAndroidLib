@@ -10,6 +10,10 @@ import CloudPhone from '../view/cloudPhone/cloudPhone';
 */
 import PayCloudPhone from '../view/cloudPhone/payCloudPhone';
 /**
+*  支付结果
+*/
+import PayResult from '../view/cloudPhone/payResult';
+/**
 *  客服页面
 */
 import CustomerService from '../view/customerService/customerService';
@@ -26,10 +30,13 @@ import Login from '../view/login/login';
 */
 import RegisterOrFindAccount from '../view/login/registerOrFindAccount';
 /**
+*  消息列表
+*/
+import MessageList from '../view/mine/messageList';
+/**
 *  我的页面
 */
 import Mine from '../view/mine/mine';
-
 
 
 
@@ -69,4 +76,6 @@ export default {
   BindAccount: { screen: BindAccount },
   TabNavigator: { screen: TabNavigator, navigationOptions: { header: null } },
   PayCloudPhone: { screen: PayCloudPhone },
+  PayResult: { screen: PayResult },
+  MessageList: { screen: MessageList }
 }

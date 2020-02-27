@@ -13,7 +13,13 @@ interface State {
     phoneList: CloudPhoneModal[],
     contentHeight: number,
     phoneIndex: number,
+    reStartPhoneIds: number[],
+    renewPhoneIds: number[],
 }
+
+/**
+*  云手机页面
+*/
 export default class CloudPhone extends BaseNavNavgator {
     static navigationOptions = { header: null }
 
@@ -21,7 +27,9 @@ export default class CloudPhone extends BaseNavNavgator {
         showType: 'viewType',
         phoneList: [],
         contentHeight: 400,
-        phoneIndex: 0
+        phoneIndex: 0,
+        reStartPhoneIds: [],
+        renewPhoneIds: [],
     }
 
     editPhoneNameModal: EditPhoneNameModal | null = null;
@@ -40,7 +48,7 @@ export default class CloudPhone extends BaseNavNavgator {
         let param = { page: 1, pageSize: 1000 }
         request.post('/cloudPhone/phone/list', param, true).then(result => {
             console.log('获取云手机列表', result)
-            this.setState({ phoneList: [...result.list, ...result.list, ...result.list] })
+            this.setState({ phoneList: result.list })
         }).catch(err => {
             console.log('获取云手机列表', err)
         })
@@ -98,7 +106,8 @@ export default class CloudPhone extends BaseNavNavgator {
 
                 {/* 手机设置弹窗 */}
                 <CloudPhoneSettingModal
-                    ref={sm => this.cloudPhoneSettingModal = sm} />
+                    ref={sm => this.cloudPhoneSettingModal = sm}
+                    onPhoneSettingAction={this.onPhoneSettingAction} />
 
                 {/* 提示框 */}
                 <TipModal
@@ -156,7 +165,7 @@ export default class CloudPhone extends BaseNavNavgator {
                                             loop={false}
                                             removeClippedSubviews={false}
                                             showsPagination={false}
-                                            onIndexChanged={this.onIndexChanged}>
+                                            onIndexChanged={(index: number) => this.setState({ phoneIndex: index })}>
                                             {
                                                 phoneList.map((phone, index) => {
                                                     return (
@@ -231,7 +240,7 @@ export default class CloudPhone extends BaseNavNavgator {
     renderCloudPhoneCell = (item: CloudPhoneModal, index: number) => {
         return (
             <View style={{ marginTop: 10, marginHorizontal: 15, backgroundColor: '#fff', borderRadius: 5, flexDirection: 'row', alignItems: 'center', overflow: 'hidden' }}>
-                <Image style={{ width: 26, height: 44, marginLeft: 8 }} resizeMode='contain' source={require('#/home/phone_img.png')} />
+                <Image style={{ width: 26, height: 44, marginLeft: 8, marginVertical: 12 }} resizeMode='contain' source={require('#/home/phone_img.png')} />
                 <View style={{ marginLeft: 10, flex: 1 }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <Text style={{ color: '#333', fontSize: 16 }}>手机名称：{item.deviceName}</Text>
@@ -273,7 +282,7 @@ export default class CloudPhone extends BaseNavNavgator {
     }
 
     /**
-    *  编辑按钮点击事件
+    *  编辑手机名称按钮点击事件
     */
     editBtnClick = (phone: CloudPhoneModal) => {
         this.editPhoneNameModal?.showModal(phone)
@@ -299,6 +308,42 @@ export default class CloudPhone extends BaseNavNavgator {
 
 
     /**
+    *  设备设置事件
+    */
+    onPhoneSettingAction = (action: 'reStart' | 'upFile' | 'upApp' | 'renew', cloudPhone: CloudPhoneModal) => {
+        if (this.checkCloudPhone(cloudPhone)) {
+            let { reStartPhoneIds, renewPhoneIds } = this.state
+
+            switch (action) {
+                case 'reStart': // 重启
+                    this.setState({ reStartPhoneIds: [...reStartPhoneIds, cloudPhone.id] })
+                    request.post('/cloudPhone/phone/resetDevice', { deviceIds: cloudPhone.deviceId, type: 1 }, true).then(result => {
+                        this.setState({ reStartPhoneIds: this.state.reStartPhoneIds.filter(id => id != cloudPhone.id) })
+                    }).catch(err => {
+                        this.setState({ reStartPhoneIds: this.state.reStartPhoneIds.filter(id => id != cloudPhone.id) })
+                    })
+                    break;
+
+                case 'upFile':
+                    break;
+
+                case 'upApp':
+                    break;
+
+                case 'renew':
+                    this.setState({ renewPhoneIds: [...renewPhoneIds, cloudPhone.id] })
+                    request.post('/cloudPhone/phone/resetDevice', { deviceIds: cloudPhone.deviceId, type: 3 }, true).then(result => {
+                        this.setState({ renewPhoneIds: this.state.renewPhoneIds.filter(id => id != cloudPhone.id) })
+                    }).catch(err => {
+                        this.setState({ renewPhoneIds: this.state.renewPhoneIds.filter(id => id != cloudPhone.id) })
+                    })
+                    break;
+            }
+        }
+    }
+
+
+    /**
     *  续费按钮点击事件
     */
     renewBtnClick = (cloudPhone: CloudPhoneModal) => {
@@ -309,14 +354,52 @@ export default class CloudPhone extends BaseNavNavgator {
     *  进入手机
     */
     enterCloudPhone = (phone: CloudPhoneModal) => {
+        if (this.checkCloudPhone(phone)) {
 
+        }
     }
 
-
     /**
-    *  索引变化回调
+    *  检查手机状况  是否可以操作
     */
-    onIndexChanged = (index: number) => {
-        this.setState({ phoneIndex: index })
+    checkCloudPhone = (phone: CloudPhoneModal) => {
+        let { reStartPhoneIds, renewPhoneIds } = this.state
+
+        if (reStartPhoneIds.indexOf(phone.id) != -1) {
+            //此手机正在重启
+            this.tipModal?.showModal('一键重启中，请稍后…')
+            return false;
+        }
+
+        if (renewPhoneIds.indexOf(phone.id) != -1) {
+            // 此手机正在恢复出厂设置
+            this.tipModal?.showModal('一键新机中，请稍后…')
+            return false;
+        }
+
+        if (phone.status == 2) {
+            // 此手机属于被控制状态
+            this.tipModal?.showModal('其他端正在控制是否强制登录')
+            return false;
+        }
+
+        if (phone.status == 10) {
+            // 此手机 处于过期状态
+            this.tipModal?.showModal('手机已过期')
+            return false;
+        }
+
+        if (phone.status == 15) {
+            // 此手机 处于已销毁状态
+            this.tipModal?.showModal('手机已销毁')
+            return false;
+        }
+        if (phone.status == 20) {
+            // 此手机 处于离线状态
+            this.tipModal?.showModal('手机已离线')
+            return false;
+        }
+
+        return true
     }
 }

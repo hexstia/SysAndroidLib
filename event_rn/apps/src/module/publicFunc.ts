@@ -143,5 +143,34 @@ let logoutAndClear = () => {
   AsyncStorage.removeItem(constact.locationSaveKey.userInfo)
 }
 
-export { getTempToken, isPhoneNum, saveLoginInfo, loadLoginInfoFromLocal, logoutAndClear, refreshToken };
+/**
+*  获取支付状态文字
+*/
+let getOrderStatusStr = (orderStatu:number)=>{
+  // '10 下单 15支付中 20 支付完成 30 订单完成',
+  switch (orderStatu){
+    case 0:
+    return '支付失败'
+    break;
+
+    case 10:
+    return '已下单'
+    break;
+
+    case 15:
+    return '未支付'
+    break;
+
+    case 20:
+    return '支付完成'
+    break;
+
+    case 30:
+    return '订单完成'
+    break;
+  }
+
+}
+
+export { getTempToken, isPhoneNum, saveLoginInfo, loadLoginInfoFromLocal, logoutAndClear, refreshToken, getOrderStatusStr };
 

@@ -1,6 +1,6 @@
 
 
-import { createTabNavigator, createTabRoute } from 'dl-kit';
+import { BaseWebView, createTabNavigator, createTabRoute } from 'dl-kit';
 /**
 *  云手机页面
 */
@@ -30,6 +30,14 @@ import Login from '../view/login/login';
 */
 import RegisterOrFindAccount from '../view/login/registerOrFindAccount';
 /**
+*  修改手机号
+*/
+import ChangePhoneNum from '../view/mine/changePhoneNum';
+/**
+*  设备列表
+*/
+import DeviceList from '../view/mine/deviceList';
+/**
 *  消息列表
 */
 import MessageList from '../view/mine/messageList';
@@ -37,7 +45,18 @@ import MessageList from '../view/mine/messageList';
 *  我的页面
 */
 import Mine from '../view/mine/mine';
-
+/**
+*  订单详情
+*/
+import OrderDetail from '../view/mine/orderDetail';
+/**
+*  我的订单
+*/
+import OrderList from '../view/mine/orderList';
+/**
+*  系统设置
+*/
+import SysSetting from '../view/mine/sysSetting';
 
 
 
@@ -77,5 +96,11 @@ export default {
   TabNavigator: { screen: TabNavigator, navigationOptions: { header: null } },
   PayCloudPhone: { screen: PayCloudPhone },
   PayResult: { screen: PayResult },
-  MessageList: { screen: MessageList }
+  MessageList: { screen: MessageList },
+  BaseWebView: { screen: BaseWebView },
+  OrderList: { screen: OrderList },
+  DeviceList: { screen: DeviceList },
+  ChangePhoneNum: { screen: ChangePhoneNum },
+  SysSetting: { screen: SysSetting },
+  OrderDetail: { screen: OrderDetail },
 }

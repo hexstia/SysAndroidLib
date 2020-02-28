@@ -9,6 +9,7 @@ import constant from './configs/constant';
 import defaultStyle from './configs/defaultStyle';
 import ActionSheetModal from './modules/actionSheet/index';
 import audio from './modules/audio/index';
+import BaseWebView from './modules/baseWebView/baseWebView';
 import DefaultListView from './modules/defaultListView/defaultListView';
 import DefaultModal from './modules/defaultModal/defaultModal';
 import DefaultScrollView from './modules/defaultScrollView/defaultScrollView';
@@ -43,6 +44,6 @@ Text.defaultProps = Object.assign({}, Text.defaultProps, { allowFontScaling: fal
 console.disableYellowBox = true;
 
 
-export { Icon, ImageViewer, DatePicker, Form, BaseComponent, audio, VideoView, Region, Picker, InputArea, TemplateText, Input, createNavNavigator, createTabNavigator, msg, BaseNavNavgator, imagePicker, request, tips, configs, DefaultListView, defaultStyle, createTabRoute, DefaultModal, SearchBar, validator, constant, DefaultScrollView, ActionSheetModal, imageCamera, ImageBtn, deepEqual };
+export { Icon, ImageViewer, DatePicker, Form, BaseComponent, audio, VideoView, BaseWebView, Region, Picker, InputArea, TemplateText, Input, createNavNavigator, createTabNavigator, msg, BaseNavNavgator, imagePicker, request, tips, configs, DefaultListView, defaultStyle, createTabRoute, DefaultModal, SearchBar, validator, constant, DefaultScrollView, ActionSheetModal, imageCamera, ImageBtn, deepEqual };
 
 

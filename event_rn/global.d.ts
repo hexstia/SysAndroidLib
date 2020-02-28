@@ -161,5 +161,139 @@ export interface Product {
     updateTime: string,
 }
 
+
+/**
+*  消息
+*/
+export interface Message {
+    appStatus: number,
+    appStatusStr: string,
+    backId: number,
+    /**
+    *  内容
+    */
+    content: string,
+    /**
+    *  创建时间
+    */
+    createTime: number,
+    endTime: number,
+    id: number,
+    nextId: number,
+    noticeId: number,
+    pcStatus: number,
+    pcStatusStr: string,
+    proType: number,
+    proTypeStr: string,
+    /**
+    *  阅读情况 1:已读  2:未读
+    */
+    readStatus: number,
+    searchValue: string,
+    startTime: number,
+    /**
+    *  标题
+    */
+    title: string,
+    userId: number,
+}
+
+export interface OrderDetailItem {
+    /**
+    *  创建时间
+    */
+    createTime: string,
+    id: number,
+    /**
+    *  数量
+    */
+    num: number,
+    orderId: number,
+    proHours: number,
+    /**
+    *  商品id
+    */
+    proId: number,
+    /**
+    *  商品图片
+    */
+    proImg: string,
+    /**
+    *  商品名称
+    */
+    proName: string,
+    /**
+    *  商品金额
+    */
+    proPrice: number,
+    renewParameter: string,
+    updateTime: string,
+}
+
+
+/**
+*  订单
+*/
+export interface OrderInfo {
+    /**
+    *  创建时间
+    */
+    createTime: string
+    /**
+    *  详情列表
+    */
+    detailList: OrderDetailItem[]
+    id: number
+    mobile: string
+    /**
+    *  支付金额
+    */
+    orderAmount: number
+    orderIds: string
+    /**
+    *  订单编号
+    */
+    orderNumber: string
+    /**
+    *  订单状态    '10 下单 15支付中 20 支付完成 30 订单完成',
+    */
+    orderStatus: number
+    /**
+    *  订单时间
+    */
+    orderTime: string
+    /**
+    *  订单状态
+    */
+    orderType: number
+    ordreInvoice: number
+    paramProName: string
+    paramProType: string
+    /**
+    *  订单金额
+    */
+    payAmount: string
+    payEndTime: string
+    payStartTime: string
+    payStatus: string
+    payTime: string
+    payType: string
+    proHours: string
+    proPrice: string
+    proTypeId: string
+    renewParameter: string
+    /**
+    *  更新时间
+    */
+    updateTime: string
+    /**
+    *  用户id
+    */
+    userId: number
+    userName: string
+
+}
+
+
 // 导出模型
 export type TRouterName = keyof typeof router;

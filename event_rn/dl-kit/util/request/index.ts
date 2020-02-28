@@ -123,10 +123,7 @@ export default class request {
 		if (loding) {
 			tips.showLoading()
 		}
-		if (__DEV__) {
-			console.log('访问接口:' + method + '==>' + url)
-			console.log('访问参数:', params)
-		}
+		
 		return new Promise<any>((resolve, reject) => {
 			this.http(url, requestData).then(
 				(res: any) => {

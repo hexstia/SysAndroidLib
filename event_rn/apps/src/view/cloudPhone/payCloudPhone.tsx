@@ -160,21 +160,18 @@ export default class PayCloudPhone extends BaseNavNavgator {
       // 续费
       let deviceId = cloudPhone.deviceId
       let product = [{ proId, deviceId }]
-      request.post('/tcssPlatform/user/renewCreateOrder', { productJson: JSON.stringify(product) }, true).then(res => {
+      request.post('/tcssPlatform/order/renewCreateOrder', { productJson: JSON.stringify(product) }, true).then(res => {
         this.orderPay(res.order.id);
       })
     } else {
       // 确认订单
-      // request.post('/tcssPlatform/order/confirmOrder', { productArr: proId }, true).then(res => {
-
-      // })
-
-      // 创建订单
-      let product = [{ proId, num: proNum }]
-      request.post('/tcssPlatform/order/createOrder', { productJson: JSON.stringify(product) }, true).then(res => {
-        this.orderPay(res.order.id)
+      request.post('/tcssPlatform/order/confirmOrder', { productArr: JSON.stringify([proId]) }, true).then(res => {
+        // 创建订单
+        let product = [{ proId: res.list[0].id, num: proNum }]
+        request.post('/tcssPlatform/order/createOrder', { productJson: JSON.stringify(product) }, true).then(res => {
+          this.orderPay(res.order.id)
+        })
       })
-
     }
   }
 

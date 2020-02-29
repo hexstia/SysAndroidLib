@@ -222,10 +222,11 @@ export default class request {
 		paths.forEach((path, index) => {
 			var arr = path.split('/');
 			let file = { uri: path, type: 'image/jpeg', name: arr[arr.length - 1] };
-			formData.append('file' + index, file);
+			formData.append('file', file);
 		})
 
 		formData.append('uploadType', 'moments')
+		formData.append('token', Config.token || '')
 
 		let requestData = {
 			method: "POST",
@@ -241,7 +242,7 @@ export default class request {
 			tips.showLoading('上传中...', 60000)
 		}
 
-		return new Promise((resolve, reject) => {
+		return new Promise<any>((resolve, reject) => {
 			this.http(url, requestData).then(
 				(res: any) => {
 					let response = res as Response

@@ -21,8 +21,6 @@ export default class DeviceList extends BaseNavNavgator {
     constructor(props: any) {
         super(props)
 
-
-
     }
 
     listView: DefaultListView | null = null;

@@ -198,6 +198,9 @@ export interface Message {
     userId: number,
 }
 
+/**
+*  
+*/
 export interface OrderDetailItem {
     /**
     *  创建时间
@@ -294,6 +297,76 @@ export interface OrderInfo {
 
 }
 
+
+/**
+*  问题对象
+*/
+interface Question {
+    /**
+    *  内容
+    */
+    content: string
+    /**
+    *  创建时间
+    */
+    createTime: number
+    /**
+    *  结束时间
+    */
+    endTime: number
+    id: number
+    /**
+    *  回答内容
+    */
+    replyContent: string
+    searchValue: string
+    startTime: number
+    /**
+    *  状态
+    */
+    status: number
+    /**
+    *  状态文案
+    */
+    statusStr: string
+    /**
+    *  标题
+    */
+    title: string
+    /**
+    *  用户id
+    */
+    userId: number
+    userImg: string
+    /**
+    *  用户名字
+    */
+    userName: string
+}
+
+
+/**
+*  广告数据
+*/
+export interface Banner {
+    bannerType: number
+    bannerTypeStr: string
+    createTime: number
+    endTime: number
+    id: number
+    imagePath: string
+    proType: number
+    proTypeStr: string
+    searchValue: string
+    skipUrl: string
+    sort: number
+    startTime: number
+    status: number
+    statusStr: string
+    title: string
+    type: number
+    typeStr: string
+}
 
 // 导出模型
 export type TRouterName = keyof typeof router;

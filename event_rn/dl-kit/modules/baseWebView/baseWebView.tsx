@@ -18,23 +18,31 @@ export default class BaseWebView extends BaseNavNavgator {
     super(props)
   }
   render() {
-    let {uri,htmlStr} = this.data
-    let source:any = {}
-    if(uri){
-      source={uri}
-    }else if(htmlStr){
-      source={html:htmlStr}
-      if(Platform.OS == 'android'){
+    let { uri, htmlStr } = this.data
+    let source: any = {}
+    if (uri) {
+
+      if (uri.substring(0, 4) != 'http') {
+        source = { uri: `http://${uri}` }
+      } else {
+        source = { uri }
+
+      }
+    } else if (htmlStr) {
+
+      source = { html: htmlStr }
+      if (Platform.OS == 'android') {
         source.baseUrl = 's'
       }
+      
     }
 
-    console.log('网页数据源',source)
+    console.log('网页数据源', source)
     return (
       <View style={{ flex: 1 }}>
         <WebView
-        style={{flex:1}}
-        source={source} 
+          style={{ flex: 1 }}
+          source={source}
         />
       </View>
     );

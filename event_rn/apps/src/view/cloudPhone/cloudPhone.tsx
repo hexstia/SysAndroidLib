@@ -1,8 +1,8 @@
 
 import { BaseNavNavgator, DefaultListView, defaultStyle, ImageBtn, request } from 'dl-kit';
-import { CloudPhoneModal } from 'global';
+import { Banner, CloudPhoneModal } from 'global';
 import React from 'react';
-import { Image, ImageBackground, Text, TouchableOpacity, View } from 'react-native';
+import { Image, ImageBackground, Platform, Text, TouchableOpacity, View } from 'react-native';
 import Swiper from 'react-native-swiper';
 import CloudPhoneSettingModal from '../../module/cloudPhoneSettingModal';
 import EditPhoneNameModal from '../../module/editPhoneNameModal';
@@ -15,6 +15,7 @@ interface State {
     phoneIndex: number,
     reStartPhoneIds: number[],
     renewPhoneIds: number[],
+    bannerDatas: Banner[]
 }
 
 /**
@@ -30,6 +31,7 @@ export default class CloudPhone extends BaseNavNavgator {
         phoneIndex: 0,
         reStartPhoneIds: [],
         renewPhoneIds: [],
+        bannerDatas: [],
     }
 
     editPhoneNameModal: EditPhoneNameModal | null = null;
@@ -51,6 +53,10 @@ export default class CloudPhone extends BaseNavNavgator {
             this.setState({ phoneList: result.list })
         }).catch(err => {
             console.log('获取云手机列表', err)
+        })
+
+        request.post('/tcssPlatform/user/queryAdBanner', { type: Platform.OS == 'ios' ? 2 : 1, proType: 1 }, true).then(result => {
+            this.setState({ bannerDatas: result.list })
         })
     }
 
@@ -121,7 +127,7 @@ export default class CloudPhone extends BaseNavNavgator {
     *  加载 视图内容
     */
     loadViewContent = () => {
-        let { phoneList, contentHeight, phoneIndex } = this.state
+        let { phoneList, contentHeight, phoneIndex, bannerDatas } = this.state
         let addImgHeight = contentHeight - 10
         let addImgWith = Math.floor(addImgHeight * (210 / 413))
         let nowSelectPhone = phoneList[phoneIndex]
@@ -191,6 +197,25 @@ export default class CloudPhone extends BaseNavNavgator {
 
                 {/* 广告 */}
                 <View style={{ height: 56, backgroundColor: '#eee' }}>
+                    {
+                        bannerDatas.length > 0 ? (
+                            <Swiper
+                                loop={true}
+                                autoplay={true}
+                                removeClippedSubviews={false}
+
+                                paginationStyle={{ bottom: 1 }}
+                                onTouchStart={this.bannerClick}>
+                                {
+                                    bannerDatas.map((banner, index) => {
+                                        return (
+                                            <Image style={{ flex: 1 }} source={{ uri: banner.imagePath }} />
+                                        )
+                                    })
+                                }
+                            </Swiper>
+                        ) : null
+                    }
 
                 </View>
 
@@ -357,6 +382,19 @@ export default class CloudPhone extends BaseNavNavgator {
         if (this.checkCloudPhone(phone)) {
 
         }
+    }
+
+    /**
+    *  banner 点击事件
+    */
+    bannerClick = (swiper: any, data: { index: number }) => {
+        console.log(data);
+        console.log(this.state.bannerDatas[data.index])
+        let banner = this.state.bannerDatas[data.index]
+        if (banner) {
+            this.navigate('BaseWebView', { title: banner.proTypeStr, uri: banner.skipUrl })
+        }
+
     }
 
     /**

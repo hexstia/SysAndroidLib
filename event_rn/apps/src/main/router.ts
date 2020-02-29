@@ -18,6 +18,18 @@ import PayResult from '../view/cloudPhone/payResult';
 */
 import CustomerService from '../view/customerService/customerService';
 /**
+*  新建消息
+*/
+import NewQuestion from '../view/customerService/newQuestion';
+/**
+*  问题详情
+*/
+import QuestionDetail from '../view/customerService/questionDetail';
+/**
+*  问题列表
+*/
+import QuestionList from '../view/customerService/questionList';
+/**
 *  绑定账号
 */
 import BindAccount from '../view/login/bindAccount';
@@ -103,4 +115,9 @@ export default {
   ChangePhoneNum: { screen: ChangePhoneNum },
   SysSetting: { screen: SysSetting },
   OrderDetail: { screen: OrderDetail },
+  QuestionList: { screen: QuestionList },
+  NewQuestion:{screen:NewQuestion},
+  QuestionDetail:{screen:QuestionDetail},
+
+  
 }

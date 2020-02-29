@@ -125,7 +125,17 @@ export default class RegisterOrFindAccount extends BaseNavNavgator {
         let mobile = this.state.mobile
 
         if (isPhoneNum(mobile)) {
-            this.checkImgCode && this.checkImgCode.show()
+            if(this.state.type == 'REGISTER'){
+                // 如果是注册，要验证一下手机号是否注册过
+                getTempToken((token, timestamp) => {
+                    request.post('/tcssPlatform/user/mobile/check',{token,timestamp,mobile},true).then(res=>{
+                        this.checkImgCode && this.checkImgCode.show()
+                    })
+                })
+
+            }else{
+                this.checkImgCode && this.checkImgCode.show()
+            }
         }
     }
 

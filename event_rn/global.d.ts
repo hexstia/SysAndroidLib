@@ -94,7 +94,7 @@ export interface CloudPhoneModal {
     remainingTime: string,
     searchValue: string,
     /**
-    *  状态码
+    *  状态码 //'使用状态 1 在线 2被控制 5即将过期 10过期  15已销毁  20离线',
     */
     status: number,
     /**

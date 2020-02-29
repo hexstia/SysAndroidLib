@@ -28,13 +28,13 @@ export default class OrderList extends BaseNavNavgator {
     loadData = (pageNum: number) => {
 
         if (pageNum == 0) {
-            request.post('/tcssPlatform/order/orderList', { page: pageNum + 1, pageSize: 10 }, false).then(result => {
-                console.log(result)
+            request.post('/tcssPlatform/order/orderList', { }, false).then(result => {
+
                 this.setState({ orderList: result.orderList }, () => {
                     this.setListViewData()
                 })
             }).catch(err => {
-                console.log(err)
+
                 this.listView && this.listView.setData(null, pageNum);
             })
         } else {
@@ -125,7 +125,7 @@ export default class OrderList extends BaseNavNavgator {
         let orderFail = item.orderStatus == 0
         let pro = item.detailList[0] || {}
         return (
-            <View style={{ backgroundColor: '#fff', marginTop: 10, marginHorizontal: 15, borderRadius: 5, overflow: 'hidden' }}>
+            <View style={{ backgroundColor: '#fff', marginTop: 10, marginHorizontal: 15, borderRadius: 5, shadowColor: '#999', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.6  }}>
                 {/* 订单信息 */}
                 <View style={{ flexDirection: 'row' }}>
                     <View style={{ marginTop: 12, marginLeft: 15, flex: 1 }}>

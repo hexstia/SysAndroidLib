@@ -154,23 +154,24 @@ export default class ChangePhoneNum extends BaseNavNavgator {
             return;
         }
 
-        // if (vcode.length == 0) {
-        //     tips.showTips('请输入验证码')
-        //     return;
-        // }
+        if (vcode.length == 0) {
+            tips.showTips('请输入验证码')
+            return;
+        }
 
-        // if (imgId.length == 0) {
-        //     tips.showTips('请输入图形验证码')
-        //     return;
-        // }
+        if (imgId.length == 0) {
+            tips.showTips('请输入图形验证码')
+            return;
+        }
 
 
         // getTempToken((token, timestamp) => {
 
-
             let param = { mobile}
             request.post('/tcssPlatform/user/info/updateMobile', param, true).then(result => {
-               
+               tips.showTips('',2000,()=>{
+
+               })
             })
 
         // })

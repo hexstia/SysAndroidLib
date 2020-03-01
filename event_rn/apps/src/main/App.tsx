@@ -9,9 +9,10 @@
  */
 
 import { createNavNavigator, msg, tips } from 'dl-kit';
-import { TRouterName, UserModel } from 'global';
+import { TRouterName } from 'global';
 import React, { Component } from 'react';
 import { View } from 'react-native';
+import RNArenaPay from 'react-native-arena-pay';
 import { loadLoginInfoFromLocal } from '../module/publicFunc';
 import routes from './router';
 
@@ -32,7 +33,9 @@ export default class App extends Component<Props, {}> {
 
   constructor(props: Props) {
     super(props)
-    let cc: UserModel
+
+    // 注册微信appid
+    RNArenaPay.wechatRegister('wx4da13368004666f5');
 
     loadLoginInfoFromLocal((success => {
       if (success) {

@@ -154,6 +154,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-arena-pay')
     implementation project(':react-native-svg')
     implementation project(':react-native-video')
     implementation project(':react-native-sound')

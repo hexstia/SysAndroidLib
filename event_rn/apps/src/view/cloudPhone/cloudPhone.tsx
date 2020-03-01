@@ -166,7 +166,7 @@ export default class CloudPhone extends BaseNavNavgator {
                                     </View>
 
                                     {/* 图片 page */}
-                                    <View style={{ marginTop: 10, flex: 1, width: phoneSwiperWidth, height: phoneSwiperHeight, alignSelf: 'center' }}>
+                                    <View style={{ marginTop: 10, flex: 1, width: phoneSwiperWidth, height: phoneSwiperHeight, alignSelf: 'center' ,overflow:'hidden'}}>
                                         <Swiper
                                             loop={false}
                                             removeClippedSubviews={false}
@@ -175,7 +175,7 @@ export default class CloudPhone extends BaseNavNavgator {
                                             {
                                                 phoneList.map((phone, index) => {
                                                     return (
-                                                        <TouchableOpacity style={{ flex: 1, backgroundColor: '#f0f', borderWidth: 1, borderColor: '#000' }} activeOpacity={1}  >
+                                                        <TouchableOpacity style={{ flex: 1,backgroundColor:'#f0f', borderWidth: 1, borderColor: '#000' }} activeOpacity={1}  >
 
                                                         </TouchableOpacity>
                                                     )

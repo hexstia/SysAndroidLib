@@ -6,6 +6,8 @@
  */
 
 #import "AppDelegate.h"
+#import <RNArenaPay/WXPayManager.h>
+#import <RNArenaPay/AliPayManager.h>
 
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
@@ -38,5 +40,28 @@
   return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 #endif
 }
+
+
+
+//  应用间跳转的代理方法
+-(BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
+{
+  
+  NSString *optionKey = options[UIApplicationOpenURLOptionsSourceApplicationKey];
+  NSString *absolute = url.absoluteString;
+  
+  //  支付宝支付
+  if ([url.host isEqualToString:@"safepay"]) {
+    return [AliPayManager applicationOpenUrl:url];
+  }
+  
+  //  微信支付或者微信登录
+  if ([optionKey isEqualToString:@"com.tencent.xin"] && ([absolute containsString:@"pay"] || [absolute containsString:@"oauth"])) {
+    return [WXPayManager applicationOpenUrl:url];
+  }
+  
+  return YES;
+}
+
 
 @end

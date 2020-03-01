@@ -3,6 +3,7 @@ import { BaseNavNavgator, DefaultListView, ImageBtn, request, tips } from 'dl-ki
 import { CloudPhoneModal, Product } from 'global';
 import React from 'react';
 import { Image, ImageBackground, RefreshControl, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import RNArenaPay from 'react-native-arena-pay';
 
 
 interface State {
@@ -179,11 +180,58 @@ export default class PayCloudPhone extends BaseNavNavgator {
   *  发起支付
   */
   orderPay = (orderId: string) => {
-    request.post('/tcssPlatform/pay/orderPay', { orderId, payType: this.state.payType == 'weixin' ? 1 : 2 }, true).then(res => {
-      this.replace('PayResult', { title: '支付结果', orderPay: res.orderPay })
+    let { payType } = this.state;
+
+    request.post('/tcssPlatform/pay/orderPay', { orderId, payType: payType == 'weixin' ? 1 : 2 }, true).then(res => {
+      // this.replace('PayResult', { title: '支付结果', orderPay: res.orderPay })
+      payType == 'weixin' ? this.wexinPay(JSON.parse(res.outPayData)) : this.aliPay(res)
+
     }).catch(err => {
-      this.replace('PayResult', { title: '支付结果' })
+      // this.replace('PayResult', { title: '支付结果' })
     })
+  }
+
+  /**
+  *  微信支付
+  */
+  wexinPay = (data: any) => {
+
+    let payData = {
+      partnerid: '',
+      prepayid: '',
+      noncestr: data.nonce_str,
+      timestamp: '',
+      package: '',
+      sign: data.sign
+    }
+    RNArenaPay.wechatPay(payData).then((data: any) => {
+      tips.showTips('支付成功');
+
+      // if (this.data.fromRoute == 'myVIP') {
+      //   this.goBack()
+      // } else {
+      //   this.replace('MyVIP')
+      // }
+
+
+    }, (error: any) => {
+      tips.showTips(error.code);
+    })
+  }
+
+  /**
+  *  支付宝支付
+  */
+  aliPay = (data: any) => {
+
+    return;
+     // 支付宝支付
+     RNArenaPay.aliPay({}).then((data:any)=>{
+      console.log('支付成功')
+    },(error:any)=>{
+      console.log('支付失败' + error.code)
+    })
+    
   }
 
 

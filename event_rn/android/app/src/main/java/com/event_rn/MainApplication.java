@@ -3,6 +3,7 @@ package com.event_rn;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.dingle.pay.RNArenaPayPackage;
 import com.horcrux.svg.SvgPackage;
 import com.brentvatne.react.ReactVideoPackage;
 import com.zmxv.RNSound.RNSoundPackage;
@@ -30,6 +31,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNArenaPayPackage(),
             new SvgPackage(),
             new ReactVideoPackage(),
             new RNSoundPackage(),

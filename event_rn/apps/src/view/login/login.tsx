@@ -2,6 +2,7 @@
 import { BaseNavNavgator, defaultStyle, msg, request, tips } from 'dl-kit';
 import React from 'react';
 import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import RNArenaPay from 'react-native-arena-pay';
 import CheckImgCode from '../../module/checkImgCode';
 import { getTempToken, isPhoneNum, saveLoginInfo } from '../../module/publicFunc';
 
@@ -248,6 +249,23 @@ export default class Login extends BaseNavNavgator {
     */
     wexinLogin = () => {
 
+    // 微信登录
+    RNArenaPay.wechatLogin().then((data: any) => {
+        console.log(JSON.stringify(data));
+  
+        // request.post('/wxUser/wxlogin', { code: data.code, regMethod: 1 }, true).then(result => {
+        //   console.log(result);
+        //   configs.token = result
+        //   AsyncStorage.setItem(constact.locationSaveKey.localToken, result)
+        //   msg.emit('changeRootRoute', { rootRoute: 'TabNavigator' })
+        // })
+      }, (error: any) => {
+        console.log('err');
+        console.log(JSON.stringify(error));
+        tips.showTips('微信登录失败')
+        // tips.showTips(JSON.stringify(error))
+        // console.log('支付失败' + error.code)
+      })
     }
 
 }

@@ -37,6 +37,9 @@ export default class App extends Component<Props, {}> {
     // 注册微信appid
     RNArenaPay.wechatRegister('wx4da13368004666f5');
 
+    // 注册QQ的AppId
+    RNArenaPay.QQRegister('101845112')
+
     loadLoginInfoFromLocal((success => {
       if (success) {
         this.setState({ rootRoute: 'TabNavigator' })

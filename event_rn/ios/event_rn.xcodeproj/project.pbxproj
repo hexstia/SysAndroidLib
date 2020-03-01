@@ -78,6 +78,9 @@
 		8D03E310240BA56400D05077 /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D03E30C240BA56400D05077 /* libWeChatSDK.a */; };
 		8D03E311240BA56400D05077 /* AlipaySDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8D03E30D240BA56400D05077 /* AlipaySDK.bundle */; };
 		8D03E312240BA56400D05077 /* AlipaySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D03E30E240BA56400D05077 /* AlipaySDK.framework */; };
+		8D03E35F240BC31800D05077 /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D03E35E240BC31800D05077 /* libiconv.tbd */; };
+		8D03E361240BC33300D05077 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D03E360240BC33300D05077 /* libsqlite3.tbd */; };
+		8D03E366240BC88D00D05077 /* TencentOpenAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D03E365240BC88D00D05077 /* TencentOpenAPI.framework */; };
 		968F40267A874F2FBA9C5FF2 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DDE8FBAA992640AD8B0CB7AF /* FontAwesome.ttf */; };
 		9B243E9E75D54C678BDF4346 /* Roboto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F412B83BDB324EFBBF51E878 /* Roboto.ttf */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
@@ -527,6 +530,9 @@
 		8D03E30C240BA56400D05077 /* libWeChatSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libWeChatSDK.a; sourceTree = "<group>"; };
 		8D03E30D240BA56400D05077 /* AlipaySDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = AlipaySDK.bundle; sourceTree = "<group>"; };
 		8D03E30E240BA56400D05077 /* AlipaySDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AlipaySDK.framework; sourceTree = "<group>"; };
+		8D03E35E240BC31800D05077 /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
+		8D03E360240BC33300D05077 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		8D03E365240BC88D00D05077 /* TencentOpenAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TencentOpenAPI.framework; sourceTree = "<group>"; };
 		8FEE057B55B4409C9CF1952B /* RCTBEEPickerManager.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTBEEPickerManager.xcodeproj; path = "../node_modules/react-native-picker/ios/RCTBEEPickerManager.xcodeproj"; sourceTree = "<group>"; };
 		93630C8398DB4F409C211994 /* libRCTVideo.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTVideo.a; sourceTree = "<group>"; };
 		A60C376025974976AA3AE4C9 /* libRNGestureHandler.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNGestureHandler.a; sourceTree = "<group>"; };
@@ -559,17 +565,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8D03E305240BA4D100D05077 /* CoreMotion.framework in Frameworks */,
+				8D03E2FB240BA4AF00D05077 /* CoreTelephony.framework in Frameworks */,
+				8D03E361240BC33300D05077 /* libsqlite3.tbd in Frameworks */,
 				8D03E303240BA4CA00D05077 /* CoreGraphics.framework in Frameworks */,
+				8D03E2F1240BA47C00D05077 /* SystemConfiguration.framework in Frameworks */,
+				8D03E366240BC88D00D05077 /* TencentOpenAPI.framework in Frameworks */,
+				8D03E35F240BC31800D05077 /* libiconv.tbd in Frameworks */,
+				8D03E2F9240BA4A800D05077 /* Security.framework in Frameworks */,
+				8D03E305240BA4D100D05077 /* CoreMotion.framework in Frameworks */,
 				8D03E301240BA4C400D05077 /* CoreText.framework in Frameworks */,
 				8D03E2FF240BA4BD00D05077 /* QuartzCore.framework in Frameworks */,
 				8D03E2FD240BA4B600D05077 /* CFNetwork.framework in Frameworks */,
-				8D03E2FB240BA4AF00D05077 /* CoreTelephony.framework in Frameworks */,
-				8D03E2F9240BA4A800D05077 /* Security.framework in Frameworks */,
 				8D03E2F7240BA4A100D05077 /* libc++.tbd in Frameworks */,
 				8D03E2F5240BA49400D05077 /* libsqlite3.0.tbd in Frameworks */,
 				8D03E2F3240BA48800D05077 /* libz.tbd in Frameworks */,
-				8D03E2F1240BA47C00D05077 /* SystemConfiguration.framework in Frameworks */,
 				ED297163215061F000B7C4FE /* JavaScriptCore.framework in Frameworks */,
 				ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */,
 				11D1A2F320CAFA9E000508D9 /* libRCTAnimation.a in Frameworks */,
@@ -748,6 +757,8 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8D03E360240BC33300D05077 /* libsqlite3.tbd */,
+				8D03E35E240BC31800D05077 /* libiconv.tbd */,
 				8D03E304240BA4D100D05077 /* CoreMotion.framework */,
 				8D03E302240BA4CA00D05077 /* CoreGraphics.framework */,
 				8D03E300240BA4C300D05077 /* CoreText.framework */,
@@ -970,6 +981,7 @@
 		8D03E306240BA56400D05077 /* framework */ = {
 			isa = PBXGroup;
 			children = (
+				8D03E365240BC88D00D05077 /* TencentOpenAPI.framework */,
 				8D03E307240BA56400D05077 /* WeChatSDK1.8.3 */,
 				8D03E30D240BA56400D05077 /* AlipaySDK.bundle */,
 				8D03E30E240BA56400D05077 /* AlipaySDK.framework */,
@@ -1090,7 +1102,7 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = 74PFUL8KG7;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -1108,6 +1120,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -1785,13 +1798,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = 74PFUL8KG7;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/event_rn/framework",
+					"$(PROJECT_DIR)/event_rn",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1817,7 +1832,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.ruisasi.blueclient;
 				PRODUCT_NAME = event_rn;
-				PROVISIONING_PROFILE_SPECIFIER = testAll;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -1826,12 +1841,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 74PFUL8KG7;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/event_rn/framework",
+					"$(PROJECT_DIR)/event_rn",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1857,7 +1874,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.ruisasi.blueclient;
 				PRODUCT_NAME = event_rn;
-				PROVISIONING_PROFILE_SPECIFIER = testAll;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;

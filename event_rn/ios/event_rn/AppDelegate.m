@@ -6,12 +6,12 @@
  */
 
 #import "AppDelegate.h"
-#import <RNArenaPay/WXPayManager.h>
-#import <RNArenaPay/AliPayManager.h>
 
+#import <RNArenaPay/RNArenaPay.h>
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
+  
 
 @implementation AppDelegate
 
@@ -60,8 +60,13 @@
     return [WXPayManager applicationOpenUrl:url];
   }
   
+//  QQ 授权回调
+  if([absolute hasPrefix:@"tencent"]){
+    return [TencentOAuth HandleOpenURL:url];
+  }
+  
+  
   return YES;
 }
-
 
 @end

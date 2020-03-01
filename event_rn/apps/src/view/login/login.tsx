@@ -241,6 +241,12 @@ export default class Login extends BaseNavNavgator {
     *  QQ登录
     */
     qqLogin = () => {
+        RNArenaPay.QQLogin().then((res:any)=>{
+            console.log(res);
+            
+        },(err:any)=>{
+            console.log(err)
+        })
 
     }
 
@@ -251,7 +257,8 @@ export default class Login extends BaseNavNavgator {
 
     // 微信登录
     RNArenaPay.wechatLogin().then((data: any) => {
-        console.log(JSON.stringify(data));
+
+        console.log(data.code);
   
         // request.post('/wxUser/wxlogin', { code: data.code, regMethod: 1 }, true).then(result => {
         //   console.log(result);

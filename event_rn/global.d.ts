@@ -75,6 +75,10 @@ export interface CloudPhoneModal {
     */
     devicePortal: string,
     /**
+    *  手机唯一码
+    */
+   deviceUdid:string,
+    /**
     *  结束时间
     */
     endTime: string,

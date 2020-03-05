@@ -9,13 +9,38 @@ import EditPhoneNameModal from '../../module/editPhoneNameModal';
 import TipModal from '../../module/tipModal';
 
 interface State {
+    /**
+    *  当前显示类型
+    */
     showType: 'viewType' | 'listType',
+    /**
+    *  手机列表
+    */
     phoneList: CloudPhoneModal[],
+    /**
+    *  手机部分的高度 包含续费条，手机page 页码
+    */
     contentHeight: number,
+    /**
+    *  当前显示的手机
+    */
     phoneIndex: number,
+    /**
+    *  重启的手机id 列表
+    */
     reStartPhoneIds: number[],
+    /**
+    *  重置的手机id 列表
+    */
     renewPhoneIds: number[],
-    bannerDatas: Banner[]
+    /**
+    *  banner 数据
+    */
+    bannerDatas: Banner[],
+    /**
+    *  手机截图内容
+    */
+    screenshotData: object,
 }
 
 /**
@@ -32,6 +57,7 @@ export default class CloudPhone extends BaseNavNavgator {
         reStartPhoneIds: [],
         renewPhoneIds: [],
         bannerDatas: [],
+        screenshotData: {}
     }
 
     editPhoneNameModal: EditPhoneNameModal | null = null;
@@ -166,16 +192,16 @@ export default class CloudPhone extends BaseNavNavgator {
                                     </View>
 
                                     {/* 图片 page */}
-                                    <View style={{ marginTop: 10, flex: 1, width: phoneSwiperWidth, height: phoneSwiperHeight, alignSelf: 'center' ,overflow:'hidden'}}>
+                                    <View style={{ marginTop: 10, flex: 1, width: phoneSwiperWidth, height: phoneSwiperHeight, alignSelf: 'center', overflow: 'hidden' }}>
                                         <Swiper
                                             loop={false}
                                             removeClippedSubviews={false}
                                             showsPagination={false}
-                                            onIndexChanged={(index: number) => this.setState({ phoneIndex: index })}>
+                                            onIndexChanged={this.phoneIndexChange}>
                                             {
                                                 phoneList.map((phone, index) => {
                                                     return (
-                                                        <TouchableOpacity style={{ flex: 1,backgroundColor:'#f0f', borderWidth: 1, borderColor: '#000' }} activeOpacity={1}  >
+                                                        <TouchableOpacity style={{ flex: 1, backgroundColor: '#f0f', borderWidth: 1, borderColor: '#000' }} activeOpacity={1}  >
 
                                                         </TouchableOpacity>
                                                     )
@@ -395,6 +421,36 @@ export default class CloudPhone extends BaseNavNavgator {
             this.navigate('BaseWebView', { title: banner.proTypeStr, uri: banner.skipUrl })
         }
 
+    }
+
+
+    /**
+    *  当前显示的手机序号改变
+    */
+    phoneIndexChange = (index:number)=>{
+        console.log('当前显示的手机序号改变',index)
+        this.setState({ phoneIndex: index },()=>{
+            this.getScreenshot(this.state.phoneList[index]);
+        })
+    }
+
+
+    /**
+    *  获得手机截图
+    */
+    getScreenshot = (phone: CloudPhoneModal) => {
+        let { phoneList, contentHeight, phoneIndex, bannerDatas } = this.state
+        let addImgHeight = contentHeight - 10
+        let phoneSwiperHeight = contentHeight - 97;
+        let phoneSwiperWidth = Math.floor(addImgHeight * (185 / 363))
+
+
+        let param = { screenStatus: 2, height: phoneSwiperHeight, width: phoneSwiperWidth, deviceId: phone.deviceId }
+        request.post('/cloudPhone/phone/screenshotCloudphone', param, true).then(result => {
+            console.log(result)
+        }).catch(err => {
+            console.log(err)
+        })
     }
 
     /**

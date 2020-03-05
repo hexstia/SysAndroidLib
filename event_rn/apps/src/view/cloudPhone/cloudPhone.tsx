@@ -40,7 +40,7 @@ interface State {
     /**
     *  手机截图内容
     */
-    screenshotData: object,
+    screenshotData: any,
 }
 
 /**
@@ -439,18 +439,20 @@ export default class CloudPhone extends BaseNavNavgator {
     *  获得手机截图
     */
     getScreenshot = (phone: CloudPhoneModal) => {
-        let { phoneList, contentHeight, phoneIndex, bannerDatas } = this.state
-        let addImgHeight = contentHeight - 10
-        let phoneSwiperHeight = contentHeight - 97;
-        let phoneSwiperWidth = Math.floor(addImgHeight * (185 / 363))
-
-
-        let param = { screenStatus: 2, height: phoneSwiperHeight, width: phoneSwiperWidth, deviceId: phone.deviceId }
-        request.post('/cloudPhone/phone/screenshotCloudphone', param, true).then(result => {
-            console.log(result)
-        }).catch(err => {
-            console.log(err)
-        })
+        if(this.state.screenshotData[phone.deviceUdid] == undefined){
+            let { phoneList, contentHeight, phoneIndex, bannerDatas } = this.state
+            let addImgHeight = contentHeight - 10
+            let phoneSwiperHeight = contentHeight - 97;
+            let phoneSwiperWidth = Math.floor(addImgHeight * (185 / 363))
+    
+    
+            let param = { screenStatus: 2, height: phoneSwiperHeight, width: phoneSwiperWidth, deviceId: phone.deviceId }
+            request.post('/cloudPhone/phone/screenshotCloudphone', param, true).then(result => {
+                console.log(result)
+            }).catch(err => {
+                console.log(err)
+            })
+        }
     }
 
     /**

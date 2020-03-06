@@ -381,7 +381,7 @@ export default class CloudPhone extends BaseNavNavgator {
                 case 'upApp':
                     break;
 
-                case 'renew':
+                case 'renew': // 恢复出厂设置
                     this.setState({ renewPhoneIds: [...renewPhoneIds, cloudPhone.id] })
                     request.post('/cloudPhone/phone/resetDevice', { deviceIds: cloudPhone.deviceId, type: 3 }, true).then(result => {
                         this.setState({ renewPhoneIds: this.state.renewPhoneIds.filter(id => id != cloudPhone.id) })

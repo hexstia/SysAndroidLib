@@ -2,27 +2,17 @@ package com.ruisasi.blueclient.wxapi;
 
 
 import com.dingle.pay.RNArenaPayModule;
-import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
-import com.tencent.mm.opensdk.constants.ConstantsAPI;
-import com.tencent.mm.opensdk.modelbase.BaseReq;
-import com.tencent.mm.opensdk.modelbase.BaseResp;
-import com.tencent.mm.opensdk.openapi.IWXAPI;
-import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
-import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
-import static com.tencent.mm.opensdk.constants.ConstantsAPI.COMMAND_LAUNCH_BY_WX;
 import static com.tencent.mm.opensdk.constants.ConstantsAPI.COMMAND_PAY_BY_WX;
 import static com.tencent.mm.opensdk.constants.ConstantsAPI.COMMAND_SENDAUTH;
 import static com.tencent.mm.opensdk.constants.ConstantsAPI.COMMAND_SENDMESSAGE_TO_WX;

@@ -2,10 +2,8 @@ package com.ruisasi.blueclient.wxapi;
 
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.dingle.pay.RNArenaPayModule;
 import com.tencent.mm.opensdk.constants.ConstantsAPI;

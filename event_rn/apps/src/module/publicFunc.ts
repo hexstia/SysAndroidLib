@@ -9,6 +9,7 @@ import { configs, msg, request, tips, validator } from 'dl-kit';
 import constact from 'dl-kit/configs/constant';
 import { UserModel } from 'global';
 import { AsyncStorage } from 'react-native';
+import { startWebsocketConnection } from './CloudPhoneModule';
 
 type getTempTokenCallback = (token: string, timestamp: number) => void;
 
@@ -43,7 +44,6 @@ let isPhoneNum = (phoneNum: any) => {
   }
   return isPhone;
 }
-
 
 /**
 *  刷新token
@@ -96,6 +96,9 @@ let saveLoginInfo = (loginResult: { refreshToken: string, token: string, userInf
     AsyncStorage.setItem(constact.locationSaveKey.refreshToken, loginResult.refreshToken)
     AsyncStorage.setItem(constact.locationSaveKey.token, loginResult.token)
     AsyncStorage.setItem(constact.locationSaveKey.userInfo, userInfoStr)
+
+    //启动websocket
+    startWebsocketConnection(configs.token)
   } catch (error) {
   }
 }
@@ -116,6 +119,9 @@ let loadLoginInfoFromLocal = async (callBack: (success: boolean) => void) => {
       configs.refreshToken = refreshToken
       configs.token = token
       callBack(true)
+
+      //启动websocket
+      startWebsocketConnection(configs.token)
       console.log('从本地获取了用户信息', userInfo);
       console.log('本地token：', token);
       console.log('本地刷新token：', refreshToken);
@@ -146,28 +152,28 @@ let logoutAndClear = () => {
 /**
 *  获取支付状态文字
 */
-let getOrderStatusStr = (orderStatu:number)=>{
+let getOrderStatusStr = (orderStatu: number) => {
   // '10 下单 15支付中 20 支付完成 30 订单完成',
-  switch (orderStatu){
+  switch (orderStatu) {
     case 0:
-    return '支付失败'
-    break;
+      return '支付失败'
+      break;
 
     case 10:
-    return '已下单'
-    break;
+      return '已下单'
+      break;
 
     case 15:
-    return '未支付'
-    break;
+      return '未支付'
+      break;
 
     case 20:
-    return '支付完成'
-    break;
+      return '支付完成'
+      break;
 
     case 30:
-    return '订单完成'
-    break;
+      return '订单完成'
+      break;
   }
 
 }

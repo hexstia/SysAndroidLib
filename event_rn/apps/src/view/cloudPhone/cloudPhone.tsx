@@ -4,6 +4,7 @@ import { Banner, CloudPhoneModal } from 'global';
 import React from 'react';
 import { Image, ImageBackground, Platform, Text, TouchableOpacity, View } from 'react-native';
 import Swiper from 'react-native-swiper';
+import { enterCloudPhone } from '../../module/CloudPhoneModule';
 import CloudPhoneSettingModal from '../../module/cloudPhoneSettingModal';
 import EditPhoneNameModal from '../../module/editPhoneNameModal';
 import TipModal from '../../module/tipModal';
@@ -405,9 +406,9 @@ export default class CloudPhone extends BaseNavNavgator {
     *  进入手机
     */
     enterCloudPhone = (phone: CloudPhoneModal) => {
-        if (this.checkCloudPhone(phone)) {
-
-        }
+        // if (this.checkCloudPhone(phone)) {
+            enterCloudPhone(phone);
+        // }
     }
 
     /**

@@ -6,6 +6,7 @@ import RNArenaPay from 'react-native-arena-pay';
 import CheckImgCode from '../../module/checkImgCode';
 import { getTempToken, isPhoneNum, saveLoginInfo } from '../../module/publicFunc';
 
+
 interface State {
     loginType: 'passwordLogin' | 'verCode',
     phone: string,

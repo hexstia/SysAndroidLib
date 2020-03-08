@@ -1,13 +1,17 @@
 package com.event_rn;
 
 import android.content.Intent;
+import android.os.Bundle;
 
 import com.dingle.pay.RNArenaPayModule;
+import com.example.nopermisstionad_sdk.LanJiangBaseActivity;
 import com.facebook.react.ReactActivity;
 import com.tencent.connect.common.Constants;
 import com.tencent.tauth.Tencent;
 
 public class MainActivity extends ReactActivity {
+
+    private static MainActivity activity;
 
     /**
      * Returns the name of the main component registered from JavaScript.
@@ -18,6 +22,16 @@ public class MainActivity extends ReactActivity {
         return "event_rn";
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        activity=this;
+    }
+
+    public static MainActivity instance(){
+        return activity;
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -26,4 +40,6 @@ public class MainActivity extends ReactActivity {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+
 }

@@ -34,6 +34,7 @@ let getTempToken = (callBack?: getTempTokenCallback) => {
   })
 }
 
+
 /**
 *  检查手机号
 */
@@ -43,6 +44,23 @@ let isPhoneNum = (phoneNum: any) => {
     tips.showTips('请填写正确的手机号')
   }
   return isPhone;
+}
+
+
+/**
+*  获取文件类型
+*/
+function getFileType(name:string) {
+  if(!name) return false;
+  var imgType=["gif", "jpeg", "jpg", "bmp", "png"];
+  var videoType=["avi","wmv","mkv","mp4","mov","rm","3gp","flv","mpg","rmvb"];
+  if(RegExp("\.(" + imgType.join("|") + ")$", "i").test(name.toLowerCase())) {
+     return 'image/*';
+  } else if(RegExp("\.(" + videoType.join("|") + ")$", "i").test(name.toLowerCase())) {
+     return 'video/*';
+  } else {
+   return false;
+  }
 }
 
 /**
@@ -178,5 +196,5 @@ let getOrderStatusStr = (orderStatu: number) => {
 
 }
 
-export { getTempToken, isPhoneNum, saveLoginInfo, loadLoginInfoFromLocal, logoutAndClear, refreshToken, getOrderStatusStr };
+export { getTempToken, isPhoneNum, saveLoginInfo, loadLoginInfoFromLocal, logoutAndClear, refreshToken, getOrderStatusStr, getFileType };
 

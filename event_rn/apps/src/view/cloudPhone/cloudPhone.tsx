@@ -1,5 +1,5 @@
 
-import { BaseNavNavgator, DefaultListView, defaultStyle, ImageBtn, request } from 'dl-kit';
+import { BaseNavNavgator, DefaultListView, defaultStyle, ImageBtn, imagePicker, request } from 'dl-kit';
 import { Banner, CloudPhoneModal } from 'global';
 import React from 'react';
 import { Image, ImageBackground, Platform, Text, TouchableOpacity, View } from 'react-native';
@@ -368,26 +368,29 @@ export default class CloudPhone extends BaseNavNavgator {
 
             switch (action) {
                 case 'reStart': // 重启
-                    this.setState({ reStartPhoneIds: [...reStartPhoneIds, cloudPhone.id] })
                     request.post('/cloudPhone/phone/resetDevice', { deviceIds: cloudPhone.deviceId, type: 1 }, true).then(result => {
-                        this.setState({ reStartPhoneIds: this.state.reStartPhoneIds.filter(id => id != cloudPhone.id) })
-                    }).catch(err => {
-                        this.setState({ reStartPhoneIds: this.state.reStartPhoneIds.filter(id => id != cloudPhone.id) })
+                        this.setState({ reStartPhoneIds: [...reStartPhoneIds, cloudPhone.id] })
                     })
                     break;
 
                 case 'upFile':
+                    imagePicker({ maxFiles: 1, mediaType: 'any', compressImageMaxWidth: 800 }, (data) => {
+
+                        let imgs = data as any[]
+                        let paths = imgs.map(i => i.path)
+            
+                        request.upload('/cloudPhone/phone/uploadFile', { paths ,deviceIds:cloudPhone.deviceId + ''}, true).then(res => {
+                            
+                        })
+                    })
                     break;
 
                 case 'upApp':
                     break;
 
                 case 'renew': // 恢复出厂设置
-                    this.setState({ renewPhoneIds: [...renewPhoneIds, cloudPhone.id] })
                     request.post('/cloudPhone/phone/resetDevice', { deviceIds: cloudPhone.deviceId, type: 3 }, true).then(result => {
-                        this.setState({ renewPhoneIds: this.state.renewPhoneIds.filter(id => id != cloudPhone.id) })
-                    }).catch(err => {
-                        this.setState({ renewPhoneIds: this.state.renewPhoneIds.filter(id => id != cloudPhone.id) })
+                        this.setState({ renewPhoneIds: [...renewPhoneIds, cloudPhone.id] })
                     })
                     break;
             }

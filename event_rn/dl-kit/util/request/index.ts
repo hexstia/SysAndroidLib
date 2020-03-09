@@ -6,7 +6,7 @@
 
 
 
-import { refreshToken } from '../../../apps/src/module/publicFunc';
+import { getFileType, refreshToken } from '../../../apps/src/module/publicFunc';
 import Config from '../../configs';
 import msg from '../msg';
 import tips from '../tip';
@@ -215,7 +215,7 @@ export default class request {
 	/**
 	*  上传
 	*/
-	static upload(url: string, params: { paths: string[] }, loding: boolean = false) {
+	static upload(url: string, params:any, loding: boolean = false) {
 
 		/* 处理url */
 		if (url.substring(0, 4) != "http") {
@@ -226,12 +226,17 @@ export default class request {
 		let paths: string[] = params.paths;
 		paths.forEach((path, index) => {
 			var arr = path.split('/');
-			let file = { uri: path, type: 'image/jpeg', name: arr[arr.length - 1] };
+			let name = arr[arr.length - 1]
+			let type = getFileType(name);
+			let file = { uri: path, type, name };
 			formData.append('file', file);
 		})
 
-		formData.append('uploadType', 'moments')
+		// formData.append('uploadType', 'moments')
 		formData.append('token', Config.token || '')
+		if(params.deviceIds){
+			formData.append('deviceIds',params.deviceIds)
+		}
 
 		let requestData = {
 			method: "POST",

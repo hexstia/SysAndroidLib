@@ -77,21 +77,21 @@ let tabRoutes = createTabRoute([
     routeName: 'CustomerService',
     tabComponent: CustomerService,
     tabBarLabel: '客服',
-    tabBarIcon_default: require('#/tabImg/server_select.png'),
+    tabBarIcon_default: require('#/tabImg/server.png'),
     tabBarIcon_select: require('#/tabImg/server_select.png'),
   },
   {
     routeName: 'CloudPhone',
     tabComponent: CloudPhone,
     tabBarLabel: '云手机',
-    tabBarIcon_default: require('#/tabImg/cloudPhone_select.png'),
+    tabBarIcon_default: require('#/tabImg/cloudPhone.png'),
     tabBarIcon_select: require('#/tabImg/cloudPhone_select.png'),
   },
   {
     routeName: 'Mine',
     tabComponent: Mine,
     tabBarLabel: '我的',
-    tabBarIcon_default: require('#/tabImg/mine_select.png'),
+    tabBarIcon_default: require('#/tabImg/mine.png'),
     tabBarIcon_select: require('#/tabImg/mine_select.png'),
   }
 ])

@@ -17,7 +17,7 @@ public class CloudPhoneModule extends ReactContextBaseJavaModule implements WebS
 
     private static ReactApplicationContext reactContext;
 
-    private SdkMain sdk = null;
+    private static SdkMain sdk = null;
 
     private Promise connectSocketPromise = null;
 
@@ -126,8 +126,6 @@ public class CloudPhoneModule extends ReactContextBaseJavaModule implements WebS
             sdk.startDumpScreenAct(wsVideoInfo, ActActivity.class, MainActivity.instance());
         }
     }
-
-
 
     @Override
     public void webSocketOnOpen(short code, String message) {

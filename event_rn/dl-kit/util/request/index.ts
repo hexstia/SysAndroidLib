@@ -128,7 +128,7 @@ export default class request {
 		// 	console.log('访问接口:' + method + '==>' + url)
 		// 	console.log('访问参数:', params)
 		// }
-		
+
 		return new Promise<any>((resolve, reject) => {
 			this.http(url, requestData).then(
 				(res: any) => {
@@ -215,7 +215,7 @@ export default class request {
 	/**
 	*  上传
 	*/
-	static upload(url: string, params:any, loding: boolean = false) {
+	static upload(url: string, params: any, loding: boolean = false) {
 
 		/* 处理url */
 		if (url.substring(0, 4) != "http") {
@@ -234,8 +234,8 @@ export default class request {
 
 		// formData.append('uploadType', 'moments')
 		formData.append('token', Config.token || '')
-		if(params.deviceIds){
-			formData.append('deviceIds',params.deviceIds)
+		if (params.deviceIds) {
+			formData.append('deviceIds', params.deviceIds)
 		}
 
 		let requestData = {
@@ -250,6 +250,12 @@ export default class request {
 
 		if (loding) {
 			tips.showLoading('上传中...', 60000)
+		}
+
+		// 测试环境打印访问结果
+		if (__DEV__) {
+			console.log('访问接口:UPLOAD' + '==>' + url)
+			console.log('访问参数', requestData)
 		}
 
 		return new Promise<any>((resolve, reject) => {

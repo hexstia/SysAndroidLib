@@ -154,6 +154,8 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-fs')
+    implementation project(':react-native-document-picker')
     implementation project(':react-native-arena-pay')
     implementation project(':react-native-svg')
     implementation project(':react-native-video')

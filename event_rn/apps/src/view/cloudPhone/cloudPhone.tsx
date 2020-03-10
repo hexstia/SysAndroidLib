@@ -3,11 +3,15 @@ import { BaseNavNavgator, DefaultListView, defaultStyle, ImageBtn, imagePicker, 
 import { Banner, CloudPhoneModal } from 'global';
 import React from 'react';
 import { Image, ImageBackground, Platform, Text, TouchableOpacity, View } from 'react-native';
+import DocumentPicker from 'react-native-document-picker';
 import Swiper from 'react-native-swiper';
 import { enterCloudPhone } from '../../module/CloudPhoneModule';
 import CloudPhoneSettingModal from '../../module/cloudPhoneSettingModal';
 import EditPhoneNameModal from '../../module/editPhoneNameModal';
 import TipModal from '../../module/tipModal';
+var RNFS = require('react-native-fs');
+
+
 
 interface State {
     /**
@@ -378,14 +382,38 @@ export default class CloudPhone extends BaseNavNavgator {
 
                         let imgs = data as any[]
                         let paths = imgs.map(i => i.path)
-            
-                        request.upload('/cloudPhone/phone/uploadFile', { paths ,deviceIds:cloudPhone.deviceId + ''}, true).then(res => {
-                            
+
+                        request.upload('/cloudPhone/phone/uploadFile', { paths, deviceIds: cloudPhone.deviceId + '' }, true).then(res => {
+
                         })
                     })
                     break;
 
                 case 'upApp':
+                    console.log('搞事请')
+                    DocumentPicker.pick({ type: [DocumentPicker.types.allFiles] }).then(res => {
+                        console.log('选择文件', res);
+
+                        let url = res.uri
+                        const split = url.split('/');
+                        const name = split.pop();
+                        const inbox = split.pop();
+                        const realPath = `file://${RNFS.TemporaryDirectoryPath}${inbox}/${name}`;
+                        console.log('路径', realPath)
+
+                        request.upload('/cloudPhone/phone/installApk', { paths: [realPath], deviceIds: cloudPhone.deviceId + '' }, true).then(res => {
+
+                        })
+
+
+                    }).catch(err => {
+                        if (DocumentPicker.isCancel(err)) {
+                            // User cancelled the picker, exit any dialogs or menus and move on
+                        } else {
+                            throw err;
+                        }
+                    })
+
                     break;
 
                 case 'renew': // 恢复出厂设置
@@ -410,7 +438,7 @@ export default class CloudPhone extends BaseNavNavgator {
     */
     enterCloudPhone = (phone: CloudPhoneModal) => {
         // if (this.checkCloudPhone(phone)) {
-            enterCloudPhone(phone);
+        enterCloudPhone(phone);
         // }
     }
 
@@ -431,9 +459,9 @@ export default class CloudPhone extends BaseNavNavgator {
     /**
     *  当前显示的手机序号改变
     */
-    phoneIndexChange = (index:number)=>{
-        console.log('当前显示的手机序号改变',index)
-        this.setState({ phoneIndex: index },()=>{
+    phoneIndexChange = (index: number) => {
+        console.log('当前显示的手机序号改变', index)
+        this.setState({ phoneIndex: index }, () => {
             this.getScreenshot(this.state.phoneList[index]);
         })
     }
@@ -443,13 +471,13 @@ export default class CloudPhone extends BaseNavNavgator {
     *  获得手机截图
     */
     getScreenshot = (phone: CloudPhoneModal) => {
-        if(this.state.screenshotData[phone.deviceUdid] == undefined){
+        if (this.state.screenshotData[phone.deviceUdid] == undefined) {
             let { phoneList, contentHeight, phoneIndex, bannerDatas } = this.state
             let addImgHeight = contentHeight - 10
             let phoneSwiperHeight = contentHeight - 97;
             let phoneSwiperWidth = Math.floor(addImgHeight * (185 / 363))
-    
-    
+
+
             let param = { screenStatus: 2, height: phoneSwiperHeight, width: phoneSwiperWidth, deviceId: phone.deviceId }
             request.post('/cloudPhone/phone/screenshotCloudphone', param, true).then(result => {
                 console.log(result)

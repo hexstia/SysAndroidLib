@@ -50,16 +50,16 @@ let isPhoneNum = (phoneNum: any) => {
 /**
 *  获取文件类型
 */
-function getFileType(name:string) {
-  if(!name) return false;
-  var imgType=["gif", "jpeg", "jpg", "bmp", "png"];
-  var videoType=["avi","wmv","mkv","mp4","mov","rm","3gp","flv","mpg","rmvb"];
-  if(RegExp("\.(" + imgType.join("|") + ")$", "i").test(name.toLowerCase())) {
-     return 'image/*';
-  } else if(RegExp("\.(" + videoType.join("|") + ")$", "i").test(name.toLowerCase())) {
-     return 'video/*';
+function getFileType(name: string) {
+  if (!name) return false;
+  var imgType = ["gif", "jpeg", "jpg", "bmp", "png"];
+  var videoType = ["avi", "wmv", "mkv", "mp4", "mov", "rm", "3gp", "flv", "mpg", "rmvb"];
+  if (RegExp("\.(" + imgType.join("|") + ")$", "i").test(name.toLowerCase())) {
+    return 'image/*';
+  } else if (RegExp("\.(" + videoType.join("|") + ")$", "i").test(name.toLowerCase())) {
+    return 'video/*';
   } else {
-   return false;
+    return 'file';
   }
 }
 

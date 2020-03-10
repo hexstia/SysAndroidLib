@@ -1,4 +1,8 @@
 rootProject.name = 'event_rn'
+include ':react-native-fs'
+project(':react-native-fs').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-fs/android')
+include ':react-native-document-picker'
+project(':react-native-document-picker').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-document-picker/android')
 include ':react-native-arena-pay'
 project(':react-native-arena-pay').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-arena-pay/android')
 include ':react-native-svg'

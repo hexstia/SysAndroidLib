@@ -3,6 +3,8 @@ package com.event_rn;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.rnfs.RNFSPackage;
+import io.github.elyx0.reactnativedocumentpicker.DocumentPickerPackage;
 import com.dingle.pay.RNArenaPayPackage;
 import com.horcrux.svg.SvgPackage;
 import com.brentvatne.react.ReactVideoPackage;
@@ -44,6 +46,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNFSPackage(),
+            new DocumentPickerPackage(),
             new RNArenaPayPackage(),
             new SvgPackage(),
             new ReactVideoPackage(),

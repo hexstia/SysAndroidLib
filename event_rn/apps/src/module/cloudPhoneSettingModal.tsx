@@ -111,7 +111,9 @@ export default class CloudPhoneSettingModal extends BaseComponent<Props> {
   */
   itemClick = (item: Item) => {
     this.setState({ visible: false }, () => {
-      this.props.onPhoneSettingAction && this.props.onPhoneSettingAction(item.action, this.state.cloudPhone!)
+      setTimeout(() => {
+        this.props.onPhoneSettingAction && this.props.onPhoneSettingAction(item.action, this.state.cloudPhone!)
+      }, 1000);
     })
   }
 

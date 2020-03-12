@@ -29,19 +29,7 @@
 
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
 
-        <activity android:name=".ActActivity"
-            android:launchMode="singleInstance"
-            android:exported="true"
-            android:process=":act"
-            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            />
 
-        <activity android:name="com.example.nopermisstionad_sdk.LanJinagTouchActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:exported="true"
-            android:process=":rmt"
-            android:theme="@style/translucent"/>
 
 
         <activity android:name="com.ruisasi.blueclient.wxapi.WXEntryActivity"
@@ -57,6 +45,31 @@
             android:exported="true"
             android:taskAffinity="net.sourceforge.simcpux"
             android:launchMode="singleTask"/>
+
+        <activity android:name=".ActActivity"
+            android:launchMode="singleInstance"
+            android:exported="true"
+            android:process=":act"
+            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            />
+
+        <activity android:name="com.example.nopermisstionad_sdk.LanJinagTouchActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:exported="true"
+            android:process=":rmt"
+            android:theme="@style/translucent"/>
+
+        <activity android:name=".MyLanJinagTouchActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:exported="true"
+            android:process=":rmt"
+            android:theme="@style/translucent">
+            <intent-filter>
+                <action android:name="android.intent.action.lanjiangtouch" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
     </application>
 

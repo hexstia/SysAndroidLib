@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.lanjiang.cloud_moblie_sdk">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:largeHeap="true"
+        android:hardwareAccelerated="true"
+        android:networkSecurityConfig="@xml/network_security"
+        android:theme="@style/AppTheme">
+        <activity android:name=".testtwoAct"
+            android:exported="true"
+            android:process=":act"
+            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            >
+        </activity>
+        <activity android:name="com.example.nopermisstionad_sdk.LanJinagTouchActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:exported="true"
+            android:process=":rmt"
+            android:theme="@style/translucent"/>
+        <activity android:name=".testOneAct"
+            android:exported="true"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.LANJIANG" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".testthreeAct"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:exported="true"
+            android:process=":rmt"
+            android:theme="@style/translucent">
+            <intent-filter>
+                <action android:name="android.intent.action.lanjiangtouch" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+    </application>
+
+</manifest>

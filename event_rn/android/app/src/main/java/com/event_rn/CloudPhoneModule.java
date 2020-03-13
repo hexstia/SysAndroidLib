@@ -5,11 +5,14 @@ import android.util.Log;
 import com.Interface.WebSocketCallback;
 import com.domain.WsVideoInfo;
 import com.example.nopermisstionad_sdk.SdkMain;
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 
 import javax.annotation.Nonnull;
 
@@ -23,11 +26,21 @@ public class CloudPhoneModule extends ReactContextBaseJavaModule implements WebS
 
     private WsVideoInfo wsVideoInfo;
 
+    private PhoneModal phoneModal;
+
+    public static CloudPhoneModule instance;
+
 
     public CloudPhoneModule(@Nonnull ReactApplicationContext context) {
         super(reactContext);
         reactContext = context;
+        instance = this;
     }
+
+    public static CloudPhoneModule instance(){
+        return instance;
+    }
+
 
     @Nonnull
     @Override
@@ -117,15 +130,38 @@ public class CloudPhoneModule extends ReactContextBaseJavaModule implements WebS
     * */
     @ReactMethod
     public void startDumpScreen(ReadableMap data,Promise callback){
+
         if (sdk == null){
             callback.reject("未启动websocket线程","未启动websocket线程");
         }else if(wsVideoInfo == null){
             callback.reject("未打开视频流","未打开视频流");
         }else {
             callback.resolve("成功打开视频页面");
+            phoneModal = new PhoneModal(data);
             sdk.startDumpScreenAct(wsVideoInfo, ActActivity.class, MainActivity.instance());
         }
     }
+
+    /*
+    * 发送云手机消息
+    * */
+    public void sendCloudPhoneEvent(String eventName){
+        System.out.println("发送云手机消息" + eventName);
+
+        WritableMap phoneMap = phoneModal.getWriteMap();
+        phoneMap.putString("eventName",eventName);
+
+        reactContext
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                .emit("cloudPhoneEvent", phoneMap);
+    }
+
+
+
+
+
+
+
 
     @Override
     public void webSocketOnOpen(short code, String message) {
@@ -139,6 +175,7 @@ public class CloudPhoneModule extends ReactContextBaseJavaModule implements WebS
     @Override
     public void webSocektOnClose(int code, String reason, boolean remote) {
         Log.i("socket链接关闭", "testOneAct ----- code:  " + code + " ; reason : " + reason);
+        sdk = null;
     }
 
     @Override

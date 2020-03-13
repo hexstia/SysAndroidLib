@@ -175,7 +175,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
     implementation 'io.netty:netty-all:4.1.39.Final'
-    implementation 'com.lanjiang:ad_app_client_sdk:5.0.1-SNAPSHOT'
+    implementation 'com.lanjiang:ad_app_client_sdk:5.0.4-SNAPSHOT'
 
 }
 

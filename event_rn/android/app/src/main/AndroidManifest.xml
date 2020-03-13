@@ -54,11 +54,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             />
 
-        <activity android:name="com.example.nopermisstionad_sdk.LanJinagTouchActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:exported="true"
-            android:process=":rmt"
-            android:theme="@style/translucent"/>
+
 
         <activity android:name=".MyLanJinagTouchActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -70,6 +66,19 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+
+        <provider
+            android:authorities="com.practise.contentprovider.mycontentprovider"
+            android:name=".MyContentProvider"
+            android:exported="true">
+        </provider>
+
+<!--        <activity android:name="com.example.nopermisstionad_sdk.LanJinagTouchActivity"-->
+<!--            android:configChanges="orientation|keyboardHidden|screenSize"-->
+<!--            android:exported="true"-->
+<!--            android:process=":rmt"-->
+<!--            android:theme="@style/translucent"/>-->
 
     </application>
 

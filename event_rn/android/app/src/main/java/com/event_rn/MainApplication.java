@@ -33,6 +33,7 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public void onCreate() {
     super.onCreate();
+    System.out.println("初始化项目");
     SoLoader.init(this, /* native exopackage */ false);
   }
 

@@ -77,7 +77,7 @@ export interface CloudPhoneModal {
     /**
     *  手机唯一码
     */
-   deviceUdid:string,
+    deviceUdid: string,
     /**
     *  结束时间
     */
@@ -371,6 +371,19 @@ export interface Banner {
     type: number
     typeStr: string
 }
+
+/**
+ * 云手机事件名称
+ * cloudPhoneRestart：重启
+ * cloudUploadFile：上传文件
+ * cloudUploadApk：上传应用
+ * cloudPhoneRenew：一键新机
+ * cloudPhoneBack：回退
+ * cloudPhoneHome ：home键点击
+ */
+export type CloudPhoneEventName = 'cloudPhoneRestart' | 'cloudUploadFile' | 'cloudUploadApk' | 'cloudPhoneRenew' | 'cloudPhoneBack' | 'cloudPhoneHome'
+
+
 
 // 导出模型
 export type TRouterName = keyof typeof router;

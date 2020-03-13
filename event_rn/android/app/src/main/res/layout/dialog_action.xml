@@ -1,6 +1,240 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/action_bg"
+    android:orientation="vertical">
+
+<!--  顶部文字  -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_phone_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:text="手机名称：YSL-99991"
+            android:textColor="#ffffff"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="网络："
+            android:textColor="#ffffff"
+            android:textSize="12sp"/>
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="14dp"
+            android:src="@drawable/good_signal"
+            android:layout_marginBottom="2dp"/>
+
+
+        <TextView
+            android:id="@+id/tv_speed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="21ms(9)"
+            android:textColor="#ffffff"
+            android:textSize="12sp"
+            android:layout_marginHorizontal="5dp"/>
+
+    </LinearLayout>
+
+<!--  第一排按钮  -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:paddingHorizontal="15dp">
+
+        <LinearLayout
+            android:id="@+id/btn_restart"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_marginHorizontal="15dp"
+            android:background="@drawable/btn_select">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="25dp"
+                android:src="@drawable/restart"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="重启"
+                android:textColor="#fff"
+                android:textSize="12sp"
+                android:layout_marginTop="5dp"/>
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:id="@+id/btn_file"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_marginHorizontal="15dp"
+            android:background="@drawable/btn_select">
+
+            <ImageView
+                android:layout_width="21dp"
+                android:layout_height="25dp"
+                android:src="@drawable/file"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="上传文件"
+                android:textColor="#fff"
+                android:textSize="12sp"
+                android:layout_marginTop="5dp"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/btn_apk"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_marginHorizontal="15dp"
+            android:background="@drawable/btn_select">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="25dp"
+                android:src="@drawable/apk"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="上传应用"
+                android:textColor="#fff"
+                android:textSize="12sp"
+                android:layout_marginTop="5dp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <!--  第二排按钮  -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
+        android:orientation="horizontal"
+        android:paddingHorizontal="15dp">
+
+        <LinearLayout
+            android:id="@+id/btn_renew"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_marginHorizontal="15dp"
+            android:background="@drawable/btn_select">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="25dp"
+                android:src="@drawable/renew"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="一键新机"
+                android:textColor="#fff"
+                android:textSize="12sp"
+                android:layout_marginTop="5dp"/>
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:id="@+id/btn_back"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_marginHorizontal="15dp"
+            android:background="@drawable/btn_select">
+
+            <ImageView
+                android:layout_width="21dp"
+                android:layout_height="25dp"
+                android:src="@drawable/back"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="返回"
+                android:textColor="#fff"
+                android:textSize="12sp"
+                android:layout_marginTop="5dp"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/btn_quit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_marginHorizontal="15dp"
+            android:background="@drawable/btn_select">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="25dp"
+                android:src="@drawable/quit"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="退出"
+                android:textColor="#fff"
+                android:textSize="12sp"
+                android:layout_marginTop="5dp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/btn_home"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/home_btn_bg"
+        android:orientation="horizontal"
+        android:gravity="center"
+        >
+
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:src="@drawable/home"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="主界面"
+            android:textColor="#fff"
+            android:textSize="18sp"
+            android:layout_marginLeft="5dp"
+            />
+    </LinearLayout>
+
 
 </LinearLayout>

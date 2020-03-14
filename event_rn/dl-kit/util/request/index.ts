@@ -234,9 +234,12 @@ export default class request {
 
 		// formData.append('uploadType', 'moments')
 		formData.append('token', Config.token || '')
-		if (params.deviceIds) {
-			formData.append('deviceIds', params.deviceIds)
-		}
+
+		Object.keys(params).forEach(key => {
+			if (key != 'paths') {
+				formData.append(key, params[key])
+			}
+		})
 
 		let requestData = {
 			method: "POST",
@@ -259,6 +262,7 @@ export default class request {
 		}
 
 		return new Promise<any>((resolve, reject) => {
+
 			this.http(url, requestData).then(
 				(res: any) => {
 					let response = res as Response
@@ -279,8 +283,6 @@ export default class request {
 					} else if (response.status == 40001) {
 						reject('token 需要刷新');
 
-
-
 					} else if (response.status == 40002) {
 
 						reject('token 失效');
@@ -291,8 +293,7 @@ export default class request {
 						}
 						reject({ message: '网络差，请稍后再试。' })
 					}
-				},
-				(error: any) => {
+				}, (error: any) => {
 					if (__DEV__) {
 						console.log(error);
 					}
@@ -302,8 +303,8 @@ export default class request {
 						tips.showTips('网络差，请稍后再试。');
 					}
 					reject({ message: error.message })
-				}
-			);
+				});
+
 		});
 
 

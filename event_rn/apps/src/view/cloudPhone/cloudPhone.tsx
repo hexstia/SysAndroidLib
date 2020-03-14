@@ -1,5 +1,5 @@
 
-import { BaseNavNavgator, DefaultListView, defaultStyle, ImageBtn, imagePicker, request } from 'dl-kit';
+import { BaseNavNavgator, DefaultListView, defaultStyle, ImageBtn, imagePicker, request, tips } from 'dl-kit';
 import { Banner, CloudPhoneModal } from 'global';
 import React from 'react';
 import { Image, ImageBackground, Platform, Text, TouchableOpacity, View } from 'react-native';
@@ -383,8 +383,8 @@ export default class CloudPhone extends BaseNavNavgator {
                         let imgs = data as any[]
                         let paths = imgs.map(i => i.path)
 
-                        request.upload('/cloudPhone/phone/uploadFile', { paths, deviceIds: cloudPhone.deviceId + '' }, true).then(res => {
-
+                        request.upload('/cloudPhone/phone/uploadFile', { paths, deviceIds: cloudPhone.deviceId, selectAll: 2, searchGroupId: '', status: '' }, true).then(res => {
+                            tips.showTips('上传成功')
                         })
                     })
                     break;

@@ -1,13 +1,16 @@
 
-import { CloudPhoneEventName, CloudPhoneModal } from 'global';
+import { configs } from 'dl-kit';
+import { CloudPhoneModal } from 'global';
 import { NativeEventEmitter, NativeModules } from 'react-native';
 
 let CloudPhoneModule = NativeModules.CloudPhoneModule
 const eventEmitter = new NativeEventEmitter(CloudPhoneModule);
 
-type EventCallback = (eventName: CloudPhoneEventName, phone: CloudPhoneModal) => void
+type PhoneEventCallback = (eventName: 'cloudPhoneRestart' | 'cloudUploadFile' | 'cloudUploadApk' | 'cloudPhoneRenew' | 'cloudPhoneBack' | 'cloudPhoneHome', phone: CloudPhoneModal) => void
+type SocketEventCallback = (eventName: 'webSocketOnOpen' | 'webSocektOnClose' | 'webSocektOnError' | 'webSocektMessage', phone: CloudPhoneModal) => void
 
-let globalEventCallback: EventCallback | null = null
+let globalPhoneEventCallback: PhoneEventCallback | null = null
+let globalSocketEventCallback: SocketEventCallback | null = null
 
 
 /**
@@ -15,7 +18,15 @@ let globalEventCallback: EventCallback | null = null
 */
 eventEmitter.addListener('cloudPhoneEvent', (phone) => {
     console.log('监听云手机事件', phone)
-    globalEventCallback && globalEventCallback(phone.eventName, phone)
+    globalPhoneEventCallback && globalPhoneEventCallback(phone.eventName, phone)
+})
+
+/**
+*  监听Socket事件
+*/
+eventEmitter.addListener('webSocketEvent', (phone) => {
+    console.log('监听Socket事件', phone)
+    globalSocketEventCallback && globalSocketEventCallback(phone.eventName, phone)
 })
 
 
@@ -23,9 +34,17 @@ eventEmitter.addListener('cloudPhoneEvent', (phone) => {
 /**
 *  添加云手机事件 监听
 */
-export function addCloudPhoneEventListener(eventCallback: EventCallback) {
-    globalEventCallback = eventCallback;
+export function addCloudPhoneEventListener(eventCallback: PhoneEventCallback) {
+    globalPhoneEventCallback = eventCallback;
 }
+
+/**
+*  添加Socket事件 监听
+*/
+export function addSocketEventListener(eventCallback: SocketEventCallback) {
+    globalSocketEventCallback = eventCallback;
+}
+
 
 
 /**
@@ -51,10 +70,16 @@ export function enterCloudPhone(phone: CloudPhoneModal) {
             // 2.跳转与启动视频流页面
             CloudPhoneModule.startDumpScreen({ deviceName: phone.deviceName, deviceId: phone.deviceId, id: phone.id }).then(() => {
                 resolve()
-            }).catch(() => {
+            }).catch((err: { code: string }) => {
+                if (err.code == '未启动websocket线程') {
+                    CloudPhoneModule.startWebsocketConnection({ token: configs.token })
+                }
                 reject()
             })
-        }).catch(() => {
+        }).catch((err: { code: string }) => {
+            if (err.code == '未启动websocket线程') {
+                CloudPhoneModule.startWebsocketConnection({ token: configs.token })
+            }
             reject()
         })
     })

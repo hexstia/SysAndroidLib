@@ -30,6 +30,8 @@ public class CloudPhoneModule extends ReactContextBaseJavaModule implements WebS
 
     public static CloudPhoneModule instance;
 
+    private String ptoken;
+
 
     public CloudPhoneModule(@Nonnull ReactApplicationContext context) {
         super(reactContext);
@@ -55,7 +57,7 @@ public class CloudPhoneModule extends ReactContextBaseJavaModule implements WebS
     public void startWebsocketConnection(ReadableMap data, Promise callback){
         this.connectSocketPromise = callback;
 
-        String ptoken = data.getString("token");
+        ptoken = data.getString("token");
 
         if (ptoken == null){
             callback.reject("缺少token参数","缺少token参数");
@@ -157,18 +159,37 @@ public class CloudPhoneModule extends ReactContextBaseJavaModule implements WebS
     }
 
 
+    /*
+    * 发送webSocket 事件
+    * */
+
+    public void sendWebSocketEvent(String eventName,String code,String message,String params){
+
+//        if(this.phoneModal == null)return;
+
+        WritableMap writableMap = Arguments.createMap();
+        writableMap.putString("eventName",eventName);
+        writableMap.putString("code",code);
+        writableMap.putString("message",message);
+        writableMap.putString("params",params);
+
+        reactContext
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                .emit("webSocketEvent", writableMap);
+    }
 
 
 
 
 
-
+//    ============   Socket   事件的回调   ==============
     @Override
     public void webSocketOnOpen(short code, String message) {
         if (connectSocketPromise != null){
             this.connectSocketPromise.resolve("socket链接打开");
         }
         Log.i("socket链接打开", "testOneAct ----- code:  " + code + " ; message : " + message);
+        sendWebSocketEvent("webSocketOnOpen","200",message,"");
     }
 
 
@@ -176,15 +197,20 @@ public class CloudPhoneModule extends ReactContextBaseJavaModule implements WebS
     public void webSocektOnClose(int code, String reason, boolean remote) {
         Log.i("socket链接关闭", "testOneAct ----- code:  " + code + " ; reason : " + reason);
         sdk = null;
+        sendWebSocketEvent("webSocektOnClose","404","","");
+
     }
 
     @Override
     public void webSocektOnError(Exception ex) {
         Log.i("socket链接报错", "testOneAct ----- ex:  " + ex);
+        sendWebSocketEvent("webSocektOnError","400","","");
+
     }
 
     @Override
     public void webSocektMessage(String code, String message, String params) {
         Log.i("socket链接收到消息", "testOneAct ----- code:  " + code + " ; message : " + message + " params :" + params);
+        sendWebSocketEvent("webSocektMessage",code,message,params);
     }
 }

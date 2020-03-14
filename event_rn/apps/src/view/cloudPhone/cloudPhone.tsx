@@ -181,13 +181,13 @@ export default class CloudPhone extends BaseNavNavgator {
                     break;
 
                 case 'cloudPhoneBack':
-                    request.post('/cloudPhone/phone/groupController', { deviceIds: phone.deviceId, type: 2 }).then(res => {
+                    request.post('/cloudPhone/phone/groupController', { deviceIds: phone.deviceId, type: '2', selectAll: '2', searchGroupId: '', status: '' }).then(res => {
 
                     })
                     break;
 
                 case 'cloudPhoneHome':
-                    request.post('/cloudPhone/phone/groupController', { deviceIds: phone.deviceId, type: 1 }).then(res => {
+                    request.post('/cloudPhone/phone/groupController', { deviceIds: phone.deviceId, type: '1', selectAll: '2', searchGroupId: '', status: '' }).then(res => {
 
                     })
                     break;
@@ -425,6 +425,7 @@ export default class CloudPhone extends BaseNavNavgator {
                 case 'upFile':
                     imagePicker({ maxFiles: 1, mediaType: 'any', compressImageMaxWidth: 800 }, (data) => {
 
+                        console.log('图片选择', data)
                         let imgs = data as any[]
                         let paths = imgs.map(i => i.path)
 
@@ -439,71 +440,9 @@ export default class CloudPhone extends BaseNavNavgator {
                     DocumentPicker.pick({ type: [DocumentPicker.types.allFiles] }).then(res => {
                         console.log('选择文件', res);
 
-                        let url = res.uri
-                        const split = url.split('/');
-                        const name = split.pop();
-                        const inbox = split.pop();
-                        const realPath = `file://${RNFS.TemporaryDirectoryPath}${inbox}/${name}`;
-                        console.log('路径', realPath)
-                        this.setState({ tempImg: realPath })
+                        request.upload('/cloudPhone/phone/installApk', { paths: [res.uri], deviceIds: cloudPhone.deviceId + '', selectAll: 2, searchGroupId: '', status: '' }, true).then(res => {
 
-
-                        const uploadBegin = (response) => {
-                            const jobId = response.jobId;
-                            console.log('UPLOAD HAS BEGUN! JobId: ' + jobId);
-                            console.log('上传开始', response);
-                        };
-
-                        const uploadProgress = (response) => {
-                            const percentage = Math.floor((response.totalBytesSent / response.totalBytesExpectedToSend) * 100);
-                            console.log('UPLOAD IS ' + percentage + '% DONE!');
-                        };
-
-                        RNFS.uploadFiles({
-                            toUrl: 'http://test.91lanjiang.com/tcss-api/cloudPhone/phone/installApk',
-                            files: [{
-                                name,
-                                filename: name,
-                                filepath: realPath,
-                            }],
-                            method: 'POST',
-                            headers: {
-                                'Accept': 'application/json',
-                            },
-                            fields: {
-                                deviceIds: cloudPhone.deviceId + ''
-                            },
-                            begin: uploadBegin,
-                            progress: uploadProgress
-                        }).promise.then((response) => {
-                            console.log(response, "<<< Response");
-                            if (response.statusCode == 200) { //You might not be getting a statusCode at all. Check
-                                console.log('FILES UPLOADED!');
-                            } else {
-                                console.log('SERVER ERROR');
-                            }
                         })
-                            .catch((err) => {
-                                if (err.description) {
-                                    switch (err.description) {
-                                        case "cancelled":
-                                            console.log("Upload cancelled");
-                                            break;
-                                        case "empty":
-                                            console.log("Empty file");
-                                        default:
-                                        //Unknown
-                                    }
-                                } else {
-                                    //Weird
-                                }
-                                console.log(err);
-                            });
-
-
-                        // request.upload('/cloudPhone/phone/installApk', { paths: [realPath], deviceIds: cloudPhone.deviceId + '' }, true).then(res => {
-
-                        // })
 
 
                     }).catch(err => {

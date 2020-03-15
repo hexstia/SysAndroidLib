@@ -203,7 +203,7 @@ export default class CloudPhone extends BaseNavNavgator {
     *  加载 视图内容
     */
     loadViewContent = () => {
-        let { phoneList, contentHeight, phoneIndex, bannerDatas } = this.state
+        let { phoneList, contentHeight, phoneIndex, bannerDatas, reStartPhoneIds, renewPhoneIds } = this.state
         let addImgHeight = contentHeight - 10
         let addImgWith = Math.floor(addImgHeight * (210 / 413))
         let nowSelectPhone = phoneList[phoneIndex]
@@ -250,9 +250,30 @@ export default class CloudPhone extends BaseNavNavgator {
                                             onIndexChanged={this.phoneIndexChange}>
                                             {
                                                 phoneList.map((phone, index) => {
+
+                                                    let isRestart = reStartPhoneIds.indexOf(phone.id) != -1
+                                                    let isRenew = renewPhoneIds.indexOf(phone.id) != -1
+
                                                     return (
-                                                        <TouchableOpacity style={{ flex: 1, backgroundColor: '#f0f', borderWidth: 1, borderColor: '#000' }} activeOpacity={1}  >
-                                                            <Image style={{ width: phoneSwiperWidth, height: phoneSwiperHeight }} source={{ uri: this.state.tempImg }} />
+                                                        <TouchableOpacity style={{ flex: 1, backgroundColor: '#f0f', borderWidth: 1, borderColor: '#000' }}
+                                                            activeOpacity={1}
+                                                            onPress={this.enterCloudPhone.bind(this, phone)} >
+                                                            <ImageBackground style={{ width: phoneSwiperWidth, height: phoneSwiperHeight, alignItems: 'center' }} source={{ uri: this.state.tempImg }} >
+                                                                {
+                                                                    (isRestart || isRenew) && (
+                                                                        <View style={{ marginTop: 110, alignItems: 'center' }}>
+                                                                            <View style={{ width: 84, height: 84, borderRadius: 42, borderColor: '#6498FF', borderWidth: 6, justifyContent: 'center', alignItems: 'center' }}>
+                                                                                <View style={{ width: 60, height: 60, borderRadius: 30, backgroundColor: '#A0C3FF', justifyContent: 'center', alignItems: 'center' }}>
+                                                                                    <View style={{ width: 48, height: 48, borderRadius: 24, backgroundColor: '#6498FF', justifyContent: 'center', alignItems: 'center' }} >
+                                                                                        <Text style={{ color: '#fff', fontSize: 12 }}>loading</Text>
+                                                                                    </View>
+                                                                                </View>
+                                                                            </View>
+                                                                            <Text style={{ color: '#fff', fontSize: 12, marginTop: 6, lineHeight: 15, textAlign: 'center', fontWeight: '600' }}>{isRestart ? '一键重启中\n请稍后' : '一键新机中\n请稍后'}</Text>
+                                                                        </View>
+                                                                    )
+                                                                }
+                                                            </ImageBackground>
                                                         </TouchableOpacity>
                                                     )
                                                 })
@@ -476,9 +497,9 @@ export default class CloudPhone extends BaseNavNavgator {
     *  进入手机
     */
     enterCloudPhone = (phone: CloudPhoneModal) => {
-        // if (this.checkCloudPhone(phone)) {
-        enterCloudPhone(phone);
-        // }
+        if (this.checkCloudPhone(phone)) {
+            enterCloudPhone(phone);
+        }
     }
 
     /**

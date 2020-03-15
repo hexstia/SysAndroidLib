@@ -1,5 +1,6 @@
 package com.event_rn;
 
+import android.net.Uri;
 import android.util.Log;
 
 import com.Interface.WebSocketCallback;

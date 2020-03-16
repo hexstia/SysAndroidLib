@@ -16,6 +16,7 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class CloudPhoneModule extends ReactContextBaseJavaModule implements WebSocketCallback {
 
@@ -24,6 +25,7 @@ public class CloudPhoneModule extends ReactContextBaseJavaModule implements WebS
     private static SdkMain sdk = null;
 
     private Promise connectSocketPromise = null;
+    private Promise closeSocketPromise = null;
 
     private WsVideoInfo wsVideoInfo;
 
@@ -100,8 +102,12 @@ public class CloudPhoneModule extends ReactContextBaseJavaModule implements WebS
     * 关闭websocket通信
     * */
     @ReactMethod
-    public void shutdownWebsocketConnect(){
-        if (sdk != null){
+    public void shutdownWebsocketConnect(Promise callback){
+        if (sdk == null){
+            callback.resolve("socket 处于关闭中");
+
+        }else {
+            this.closeSocketPromise = callback;
             //关闭websocket通信
             sdk.shutdownWebsocketConnect();
         }
@@ -167,8 +173,6 @@ public class CloudPhoneModule extends ReactContextBaseJavaModule implements WebS
 
     public void sendWebSocketEvent(String eventName,String code,String message,String params){
 
-//        if(this.phoneModal == null)return;
-
         WritableMap writableMap = Arguments.createMap();
         writableMap.putString("eventName",eventName);
         writableMap.putString("code",code);
@@ -188,7 +192,7 @@ public class CloudPhoneModule extends ReactContextBaseJavaModule implements WebS
     @Override
     public void webSocketOnOpen(short code, String message) {
         if (connectSocketPromise != null){
-            this.connectSocketPromise.resolve("socket链接打开");
+            connectSocketPromise.resolve("socket链接打开");
         }
         Log.i("socket链接打开", "testOneAct ----- code:  " + code + " ; message : " + message);
         sendWebSocketEvent("webSocketOnOpen","200",message,"");
@@ -198,6 +202,9 @@ public class CloudPhoneModule extends ReactContextBaseJavaModule implements WebS
     @Override
     public void webSocektOnClose(int code, String reason, boolean remote) {
         Log.i("socket链接关闭", "testOneAct ----- code:  " + code + " ; reason : " + reason);
+        if (closeSocketPromise != null){
+            closeSocketPromise.resolve("成功关闭socket");
+        }
         sdk = null;
         sendWebSocketEvent("webSocektOnClose","404","","");
 
@@ -206,6 +213,10 @@ public class CloudPhoneModule extends ReactContextBaseJavaModule implements WebS
     @Override
     public void webSocektOnError(Exception ex) {
         Log.i("socket链接报错", "testOneAct ----- ex:  " + ex);
+        if (sdk != null){
+            sdk.shutdownWebsocketConnect();
+            sdk = null;
+        }
         sendWebSocketEvent("webSocektOnError","400","","");
 
     }

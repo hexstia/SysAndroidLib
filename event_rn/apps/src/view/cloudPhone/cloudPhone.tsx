@@ -41,9 +41,7 @@ interface State {
     /**
     *  banner 数据
     */
-    bannerDatas: Banner[],
-
-    tempImg: string
+    bannerDatas: Banner[]
 }
 
 /**
@@ -59,8 +57,7 @@ export default class CloudPhone extends BaseNavNavgator {
         phoneIndex: 0,
         reStartPhoneIds: [],
         renewPhoneIds: [],
-        bannerDatas: [],
-        tempImg: ''
+        bannerDatas: []
     }
 
     editPhoneNameModal: EditPhoneNameModal | null = null;
@@ -212,9 +209,16 @@ export default class CloudPhone extends BaseNavNavgator {
                     } else if (socketMessage.code == '200') {
                         let messageData = JSON.parse(socketMessage.message);
                         if (messageData.method == 'rebootReceive') {
-                            // 重启成功
-                            let newRSIds = reStartPhoneIds.filter(id => id != messageData.data.deviceId)
-                            this.setState({ reStartPhoneIds: newRSIds })
+                            if (messageData.data.type == 1) {
+                                // 重启成功
+                                let newRSIds = reStartPhoneIds.filter(id => id != messageData.data.deviceId)
+                                this.setState({ reStartPhoneIds: newRSIds })
+                            } else {
+                                // 恢复出厂成功
+                                let newRNIds = renewPhoneIds.filter(id => id != messageData.data.deviceId)
+                                this.setState({ renewPhoneIds: newRNIds })
+                            }
+
                         }
                     }
                     break
@@ -282,10 +286,10 @@ export default class CloudPhone extends BaseNavNavgator {
                                                     let isRenew = renewPhoneIds.indexOf(phone.deviceId) != -1
 
                                                     return (
-                                                        <TouchableOpacity style={{ flex: 1, backgroundColor: '#f0f', borderWidth: 1, borderColor: '#000' }}
+                                                        <TouchableOpacity style={{}}
                                                             activeOpacity={1}
                                                             onPress={this.enterCloudPhone.bind(this, phone)} >
-                                                            <ImageBackground style={{ width: phoneSwiperWidth, height: phoneSwiperHeight, alignItems: 'center' }} source={{ uri: phone.screenShot || this.state.tempImg }} >
+                                                            <ImageBackground style={{ width: phoneSwiperWidth, height: phoneSwiperHeight, alignItems: 'center' }} resizeMode='contain' source={phone.screenShot ? { uri: phone.screenShot } : require('#/home/tempPhone.png')} >
                                                                 {
                                                                     (isRestart || isRenew) && (
                                                                         <View style={{ marginTop: 110, alignItems: 'center' }}>
@@ -525,7 +529,7 @@ export default class CloudPhone extends BaseNavNavgator {
                         }
                     }
                     sendWebsocketData(JSON.stringify(messageData2)).then(v => {
-                        request.post('/cloudPhone/phone/resetDevice', { deviceIds: cloudPhone.deviceId, type: 3 }, true).then(result => {
+                        request.post('/cloudPhone/phone/resetDevice', { deviceIds: cloudPhone.deviceId, type: 2 }, true).then(result => {
                             this.setState({ renewPhoneIds: [...renewPhoneIds, cloudPhone.deviceId] })
                         })
                     })

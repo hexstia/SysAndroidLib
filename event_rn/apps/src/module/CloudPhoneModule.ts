@@ -53,9 +53,11 @@ export function addSocketEventListener(eventCallback: SocketEventCallback) {
 export function startWebsocketConnection() {
 
     // 先关闭websocket通信
-    CloudPhoneModule.shutdownWebsocketConnect()
-    // 再启动websocket线程
-    return CloudPhoneModule.startWebsocketConnection({ token: configs.token }) as Promise<any>
+    return CloudPhoneModule.shutdownWebsocketConnect().then((v: string) => {
+        // 再启动websocket线程
+        return CloudPhoneModule.startWebsocketConnection({ token: configs.token }) as Promise<any>
+    })
+
 }
 
 /**
@@ -74,13 +76,13 @@ export function enterCloudPhone(phone: CloudPhoneModal) {
                 if (err.code == '未启动websocket线程') {
                     CloudPhoneModule.startWebsocketConnection({ token: configs.token })
                 }
-                reject()
+                reject(err.code)
             })
         }).catch((err: { code: string }) => {
             if (err.code == '未启动websocket线程') {
                 CloudPhoneModule.startWebsocketConnection({ token: configs.token })
             }
-            reject()
+            reject(err.code)
         })
     })
 }
@@ -97,7 +99,7 @@ export function sendWebsocketData(data: string) {
             if (err.code == '未启动websocket线程') {
                 CloudPhoneModule.startWebsocketConnection({ token: configs.token })
             }
-            reject()
+            reject(err.code)
         })
     })
 }

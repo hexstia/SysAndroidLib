@@ -1,5 +1,5 @@
 
-import { BaseNavNavgator, DefaultListView, defaultStyle, ImageBtn, imagePicker, request, tips } from 'dl-kit';
+import { BaseNavNavgator, DefaultListView, defaultStyle, ImageBtn, request, tips } from 'dl-kit';
 import { Banner, CloudPhoneModal } from 'global';
 import React from 'react';
 import { Image, ImageBackground, Platform, Text, TouchableOpacity, View } from 'react-native';
@@ -9,6 +9,8 @@ import { addCloudPhoneEventListener, addSocketEventListener, enterCloudPhone, se
 import CloudPhoneSettingModal from '../../module/cloudPhoneSettingModal';
 import EditPhoneNameModal from '../../module/editPhoneNameModal';
 import TipModal from '../../module/tipModal';
+import UploadFileModal from '../../module/uploadFileModal';
+
 var RNFS = require('react-native-fs');
 
 
@@ -61,6 +63,7 @@ export default class CloudPhone extends BaseNavNavgator {
     }
 
     editPhoneNameModal: EditPhoneNameModal | null = null;
+    uploadFileModal: UploadFileModal | null = null;
     cloudPhoneSettingModal: CloudPhoneSettingModal | null = null;
     tipModal: TipModal | null = null;
 
@@ -146,6 +149,9 @@ export default class CloudPhone extends BaseNavNavgator {
                     ref={sm => this.cloudPhoneSettingModal = sm}
                     onPhoneSettingAction={this.onPhoneSettingAction} />
 
+                <UploadFileModal
+                    ref={uf => this.uploadFileModal = uf}
+                />
                 {/* 提示框 */}
                 <TipModal
                     ref={tm => this.tipModal = tm}
@@ -487,16 +493,7 @@ export default class CloudPhone extends BaseNavNavgator {
                     break;
 
                 case 'upFile':
-                    imagePicker({ maxFiles: 1, mediaType: 'any', compressImageMaxWidth: 800 }, (data) => {
-
-                        console.log('图片选择', data)
-                        let imgs = data as any[]
-                        let paths = imgs.map(i => i.path)
-
-                        request.upload('/cloudPhone/phone/uploadFile', { paths, deviceIds: cloudPhone.deviceId, selectAll: 2, searchGroupId: '', status: '' }, true).then(res => {
-                            tips.showTips('上传成功')
-                        })
-                    })
+                    this.uploadFileModal && this.uploadFileModal.uploadFile(cloudPhone)
                     break;
 
                 case 'upApp':

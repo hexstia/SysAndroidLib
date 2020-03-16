@@ -56,6 +56,7 @@ public class CloudPhoneModule extends ReactContextBaseJavaModule implements WebS
     * */
     @ReactMethod
     public void startWebsocketConnection(ReadableMap data, Promise callback){
+
         this.connectSocketPromise = callback;
 
         ptoken = data.getString("token");
@@ -86,7 +87,7 @@ public class CloudPhoneModule extends ReactContextBaseJavaModule implements WebS
         }
 
         if (sdk == null){
-            callback.reject("请先启动websocket线程","请先启动websocket线程");
+            callback.reject("未启动websocket线程","未启动websocket线程");
             return;
         }
 

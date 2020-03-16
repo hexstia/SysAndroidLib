@@ -59,7 +59,7 @@ function getFileType(name: string) {
   } else if (RegExp("\.(" + videoType.join("|") + ")$", "i").test(name.toLowerCase())) {
     return 'video/*';
   } else {
-    return 'file';
+    return 'file/*';
   }
 }
 

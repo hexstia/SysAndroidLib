@@ -111,6 +111,10 @@ export interface CloudPhoneModal {
     *  更新时间
     */
     updateTime: string,
+    /**
+    *  屏幕截图 Base64
+    */
+    screenShot?: string
 }
 
 
@@ -370,6 +374,16 @@ export interface Banner {
     title: string
     type: number
     typeStr: string
+}
+
+/**
+*  socket消息
+*/
+export interface SocketMessage {
+    code: string
+    eventName: 'webSocketOnOpen' | 'webSocektOnClose' | 'webSocektOnError' | 'webSocektMessage'
+    message: string
+    params: string
 }
 
 /**

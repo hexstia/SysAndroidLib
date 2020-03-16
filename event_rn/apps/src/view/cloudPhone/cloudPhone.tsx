@@ -5,7 +5,7 @@ import React from 'react';
 import { Image, ImageBackground, Platform, Text, TouchableOpacity, View } from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import Swiper from 'react-native-swiper';
-import { addCloudPhoneEventListener, enterCloudPhone } from '../../module/CloudPhoneModule';
+import { addCloudPhoneEventListener, addSocketEventListener, enterCloudPhone, sendWebsocketData } from '../../module/CloudPhoneModule';
 import CloudPhoneSettingModal from '../../module/cloudPhoneSettingModal';
 import EditPhoneNameModal from '../../module/editPhoneNameModal';
 import TipModal from '../../module/tipModal';
@@ -42,10 +42,7 @@ interface State {
     *  banner 数据
     */
     bannerDatas: Banner[],
-    /**
-    *  手机截图内容
-    */
-    screenshotData: any,
+
     tempImg: string
 }
 
@@ -63,7 +60,6 @@ export default class CloudPhone extends BaseNavNavgator {
         reStartPhoneIds: [],
         renewPhoneIds: [],
         bannerDatas: [],
-        screenshotData: {},
         tempImg: ''
     }
 
@@ -84,7 +80,11 @@ export default class CloudPhone extends BaseNavNavgator {
         let param = { page: 1, pageSize: 1000 }
         request.post('/cloudPhone/phone/list', param, true).then(result => {
             console.log('获取云手机列表', result)
-            this.setState({ phoneList: result.list })
+            this.setState({ phoneList: result.list }, () => {
+                if (this.state.phoneList.length > 0) {
+                    this.getScreenshot(this.state.phoneList[0])
+                }
+            })
         }).catch(err => {
             console.log('获取云手机列表', err)
         })
@@ -159,7 +159,7 @@ export default class CloudPhone extends BaseNavNavgator {
 
 
     /**
-    *  添加云手机监听
+    *  添加云手机监听 和 Socket 监听
     */
     addEventListener = () => {
         addCloudPhoneEventListener((eventName, phone) => {
@@ -191,6 +191,33 @@ export default class CloudPhone extends BaseNavNavgator {
 
                     })
                     break;
+            }
+        })
+
+
+        addSocketEventListener((eventName, socketMessage) => {
+            let { phoneList, phoneIndex, reStartPhoneIds, renewPhoneIds } = this.state
+
+            switch (eventName) {
+                case 'webSocektMessage':
+                    if (socketMessage.code == '5000') {
+                        let newPhoneList = [...phoneList].map((p, i) => {
+                            if (i == phoneIndex) {
+                                let screenShot = 'data:image/png;base64,' + socketMessage.message
+                                return { ...p, screenShot }
+                            }
+                            return p
+                        })
+                        this.setState({ phoneList: newPhoneList })
+                    } else if (socketMessage.code == '200') {
+                        let messageData = JSON.parse(socketMessage.message);
+                        if (messageData.method == 'rebootReceive') {
+                            // 重启成功
+                            let newRSIds = reStartPhoneIds.filter(id => id != messageData.data.deviceId)
+                            this.setState({ reStartPhoneIds: newRSIds })
+                        }
+                    }
+                    break
             }
         })
     }
@@ -251,14 +278,14 @@ export default class CloudPhone extends BaseNavNavgator {
                                             {
                                                 phoneList.map((phone, index) => {
 
-                                                    let isRestart = reStartPhoneIds.indexOf(phone.id) != -1
-                                                    let isRenew = renewPhoneIds.indexOf(phone.id) != -1
+                                                    let isRestart = reStartPhoneIds.indexOf(phone.deviceId) != -1
+                                                    let isRenew = renewPhoneIds.indexOf(phone.deviceId) != -1
 
                                                     return (
                                                         <TouchableOpacity style={{ flex: 1, backgroundColor: '#f0f', borderWidth: 1, borderColor: '#000' }}
                                                             activeOpacity={1}
                                                             onPress={this.enterCloudPhone.bind(this, phone)} >
-                                                            <ImageBackground style={{ width: phoneSwiperWidth, height: phoneSwiperHeight, alignItems: 'center' }} source={{ uri: this.state.tempImg }} >
+                                                            <ImageBackground style={{ width: phoneSwiperWidth, height: phoneSwiperHeight, alignItems: 'center' }} source={{ uri: phone.screenShot || this.state.tempImg }} >
                                                                 {
                                                                     (isRestart || isRenew) && (
                                                                         <View style={{ marginTop: 110, alignItems: 'center' }}>
@@ -438,9 +465,21 @@ export default class CloudPhone extends BaseNavNavgator {
 
             switch (action) {
                 case 'reStart': // 重启
-                    request.post('/cloudPhone/phone/resetDevice', { deviceIds: cloudPhone.deviceId, type: 1 }, true).then(result => {
-                        this.setState({ reStartPhoneIds: [...reStartPhoneIds, cloudPhone.id] })
+                    let messageData = {
+                        method: 'apply',
+                        type: 'cloudPhone',
+                        data: {
+                            device: [cloudPhone.deviceId],
+                            selectAll: ''
+                        }
+                    }
+
+                    sendWebsocketData(JSON.stringify(messageData)).then(v => {
+                        request.post('/cloudPhone/phone/resetDevice', { deviceIds: cloudPhone.deviceId, type: 1 }, true).then(result => {
+                            this.setState({ reStartPhoneIds: [...reStartPhoneIds, cloudPhone.deviceId] })
+                        })
                     })
+
                     break;
 
                 case 'upFile':
@@ -477,9 +516,20 @@ export default class CloudPhone extends BaseNavNavgator {
                     break;
 
                 case 'renew': // 恢复出厂设置
-                    request.post('/cloudPhone/phone/resetDevice', { deviceIds: cloudPhone.deviceId, type: 3 }, true).then(result => {
-                        this.setState({ renewPhoneIds: [...renewPhoneIds, cloudPhone.id] })
+                    let messageData2 = {
+                        method: 'apply',
+                        type: 'cloudPhone',
+                        data: {
+                            device: [cloudPhone.deviceId],
+                            selectAll: ''
+                        }
+                    }
+                    sendWebsocketData(JSON.stringify(messageData2)).then(v => {
+                        request.post('/cloudPhone/phone/resetDevice', { deviceIds: cloudPhone.deviceId, type: 3 }, true).then(result => {
+                            this.setState({ renewPhoneIds: [...renewPhoneIds, cloudPhone.deviceId] })
+                        })
                     })
+
                     break;
             }
         }
@@ -512,7 +562,6 @@ export default class CloudPhone extends BaseNavNavgator {
         if (banner) {
             this.navigate('BaseWebView', { title: banner.proTypeStr, uri: banner.skipUrl })
         }
-
     }
 
 
@@ -531,20 +580,28 @@ export default class CloudPhone extends BaseNavNavgator {
     *  获得手机截图
     */
     getScreenshot = (phone: CloudPhoneModal) => {
-        if (this.state.screenshotData[phone.deviceUdid] == undefined) {
-            let { phoneList, contentHeight, phoneIndex, bannerDatas } = this.state
+        let messageData = {
+            method: 'apply',
+            type: 'cloudPhone',
+            data: {
+                device: [phone.deviceId],
+                selectAll: ''
+            }
+        }
+        sendWebsocketData(JSON.stringify(messageData)).then(v => {
+            let { contentHeight } = this.state
             let addImgHeight = contentHeight - 10
             let phoneSwiperHeight = contentHeight - 97;
             let phoneSwiperWidth = Math.floor(addImgHeight * (185 / 363))
 
-
             let param = { screenStatus: 2, height: phoneSwiperHeight, width: phoneSwiperWidth, deviceId: phone.deviceId }
-            request.post('/cloudPhone/phone/screenshotCloudphone', param, true).then(result => {
+            request.post('/cloudPhone/phone/screenshotCloudphone', param, false).then(result => {
                 console.log(result)
             }).catch(err => {
                 console.log(err)
+                tips.showTips(err.message)
             })
-        }
+        })
     }
 
     /**
@@ -553,13 +610,13 @@ export default class CloudPhone extends BaseNavNavgator {
     checkCloudPhone = (phone: CloudPhoneModal) => {
         let { reStartPhoneIds, renewPhoneIds } = this.state
 
-        if (reStartPhoneIds.indexOf(phone.id) != -1) {
+        if (reStartPhoneIds.indexOf(phone.deviceId) != -1) {
             //此手机正在重启
             this.tipModal?.showModal('一键重启中，请稍后…')
             return false;
         }
 
-        if (renewPhoneIds.indexOf(phone.id) != -1) {
+        if (renewPhoneIds.indexOf(phone.deviceId) != -1) {
             // 此手机正在恢复出厂设置
             this.tipModal?.showModal('一键新机中，请稍后…')
             return false;

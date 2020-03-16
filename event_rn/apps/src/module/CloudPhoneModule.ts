@@ -1,13 +1,13 @@
 
 import { configs } from 'dl-kit';
-import { CloudPhoneModal } from 'global';
+import { CloudPhoneModal, SocketMessage } from 'global';
 import { NativeEventEmitter, NativeModules } from 'react-native';
 
 let CloudPhoneModule = NativeModules.CloudPhoneModule
 const eventEmitter = new NativeEventEmitter(CloudPhoneModule);
 
 type PhoneEventCallback = (eventName: 'cloudPhoneRestart' | 'cloudUploadFile' | 'cloudUploadApk' | 'cloudPhoneRenew' | 'cloudPhoneBack' | 'cloudPhoneHome', phone: CloudPhoneModal) => void
-type SocketEventCallback = (eventName: 'webSocketOnOpen' | 'webSocektOnClose' | 'webSocektOnError' | 'webSocektMessage', phone: CloudPhoneModal) => void
+type SocketEventCallback = (eventName: 'webSocketOnOpen' | 'webSocektOnClose' | 'webSocektOnError' | 'webSocektMessage', socketMessage: SocketMessage) => void
 
 let globalPhoneEventCallback: PhoneEventCallback | null = null
 let globalSocketEventCallback: SocketEventCallback | null = null
@@ -50,12 +50,12 @@ export function addSocketEventListener(eventCallback: SocketEventCallback) {
 /**
 *  启动websocket线程
 */
-export function startWebsocketConnection(token: string) {
+export function startWebsocketConnection() {
 
     // 先关闭websocket通信
     CloudPhoneModule.shutdownWebsocketConnect()
     // 再启动websocket线程
-    return CloudPhoneModule.startWebsocketConnection({ token })
+    return CloudPhoneModule.startWebsocketConnection({ token: configs.token }) as Promise<any>
 }
 
 /**
@@ -83,8 +83,21 @@ export function enterCloudPhone(phone: CloudPhoneModal) {
             reject()
         })
     })
+}
 
 
+export function sendWebsocketData(data: string) {
 
+    return new Promise((resolve, reject) => {
 
+        // 1.发送socket消息
+        CloudPhoneModule.sendWebsocketData(data).then(() => {
+            resolve()
+        }).catch((err: { code: string }) => {
+            if (err.code == '未启动websocket线程') {
+                CloudPhoneModule.startWebsocketConnection({ token: configs.token })
+            }
+            reject()
+        })
+    })
 }

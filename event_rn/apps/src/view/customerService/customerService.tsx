@@ -37,6 +37,7 @@ export default class CustomerService extends BaseNavNavgator {
         return (
             <View style={{ flex: 1 }}>
                 <DefaultListView
+                    style={{ marginTop: 5 }}
                     ref={lv => this.listView = lv}
                     useExternalSource={true}
                     dataSource={{ data: this.commonQuestions, pageNum: 0 }}

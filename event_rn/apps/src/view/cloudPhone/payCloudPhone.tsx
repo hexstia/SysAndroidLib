@@ -184,9 +184,9 @@ export default class PayCloudPhone extends BaseNavNavgator {
 
     request.post('/tcssPlatform/pay/orderPay', { orderId, payType: payType == 'weixin' ? 1 : 2 }, true).then(res => {
       // this.replace('PayResult', { title: '支付结果', orderPay: res.orderPay })
-      if(payType == 'weixin'){
+      if (payType == 'weixin') {
         this.wexinPay(res.orderPay)
-      }else{
+      } else {
         this.aliPay(res)
       }
 
@@ -199,12 +199,13 @@ export default class PayCloudPhone extends BaseNavNavgator {
   *  微信支付
   */
   wexinPay = (orderPay: any) => {
-    console.log('微信信息',orderPay);
 
-let outPayData = JSON.parse(orderPay.outPayData);
+    let outPayData = JSON.parse(orderPay.outPayData);
+    console.log('微信信息', outPayData);
 
-    return;
+
     let payData = {
+      appid: outPayData.appid,
       partnerid: outPayData.mch_id,
       prepayid: '',
       noncestr: outPayData.nonce_str,
@@ -212,6 +213,7 @@ let outPayData = JSON.parse(orderPay.outPayData);
       package: 'Sign=WXPay',
       sign: outPayData.sign
     }
+    return;
     RNArenaPay.wechatPay(payData).then((data: any) => {
       tips.showTips('支付成功');
 
@@ -233,13 +235,13 @@ let outPayData = JSON.parse(orderPay.outPayData);
   aliPay = (data: any) => {
 
     return;
-     // 支付宝支付
-     RNArenaPay.aliPay({}).then((data:any)=>{
+    // 支付宝支付
+    RNArenaPay.aliPay({}).then((data: any) => {
       console.log('支付成功')
-    },(error:any)=>{
+    }, (error: any) => {
       console.log('支付失败' + error.code)
     })
-    
+
   }
 
 

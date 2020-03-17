@@ -1,9 +1,10 @@
 
 
-import { BaseComponent, configs, ImageBtn, imagePicker, tips } from 'dl-kit';
+import { BaseComponent, configs, ImageBtn, tips } from 'dl-kit';
 import { CloudPhoneModal } from 'global';
 import React from 'react';
 import { Image, Modal, Text, View } from 'react-native';
+import DocumentPicker from 'react-native-document-picker';
 import { getFileType } from './publicFunc';
 var RNFS = require('react-native-fs');
 
@@ -23,15 +24,14 @@ interface UploadTask {
 interface State {
   visible: boolean,
   cloudPhone?: CloudPhoneModal,
-  uploadTasks: UploadTask[]
+  uploadTask?: UploadTask
 }
 /**
 *  编辑手机名称
 */
-export default class UploadFileModal extends BaseComponent<Props> {
+export default class UploadAppModal extends BaseComponent<Props> {
   state: State = {
     visible: false,
-    uploadTasks: []
   }
 
   constructor(props: Props) {
@@ -40,45 +40,39 @@ export default class UploadFileModal extends BaseComponent<Props> {
   }
 
   render() {
-    let { visible, uploadTasks } = this.state
-    let itemWidth = 90
-    let itemHeight = 100
+    let { visible, uploadTask } = this.state
     return (
       <Modal visible={visible}
         transparent={true}
         animationType='none'>
         <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'center', alignItems: 'center' }}>
 
-          <View style={{ width: 270, backgroundColor: '#fff', borderRadius: 10, overflow: 'hidden' }}>
+          <View style={{ width: 260, backgroundColor: '#fff', borderRadius: 10, overflow: 'hidden' }}>
             {/* 标题 */}
             <View style={{ height: 40, backgroundColor: '#6498FF', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
               <View style={{ width: 30, marginLeft: 5 }} />
-              <Text style={{ color: '#fff', fontSize: 18 }}>上传文件</Text>
-              <ImageBtn style={{ marginRight: 5 }} width={30} height={30} imgWidth={20} imgHeight={20} source={require('#/home/close.png')} onPress={this.close} />
+              <Text style={{ color: '#fff', fontSize: 18 }}>上传应用</Text>
+              <ImageBtn style={{ marginRight: 5 }} width={30} height={30} imgWidth={20} imgHeight={20}
+                source={require('#/home/close.png')} onPress={this.close} />
             </View>
 
             {/* 文件上传 */}
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginBottom: 10, alignSelf: 'stretch' }}>
-              {
-                uploadTasks.map(task => {
-                  return (
-                    <View style={{ width: itemWidth, height: itemHeight, alignItems: 'center' }} key={task.jobId}>
-                      {/* 文件夹📂 */}
-                      <Image style={{ width: 60, height: 60, marginTop: 10 }} resizeMode='contain' source={require('#/home/filePage.png')} />
-                      {/* 进度条 */}
-                      <View style={{ width: 60, height: 5, marginTop: 6, backgroundColor: '#EEEEEE', borderRadius: 2.5 }}>
-                        <View style={{ width: 60 * task.progress * 0.01, height: 5, backgroundColor: '#6498FF', borderRadius: 2.5 }} />
-                      </View>
-                      {/* 文字 */}
-                      <Text style={{ color: task.statusTextColor, fontSize: 10, marginTop: 4 }}>{task.status == 'success' ? '成功' : (task.status == 'faild' ? '失败' : `${task.progress}%`)}</Text>
-                    </View>
-                  )
-                })
-              }
-              <View style={{ width: itemWidth, height: itemHeight, alignItems: 'center' }}>
-                <ImageBtn style={{ marginTop: 15 }} imgWidth={50} imgHeight={50} source={require('#/home/addFile.png')} onPress={this.addFileClick} />
-              </View>
-            </View>
+            {
+              uploadTask && (
+                <View style={{ alignItems: 'center' }}>
+                  <Image style={{ marginTop: 12, width: 105, height: 78 }} source={require('#/home/uploadApp.png')} resizeMode='contain' />
+                  {/* 进度条 */}
+                  <View style={{ width: 120, height: 10, marginTop: 6, backgroundColor: '#EEEEEE', borderRadius: 5 }}>
+                    <View style={{ width: 120 * uploadTask.progress * 0.01, height: 10, backgroundColor: '#6498FF', borderRadius: 5 }} />
+                  </View>
+                  {/* 文字 */}
+                  <Text style={{ color: uploadTask.statusTextColor, fontSize: 12, marginTop: 2 }}>{uploadTask.status == 'success' ? '成功' : (uploadTask.status == 'faild' ? '失败' : `${uploadTask.progress}%`)}</Text>
+                  {/* 描述 */}
+                  <Text style={{ color: '#999', fontSize: 12, marginTop: 10, marginBottom: 16 }}>上传应用将自动安装</Text>
+                </View>
+              )
+            }
+
           </View>
 
         </View>
@@ -98,28 +92,30 @@ export default class UploadFileModal extends BaseComponent<Props> {
       return;
     }
 
-    imagePicker({ maxFiles: 100, mediaType: 'any', compressImageMaxWidth: 800 }, (data: any) => {
+    DocumentPicker.pick({ type: [DocumentPicker.types.allFiles] }).then(res => {
+      console.log('选择文件', res); // res.uri
 
-      console.log('图片选择', data)
-      let imgs = data as any[]
-      let paths = imgs.map(i => i.path)
-      if (paths.length > 0) {
-        this.setState({ visible: true })
-        this.uploadFiles(paths)
+      this.setState({ visible: true })
+      this.uploadFiles([res.uri])
+
+    }).catch(err => {
+      if (DocumentPicker.isCancel(err)) {
+        // User cancelled the picker, exit any dialogs or menus and move on
+      } else {
+        tips.showTips('选择文件失败')
       }
     })
-
   }
 
 
   uploadFiles = (paths: string[]) => {
-    let { cloudPhone, uploadTasks } = this.state
+    let { cloudPhone, uploadTask } = this.state
     if (cloudPhone == undefined) {
       tips.showTips('缺少云手机参数');
       return;
     }
 
-    var uploadUrl = configs.apiHost + '/cloudPhone/phone/uploadFile';
+    var uploadUrl = configs.apiHost + '/cloudPhone/phone/installApk';
 
     let fileDatas = paths.map((path, index) => {
       var arr = path.split('/');
@@ -142,20 +138,13 @@ export default class UploadFileModal extends BaseComponent<Props> {
         jobId,
         statusTextColor: '#6498FF'
       }
-      this.setState({ uploadTasks: [...uploadTasks, task] })
+      this.setState({ uploadTask: task })
     };
 
     var uploadProgress = (response: { jobId: number, totalBytesExpectedToSend: number, totalBytesSent: number }) => {
       var percentage = Math.floor((response.totalBytesSent / response.totalBytesExpectedToSend) * 100);
       console.log('上传进度：' + response.jobId + '==》' + percentage);
-
-      let newTasks = [...this.state.uploadTasks].map(task => {
-        if (task.jobId == response.jobId) {
-          return { ...task, progress: percentage }
-        }
-        return task;
-      })
-      this.setState({ uploadTasks: newTasks })
+      this.setState({ uploadTask: { ...this.state.uploadTask, progress: percentage } })
     };
 
     RNFS.uploadFiles({
@@ -179,19 +168,12 @@ export default class UploadFileModal extends BaseComponent<Props> {
       let body = JSON.parse(response.body);
       let success = response.statusCode == 200 && body.status == 200
 
-      let newTasks = [...this.state.uploadTasks].map(task => {
-        if (task.jobId == response.jobId) {
-          return { ...task, status: success ? 'success' : 'faild', statusTextColor: success ? '#18A918' : '#FE5437' }
-        }
-        return task;
-      })
-      this.setState({ uploadTasks: newTasks })
+      this.setState({ uploadTask: { ...this.state.uploadTask, status: success ? 'success' : 'faild', statusTextColor: success ? '#18A918' : '#FE5437' } })
     }).catch((err: any) => {
       if (err.description === "cancelled") {
         // cancelled by user
       }
-      tips.showTips(`上传失败！`)
-      console.log(err);
+      this.setState({ uploadTask: { ...this.state.uploadTask, status: 'faild', statusTextColor: '#FE5437' } })
     });
   }
 
@@ -205,18 +187,9 @@ export default class UploadFileModal extends BaseComponent<Props> {
   }
 
   /**
-  *  显示弹窗
-  */
-  // showModal = (phone: CloudPhoneModal) => {
-  //   this.setState({ visible: true, cloudPhone: phone }, () => {
-  //     this.addFileClick()
-  //   })
-  // }
-
-  /**
   *  上传文件
   */
-  uploadFile = (phone: CloudPhoneModal) => {
+  uploadApp = (phone: CloudPhoneModal) => {
     this.setState({ cloudPhone: phone }, () => {
       this.addFileClick()
     })

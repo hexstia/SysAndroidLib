@@ -3,12 +3,12 @@ import { BaseNavNavgator, DefaultListView, defaultStyle, ImageBtn, request, tips
 import { Banner, CloudPhoneModal } from 'global';
 import React from 'react';
 import { Image, ImageBackground, Platform, Text, TouchableOpacity, View } from 'react-native';
-import DocumentPicker from 'react-native-document-picker';
 import Swiper from 'react-native-swiper';
 import { addCloudPhoneEventListener, addSocketEventListener, enterCloudPhone, sendWebsocketData } from '../../module/CloudPhoneModule';
 import CloudPhoneSettingModal from '../../module/cloudPhoneSettingModal';
 import EditPhoneNameModal from '../../module/editPhoneNameModal';
 import TipModal from '../../module/tipModal';
+import UploadAppModal from '../../module/uploadAppModal';
 import UploadFileModal from '../../module/uploadFileModal';
 
 var RNFS = require('react-native-fs');
@@ -64,6 +64,7 @@ export default class CloudPhone extends BaseNavNavgator {
 
     editPhoneNameModal: EditPhoneNameModal | null = null;
     uploadFileModal: UploadFileModal | null = null;
+    uploadAppModal: UploadAppModal | null = null;
     cloudPhoneSettingModal: CloudPhoneSettingModal | null = null;
     tipModal: TipModal | null = null;
 
@@ -148,9 +149,14 @@ export default class CloudPhone extends BaseNavNavgator {
                 <CloudPhoneSettingModal
                     ref={sm => this.cloudPhoneSettingModal = sm}
                     onPhoneSettingAction={this.onPhoneSettingAction} />
-
+                {/* 上传文件弹窗 */}
                 <UploadFileModal
                     ref={uf => this.uploadFileModal = uf}
+                />
+
+                {/* 上传应用 */}
+                <UploadAppModal
+                    ref={ua => this.uploadAppModal = ua}
                 />
                 {/* 提示框 */}
                 <TipModal
@@ -337,13 +343,15 @@ export default class CloudPhone extends BaseNavNavgator {
                                 loop={true}
                                 autoplay={true}
                                 removeClippedSubviews={false}
-
-                                paginationStyle={{ bottom: 1 }}
-                                onTouchStart={this.bannerClick}>
+                                autoplayTimeout={4}
+                                paginationStyle={{ bottom: 1 }}>
                                 {
                                     bannerDatas.map((banner, index) => {
                                         return (
-                                            <Image style={{ flex: 1 }} source={{ uri: banner.imagePath }} />
+                                            <TouchableOpacity style={{ width: defaultStyle.device.width, height: 56 }}
+                                                onPress={this.bannerClick.bind(this, banner)}>
+                                                <Image style={{ width: defaultStyle.device.width, height: 56 }} resizeMode='cover' source={{ uri: banner.imagePath }} />
+                                            </TouchableOpacity>
                                         )
                                     })
                                 }
@@ -497,23 +505,7 @@ export default class CloudPhone extends BaseNavNavgator {
                     break;
 
                 case 'upApp':
-                    console.log('搞事请')
-                    DocumentPicker.pick({ type: [DocumentPicker.types.allFiles] }).then(res => {
-                        console.log('选择文件', res);
-
-                        request.upload('/cloudPhone/phone/installApk', { paths: [res.uri], deviceIds: cloudPhone.deviceId + '', selectAll: 2, searchGroupId: '', status: '' }, true).then(res => {
-
-                        })
-
-
-                    }).catch(err => {
-                        if (DocumentPicker.isCancel(err)) {
-                            // User cancelled the picker, exit any dialogs or menus and move on
-                        } else {
-                            throw err;
-                        }
-                    })
-
+                    this.uploadAppModal && this.uploadAppModal.uploadApp(cloudPhone);
                     break;
 
                 case 'renew': // 恢复出厂设置
@@ -556,13 +548,10 @@ export default class CloudPhone extends BaseNavNavgator {
     /**
     *  banner 点击事件
     */
-    bannerClick = (swiper: any, data: { index: number }) => {
-        console.log(data);
-        console.log(this.state.bannerDatas[data.index])
-        let banner = this.state.bannerDatas[data.index]
-        if (banner) {
-            this.navigate('BaseWebView', { title: banner.proTypeStr, uri: banner.skipUrl })
-        }
+    bannerClick = (banner: Banner) => {
+
+        this.navigate('BaseWebView', { title: banner.proTypeStr, uri: banner.skipUrl })
+
     }
 
 

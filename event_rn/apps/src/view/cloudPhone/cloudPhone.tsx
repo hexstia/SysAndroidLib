@@ -3,6 +3,7 @@ import { BaseNavNavgator, DefaultListView, defaultStyle, ImageBtn, request, tips
 import { Banner, CloudPhoneModal } from 'global';
 import React from 'react';
 import { Image, ImageBackground, Platform, Text, TouchableOpacity, View } from 'react-native';
+import DocumentPicker from 'react-native-document-picker';
 import Swiper from 'react-native-swiper';
 import { addCloudPhoneEventListener, addSocketEventListener, enterCloudPhone, sendWebsocketData } from '../../module/CloudPhoneModule';
 import CloudPhoneSettingModal from '../../module/cloudPhoneSettingModal';
@@ -10,8 +11,6 @@ import EditPhoneNameModal from '../../module/editPhoneNameModal';
 import TipModal from '../../module/tipModal';
 import UploadAppModal from '../../module/uploadAppModal';
 import UploadFileModal from '../../module/uploadFileModal';
-
-var RNFS = require('react-native-fs');
 
 
 
@@ -506,6 +505,25 @@ export default class CloudPhone extends BaseNavNavgator {
 
                 case 'upApp':
                     this.uploadAppModal && this.uploadAppModal.uploadApp(cloudPhone);
+                    return;
+
+                    DocumentPicker.pick({ type: [DocumentPicker.types.allFiles] }).then(res => {
+                        console.log('选择文件', res);
+
+                        request.upload('/cloudPhone/phone/installApk', { paths: [res.uri], deviceIds: cloudPhone.deviceId + '', selectAll: 2, searchGroupId: '', status: '' }, true).then(res => {
+
+                        })
+
+
+                    }).catch(err => {
+                        if (DocumentPicker.isCancel(err)) {
+                            // User cancelled the picker, exit any dialogs or menus and move on
+                        } else {
+                            throw err;
+                        }
+                    })
+
+
                     break;
 
                 case 'renew': // 恢复出厂设置

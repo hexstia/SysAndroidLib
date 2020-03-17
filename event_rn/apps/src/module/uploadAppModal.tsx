@@ -156,7 +156,7 @@ export default class UploadAppModal extends BaseComponent<Props> {
       },
       fields: {
         token: configs.token,
-        'deviceIds': cloudPhone!.deviceId + '',
+        deviceIds: cloudPhone!.deviceId + '',
         selectAll: '2',
         searchGroupId: '',
         status: ''

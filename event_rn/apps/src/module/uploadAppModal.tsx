@@ -147,6 +147,15 @@ export default class UploadAppModal extends BaseComponent<Props> {
       this.setState({ uploadTask: { ...this.state.uploadTask, progress: percentage } })
     };
 
+    console.log('上传参数', {
+      token: configs.token,
+      deviceIds: cloudPhone!.deviceId + '',
+      selectAll: '2',
+      searchGroupId: '',
+      status: ''
+    });
+
+
     RNFS.uploadFiles({
       toUrl: uploadUrl,
       files: fileDatas,

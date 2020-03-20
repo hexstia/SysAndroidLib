@@ -205,6 +205,8 @@ export default class CloudPhone extends BaseNavNavgator {
 
         addSocketEventListener((eventName, socketMessage) => {
             let { phoneList, phoneIndex, reStartPhoneIds, renewPhoneIds } = this.state
+            console.log('收到消息', eventName)
+            console.log('消息内容', socketMessage);
 
             switch (eventName) {
                 case 'webSocektMessage':
@@ -225,7 +227,6 @@ export default class CloudPhone extends BaseNavNavgator {
                             let newRNIds = renewPhoneIds.filter(id => id != messageData.data.deviceId)
 
                             this.setState({ reStartPhoneIds: newRSIds, renewPhoneIds: newRNIds })
-
                         }
                     }
                     break

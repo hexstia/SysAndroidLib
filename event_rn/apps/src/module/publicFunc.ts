@@ -116,7 +116,7 @@ let saveLoginInfo = (loginResult: { refreshToken: string, token: string, userInf
     AsyncStorage.setItem(constact.locationSaveKey.userInfo, userInfoStr)
 
     //启动websocket
-    startWebsocketConnection(configs.token)
+    startWebsocketConnection()
   } catch (error) {
   }
 }
@@ -139,7 +139,7 @@ let loadLoginInfoFromLocal = async (callBack: (success: boolean) => void) => {
       callBack(true)
 
       //启动websocket
-      startWebsocketConnection(configs.token)
+      startWebsocketConnection()
       console.log('从本地获取了用户信息', userInfo);
       console.log('本地token：', token);
       console.log('本地刷新token：', refreshToken);

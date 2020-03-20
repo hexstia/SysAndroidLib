@@ -220,15 +220,11 @@ export default class CloudPhone extends BaseNavNavgator {
                     } else if (socketMessage.code == '200') {
                         let messageData = JSON.parse(socketMessage.message);
                         if (messageData.method == 'rebootReceive') {
-                            if (messageData.data.type == 1) {
-                                // 重启成功
-                                let newRSIds = reStartPhoneIds.filter(id => id != messageData.data.deviceId)
-                                this.setState({ reStartPhoneIds: newRSIds })
-                            } else {
-                                // 恢复出厂成功
-                                let newRNIds = renewPhoneIds.filter(id => id != messageData.data.deviceId)
-                                this.setState({ renewPhoneIds: newRNIds })
-                            }
+                            // 重启成功 和 重置成功都是返回这个 一起处理
+                            let newRSIds = reStartPhoneIds.filter(id => id != messageData.data.deviceId)
+                            let newRNIds = renewPhoneIds.filter(id => id != messageData.data.deviceId)
+
+                            this.setState({ reStartPhoneIds: newRSIds, renewPhoneIds: newRNIds })
 
                         }
                     }

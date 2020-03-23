@@ -17,7 +17,7 @@ interface ConfigStyle {
   /**
   *  刷新token
   */
-  refreshToken?:string,
+  refreshToken?: string,
   /**
   *   临时token
   */

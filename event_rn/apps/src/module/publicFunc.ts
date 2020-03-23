@@ -75,6 +75,7 @@ let refreshToken = () => {
       getTempToken((tempToken, timestamp) => {
         let refreshParam = { token: tempToken, timestamp: timestamp, refreshToken: configs.refreshToken }
         request.postDefault('/tcssPlatform/user/refreshToken', refreshParam, true).then(response => {
+          console.log('刷新token', response)
           if (response.status == 200) {
             saveLoginInfo(response.data);
             resolve(response.data)

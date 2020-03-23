@@ -41,7 +41,9 @@ export default class Login extends BaseNavNavgator {
         return (
             <View style={{ flex: 1 }}>
                 {/* logo */}
-                <Image style={{ marginTop: defaultStyle.safeArea.navMarginTop + 25, width: 75, height: 75, borderRadius: 8, backgroundColor: '#eee', alignSelf: 'center' }} />
+                <Image style={{ marginTop: defaultStyle.safeArea.navMarginTop + 25, width: 75, height: 75, borderRadius: 8, backgroundColor: '#eee', alignSelf: 'center' }}
+                    resizeMode='contain'
+                    source={require('#/login/logo.png')} />
 
                 {/* 手机号 */}
                 <View style={{ marginTop: 25, marginHorizontal: 15, height: 45, backgroundColor: '#fff', borderRadius: 5, paddingHorizontal: 10 }}>
@@ -242,10 +244,10 @@ export default class Login extends BaseNavNavgator {
     *  QQ登录
     */
     qqLogin = () => {
-        RNArenaPay.QQLogin().then((res:any)=>{
+        RNArenaPay.QQLogin().then((res: any) => {
             console.log(res);
-            
-        },(err:any)=>{
+
+        }, (err: any) => {
             console.log(err)
         })
 
@@ -256,24 +258,24 @@ export default class Login extends BaseNavNavgator {
     */
     wexinLogin = () => {
 
-    // 微信登录
-    RNArenaPay.wechatLogin().then((data: any) => {
+        // 微信登录
+        RNArenaPay.wechatLogin().then((data: any) => {
 
-        console.log(data.code);
-  
-        // request.post('/wxUser/wxlogin', { code: data.code, regMethod: 1 }, true).then(result => {
-        //   console.log(result);
-        //   configs.token = result
-        //   AsyncStorage.setItem(constact.locationSaveKey.localToken, result)
-        //   msg.emit('changeRootRoute', { rootRoute: 'TabNavigator' })
-        // })
-      }, (error: any) => {
-        console.log('err');
-        console.log(JSON.stringify(error));
-        tips.showTips('微信登录失败')
-        // tips.showTips(JSON.stringify(error))
-        // console.log('支付失败' + error.code)
-      })
+            console.log(data.code);
+
+            // request.post('/wxUser/wxlogin', { code: data.code, regMethod: 1 }, true).then(result => {
+            //   console.log(result);
+            //   configs.token = result
+            //   AsyncStorage.setItem(constact.locationSaveKey.localToken, result)
+            //   msg.emit('changeRootRoute', { rootRoute: 'TabNavigator' })
+            // })
+        }, (error: any) => {
+            console.log('err');
+            console.log(JSON.stringify(error));
+            tips.showTips('微信登录失败')
+            // tips.showTips(JSON.stringify(error))
+            // console.log('支付失败' + error.code)
+        })
     }
 
 }

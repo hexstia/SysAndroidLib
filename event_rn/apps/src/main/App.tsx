@@ -29,6 +29,7 @@ interface State {
 export default class App extends Component<Props, {}> {
 
   state: State = {
+    rootRoute: 'TabNavigator'
   }
 
   constructor(props: Props) {
@@ -41,11 +42,11 @@ export default class App extends Component<Props, {}> {
     RNArenaPay.QQRegister('101845112')
 
     loadLoginInfoFromLocal((success => {
-      if (success) {
-        this.setState({ rootRoute: 'TabNavigator' })
-      } else {
-        this.setState({ rootRoute: 'Login' })
-      }
+      // if (success) {
+      //   this.setState({ rootRoute: 'TabNavigator' })
+      // } else {
+      //   this.setState({ rootRoute: 'Login' })
+      // }
     }))
 
     // 登出事件监听
@@ -59,7 +60,7 @@ export default class App extends Component<Props, {}> {
     msg.on('changeRootRoute', (e: any) => {
       this.setState({ rootRoute: e.rootRoute })
     })
-    
+
   }
 
   render() {

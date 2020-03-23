@@ -51,7 +51,7 @@ export default class Mine extends BaseNavNavgator {
         {
             icon: require('#/mine/phoneNumber.png'),
             title: '手机号',
-            text: (configs.userInfo?.mobile || '').replaceStrIndex(3,'****'),
+            text: (configs.userInfo?.mobile || '').replaceStrIndex(3, '****'),
             nav: 'ChangePhoneNum',
             data: { title: '修改手机号' }
         },
@@ -85,7 +85,7 @@ export default class Mine extends BaseNavNavgator {
                 </ImageBackground>
 
                 {/* 手机号 */}
-                <Text style={{ color: '#333', fontSize: 16, alignSelf: 'center', marginTop: 22 }}>{(configs.userInfo?.mobile || '').replaceStrIndex(3,'****')}</Text>
+                <Text style={{ color: '#333', fontSize: 16, alignSelf: 'center', marginTop: 22 }}>{(configs.userInfo?.mobile || '').replaceStrIndex(3, '****')}</Text>
 
                 {/* 按钮栏目 */}
                 <View style={{ backgroundColor: '#fff', marginTop: 10 }}>
@@ -105,11 +105,16 @@ export default class Mine extends BaseNavNavgator {
                 </View>
 
                 {/* 退出登录按钮 */}
-                <ImageBtn style={{ marginTop: 24, alignSelf: 'center' }}
-                    imgWidth={223}
-                    imgHeight={63}
-                    source={require('#/mine/logoutBtn.png')}
-                    onPress={this.logout} />
+                {
+                    configs.token && (
+                        <ImageBtn style={{ marginTop: 24, alignSelf: 'center' }}
+                            imgWidth={223}
+                            imgHeight={63}
+                            source={require('#/mine/logoutBtn.png')}
+                            onPress={this.logout} />
+                    )
+                }
+
             </View>
         );
     }

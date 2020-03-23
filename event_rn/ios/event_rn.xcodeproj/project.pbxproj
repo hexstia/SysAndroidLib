@@ -45,6 +45,10 @@
 		31049CFDDB59465FAA75F6E9 /* libRNImagePicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C7383D558BC044D882285341 /* libRNImagePicker.a */; };
 		32B86045919E48C7A2AC8B74 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 83A2E1BD5DB54C9F82A51AB1 /* Entypo.ttf */; };
 		44CA13306D8447178F873EF6 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 807C7BE90ACE4755801659F8 /* EvilIcons.ttf */; };
+		48016A7D242902930084224B /* CloudPhoneModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 48016A7C242902930084224B /* CloudPhoneModule.m */; };
+		48016AB2242908C10084224B /* LJCloudPhone.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48016AB1242908C10084224B /* LJCloudPhone.framework */; };
+		48016AB424290BA10084224B /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48016AB324290BA10084224B /* CloudKit.framework */; };
+		48016AB72429174B0084224B /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 48016AB62429174B0084224B /* MainViewController.m */; };
 		4877CD6C22603D3200D63344 /* iconfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4877CD6B22603D3200D63344 /* iconfont.ttf */; };
 		48A85922E0694A03A3698465 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F0078E7B14A14296A07621B0 /* MaterialCommunityIcons.ttf */; };
 		48AEF400240D2702001F0A51 /* libRNArenaPay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D03E2EF240BA3D000D05077 /* libRNArenaPay.a */; };
@@ -521,6 +525,12 @@
 		342B4F9EF40F47E5931E353F /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/native-base/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
 		342BAE50017E4498AE915C57 /* libRNGestureHandler-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libRNGestureHandler-tvOS.a"; sourceTree = "<group>"; };
 		37588DFF42A44F4C95AE1BC7 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
+		48016A7B242902930084224B /* CloudPhoneModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CloudPhoneModule.h; sourceTree = "<group>"; };
+		48016A7C242902930084224B /* CloudPhoneModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CloudPhoneModule.m; sourceTree = "<group>"; };
+		48016AB1242908C10084224B /* LJCloudPhone.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = LJCloudPhone.framework; sourceTree = "<group>"; };
+		48016AB324290BA10084224B /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		48016AB52429174A0084224B /* MainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MainViewController.h; path = event_rn/MainViewController.h; sourceTree = "<group>"; };
+		48016AB62429174B0084224B /* MainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MainViewController.m; path = event_rn/MainViewController.m; sourceTree = "<group>"; };
 		4869B2462417FB4E003F1837 /* event_rn.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = event_rn.entitlements; path = event_rn/event_rn.entitlements; sourceTree = "<group>"; };
 		4877CD6B22603D3200D63344 /* iconfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = iconfont.ttf; sourceTree = "<group>"; };
 		48DCC0FB227ED1450038C80C /* RSKImageCropper.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RSKImageCropper.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -619,6 +629,7 @@
 				00C302E81ABCBA2D00DB3ED1 /* libRCTImage.a in Frameworks */,
 				48DCC0FF227ED1450038C80C /* QBImagePicker.framework in Frameworks */,
 				133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */,
+				48016AB424290BA10084224B /* CloudKit.framework in Frameworks */,
 				00C302E91ABCBA2D00DB3ED1 /* libRCTNetwork.a in Frameworks */,
 				139105C61AF99C1200B5F7CC /* libRCTSettings.a in Frameworks */,
 				48DCC0FC227ED1450038C80C /* RSKImageCropper.framework in Frameworks */,
@@ -634,6 +645,7 @@
 				7780EC52B1D84BFE8C6D5EF9 /* libRNSVG.a in Frameworks */,
 				9D573ACC3BCF4818BC2EAAA1 /* libRNDocumentPicker.a in Frameworks */,
 				2105F43261844BE88443625C /* libRNFS.a in Frameworks */,
+				48016AB2242908C10084224B /* LJCloudPhone.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -758,6 +770,10 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				48016A7B242902930084224B /* CloudPhoneModule.h */,
+				48016A7C242902930084224B /* CloudPhoneModule.m */,
+				48016AB52429174A0084224B /* MainViewController.h */,
+				48016AB62429174B0084224B /* MainViewController.m */,
 			);
 			name = event_rn;
 			sourceTree = "<group>";
@@ -788,6 +804,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				48016AB324290BA10084224B /* CloudKit.framework */,
 				8D03E360240BC33300D05077 /* libsqlite3.tbd */,
 				8D03E35E240BC31800D05077 /* libiconv.tbd */,
 				8D03E304240BA4D100D05077 /* CoreMotion.framework */,
@@ -1033,6 +1050,7 @@
 		8D03E306240BA56400D05077 /* framework */ = {
 			isa = PBXGroup;
 			children = (
+				48016AB1242908C10084224B /* LJCloudPhone.framework */,
 				8D03E365240BC88D00D05077 /* TencentOpenAPI.framework */,
 				8D03E307240BA56400D05077 /* WeChatSDK1.8.3 */,
 				8D03E30D240BA56400D05077 /* AlipaySDK.bundle */,
@@ -1150,6 +1168,7 @@
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = 74PFUL8KG7;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
@@ -1744,7 +1763,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				48016A7D242902930084224B /* CloudPhoneModule.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				48016AB72429174B0084224B /* MainViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1797,6 +1818,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = 74PFUL8KG7;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -1847,6 +1869,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = 74PFUL8KG7;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
@@ -1897,7 +1920,8 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 74PFUL8KG7;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/event_rn/framework",
@@ -1942,7 +1966,8 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 74PFUL8KG7;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/event_rn/framework",

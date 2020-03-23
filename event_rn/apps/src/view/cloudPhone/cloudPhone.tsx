@@ -543,7 +543,7 @@ export default class CloudPhone extends BaseNavNavgator {
                             selectAll: ''
                         }
                     }
-                    sendWebsocketData(JSON.stringify(messageData2)).then(v => {
+                    sendWebsocketData(Platform.OS == 'android' ? JSON.stringify(messageData2) : `${cloudPhone.deviceId}`).then(v => {
                         request.post('/cloudPhone/phone/resetDevice', { deviceIds: cloudPhone.deviceId, type: 2 }, true).then(result => {
                             this.setState({ renewPhoneIds: [...renewPhoneIds, cloudPhone.deviceId] })
                         })

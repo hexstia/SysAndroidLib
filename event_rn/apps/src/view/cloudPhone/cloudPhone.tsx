@@ -512,14 +512,14 @@ export default class CloudPhone extends BaseNavNavgator {
                     break;
 
                 case 'upApp':
-                    this.uploadAppModal && this.uploadAppModal.uploadApp(cloudPhone);
-                    return;
+                    // this.uploadAppModal && this.uploadAppModal.uploadApp(cloudPhone);
+                    // return;
 
                     DocumentPicker.pick({ type: [DocumentPicker.types.allFiles] }).then(res => {
                         console.log('选择文件', res);
 
                         request.upload('/cloudPhone/phone/installApk', { paths: [res.uri], deviceIds: cloudPhone.deviceId + '', selectAll: 2, searchGroupId: '', status: '' }, true).then(res => {
-
+                            tips.showTips('上传成功!');
                         })
 
 

@@ -13,8 +13,8 @@ interface State {
     password: string,
     verCode: string,
     minutes: number
-
 }
+
 export default class Login extends BaseNavNavgator {
     static navigationOptions = { header: null }
 

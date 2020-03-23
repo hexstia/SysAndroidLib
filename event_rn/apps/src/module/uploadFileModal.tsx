@@ -66,7 +66,7 @@ export default class UploadFileModal extends BaseComponent<Props> {
                       {/* 文件夹📂 */}
                       <Image style={{ width: 60, height: 60, marginTop: 10 }} resizeMode='contain' source={require('#/home/filePage.png')} />
                       {/* 进度条 */}
-                      <View style={{ width: 60, height: 5, marginTop: 6, backgroundColor: '#EEEEEE', borderRadius: 2.5 }}>
+                      <View style={{ width: 60, height: 5, marginTop: 6, backgroundColor: '#EEEEEE', borderRadius: 2.5, overflow: 'hidden' }}>
                         <View style={{ width: 60 * task.progress * 0.01, height: 5, backgroundColor: '#6498FF', borderRadius: 2.5 }} />
                       </View>
                       {/* 文字 */}

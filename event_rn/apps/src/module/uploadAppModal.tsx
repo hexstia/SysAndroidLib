@@ -6,6 +6,7 @@ import React from 'react';
 import { Image, Modal, Text, View } from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import { getFileType } from './publicFunc';
+
 var RNFS = require('react-native-fs');
 
 
@@ -62,7 +63,7 @@ export default class UploadAppModal extends BaseComponent<Props> {
                 <View style={{ alignItems: 'center' }}>
                   <Image style={{ marginTop: 12, width: 105, height: 78 }} source={require('#/home/uploadApp.png')} resizeMode='contain' />
                   {/* 进度条 */}
-                  <View style={{ width: 120, height: 10, marginTop: 6, backgroundColor: '#EEEEEE', borderRadius: 5 }}>
+                  <View style={{ width: 120, height: 10, marginTop: 6, backgroundColor: '#EEEEEE', borderRadius: 5, overflow: 'hidden' }}>
                     <View style={{ width: 120 * uploadTask.progress * 0.01, height: 10, backgroundColor: '#6498FF', borderRadius: 5 }} />
                   </View>
                   {/* 文字 */}
@@ -120,9 +121,8 @@ export default class UploadAppModal extends BaseComponent<Props> {
     let fileDatas = paths.map((path, index) => {
       var arr = path.split('/');
       let filename = arr[arr.length - 1];
-      let name = 'file';
       let type = getFileType(filename);
-      let fileData = { filepath: path.split('file://').join(''), filetype: type, name, filename };
+      let fileData = { filepath: path.split('file://').join(''), filetype: type, name: 'file', filename };
       return fileData
     })
     console.log('文件数组', fileDatas)
@@ -161,7 +161,7 @@ export default class UploadAppModal extends BaseComponent<Props> {
       files: fileDatas,
       method: 'POST',
       headers: {
-        'Accept': 'application/json'
+        'Accept': 'application/json',
       },
       fields: {
         token: configs.token,
@@ -182,6 +182,8 @@ export default class UploadAppModal extends BaseComponent<Props> {
       if (err.description === "cancelled") {
         // cancelled by user
       }
+      console.log('上传失败', err);
+
       this.setState({ uploadTask: { ...this.state.uploadTask, status: 'faild', statusTextColor: '#FE5437' } })
     });
   }

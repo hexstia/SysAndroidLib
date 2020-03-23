@@ -254,6 +254,10 @@ export default class CloudPhone extends BaseNavNavgator {
         let phoneSwiperHeight = contentHeight - 97;
         let phoneSwiperWidth = Math.floor(addImgHeight * (185 / 363))
 
+        let phoneWidth = phoneSwiperWidth * 166 / 185
+        let phoneHeight = phoneSwiperHeight * 295 / 363
+        let phoneTop = phoneSwiperHeight * 29.5 / 363
+
         return (
             <View style={{ flex: 1 }}>
                 <View style={{ flex: 1 }} onLayout={(e) => this.setState({ contentHeight: e.nativeEvent.layout.height })}>
@@ -301,21 +305,24 @@ export default class CloudPhone extends BaseNavNavgator {
                                                         <TouchableOpacity style={{}}
                                                             activeOpacity={1}
                                                             onPress={this.enterCloudPhone.bind(this, phone)} >
-                                                            <ImageBackground style={{ width: phoneSwiperWidth, height: phoneSwiperHeight, alignItems: 'center' }} resizeMode='contain' source={phone.screenShot ? { uri: phone.screenShot } : require('#/home/tempPhone.png')} >
-                                                                {
-                                                                    (isRestart || isRenew) && (
-                                                                        <View style={{ marginTop: 110, alignItems: 'center' }}>
-                                                                            <View style={{ width: 84, height: 84, borderRadius: 42, borderColor: '#6498FF', borderWidth: 6, justifyContent: 'center', alignItems: 'center' }}>
-                                                                                <View style={{ width: 60, height: 60, borderRadius: 30, backgroundColor: '#A0C3FF', justifyContent: 'center', alignItems: 'center' }}>
-                                                                                    <View style={{ width: 48, height: 48, borderRadius: 24, backgroundColor: '#6498FF', justifyContent: 'center', alignItems: 'center' }} >
-                                                                                        <Text style={{ color: '#fff', fontSize: 12 }}>loading</Text>
+                                                            <ImageBackground style={{ width: phoneSwiperWidth, height: phoneSwiperHeight, alignItems: 'center' }} resizeMode='contain' source={require('#/home/tempPhone.png')} >
+                                                                <ImageBackground style={{ width: phoneWidth, height: phoneHeight, marginTop: phoneTop, alignItems: 'center', }} resizeMode='contain' source={phone.screenShot ? { uri: phone.screenShot } : require('#/home/tempPhoneContent.png')} >
+                                                                    {
+                                                                        (isRestart || isRenew) && (
+                                                                            <View style={{ marginTop: 110, alignItems: 'center' }}>
+                                                                                <View style={{ width: 84, height: 84, borderRadius: 42, borderColor: '#6498FF', borderWidth: 6, justifyContent: 'center', alignItems: 'center' }}>
+                                                                                    <View style={{ width: 60, height: 60, borderRadius: 30, backgroundColor: '#A0C3FF', justifyContent: 'center', alignItems: 'center' }}>
+                                                                                        <View style={{ width: 48, height: 48, borderRadius: 24, backgroundColor: '#6498FF', justifyContent: 'center', alignItems: 'center' }} >
+                                                                                            <Text style={{ color: '#fff', fontSize: 12 }}>loading</Text>
+                                                                                        </View>
                                                                                     </View>
                                                                                 </View>
+                                                                                <Text style={{ color: '#fff', fontSize: 12, marginTop: 6, lineHeight: 15, textAlign: 'center', fontWeight: '600' }}>{isRestart ? '一键重启中\n请稍后' : '一键新机中\n请稍后'}</Text>
                                                                             </View>
-                                                                            <Text style={{ color: '#fff', fontSize: 12, marginTop: 6, lineHeight: 15, textAlign: 'center', fontWeight: '600' }}>{isRestart ? '一键重启中\n请稍后' : '一键新机中\n请稍后'}</Text>
-                                                                        </View>
-                                                                    )
-                                                                }
+                                                                        )
+                                                                    }
+                                                                </ImageBackground>
+
                                                             </ImageBackground>
                                                         </TouchableOpacity>
                                                     )
@@ -602,8 +609,10 @@ export default class CloudPhone extends BaseNavNavgator {
             let addImgHeight = contentHeight - 10
             let phoneSwiperHeight = contentHeight - 97;
             let phoneSwiperWidth = Math.floor(addImgHeight * (185 / 363))
+            let phoneWidth = phoneSwiperWidth * 166 / 185
+            let phoneHeight = phoneSwiperHeight * 295 / 363
 
-            let param = { screenStatus: 2, height: phoneSwiperHeight, width: phoneSwiperWidth, deviceId: phone.deviceId }
+            let param = { screenStatus: 2, height: phoneHeight, width: phoneWidth, deviceId: phone.deviceId }
             request.post('/cloudPhone/phone/screenshotCloudphone', param, false).then(result => {
                 console.log(result)
             }).catch(err => {

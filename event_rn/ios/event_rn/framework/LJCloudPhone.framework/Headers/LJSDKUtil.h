@@ -57,7 +57,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// 弹窗(增加一个View)
 -(void)showAlertViewWithView:(UIView *)view;
 /// 发送一个webSocket请求 申请设备
--(void)sendOneWebSocketRequestWithDeviceId:(NSInteger)deviceId;
+-(void)sendOneWebSocketRequestWithJsonStr:(NSString *)jsonStr;
 
 /// 弹出内部页: 返回值为是否成功, 不成功的原因是因为视频流未成功打开.需要等待视频流打开
 /// @param currentVc 当前控制器

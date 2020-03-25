@@ -49,6 +49,8 @@
 		48016AB2242908C10084224B /* LJCloudPhone.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48016AB1242908C10084224B /* LJCloudPhone.framework */; };
 		48016AB424290BA10084224B /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48016AB324290BA10084224B /* CloudKit.framework */; };
 		48016AB72429174B0084224B /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 48016AB62429174B0084224B /* MainViewController.m */; };
+		48016ABA242BA2CD0084224B /* ActionModal.m in Sources */ = {isa = PBXBuildFile; fileRef = 48016AB9242BA2CD0084224B /* ActionModal.m */; };
+		48016ABC242BA2EA0084224B /* ActionModal.xib in Resources */ = {isa = PBXBuildFile; fileRef = 48016ABB242BA2EA0084224B /* ActionModal.xib */; };
 		4877CD6C22603D3200D63344 /* iconfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4877CD6B22603D3200D63344 /* iconfont.ttf */; };
 		48A85922E0694A03A3698465 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F0078E7B14A14296A07621B0 /* MaterialCommunityIcons.ttf */; };
 		48AEF400240D2702001F0A51 /* libRNArenaPay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D03E2EF240BA3D000D05077 /* libRNArenaPay.a */; };
@@ -531,6 +533,9 @@
 		48016AB324290BA10084224B /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		48016AB52429174A0084224B /* MainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MainViewController.h; path = event_rn/MainViewController.h; sourceTree = "<group>"; };
 		48016AB62429174B0084224B /* MainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MainViewController.m; path = event_rn/MainViewController.m; sourceTree = "<group>"; };
+		48016AB8242BA2CD0084224B /* ActionModal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ActionModal.h; path = event_rn/ActionModal.h; sourceTree = "<group>"; };
+		48016AB9242BA2CD0084224B /* ActionModal.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ActionModal.m; path = event_rn/ActionModal.m; sourceTree = "<group>"; };
+		48016ABB242BA2EA0084224B /* ActionModal.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ActionModal.xib; path = event_rn/ActionModal.xib; sourceTree = "<group>"; };
 		4869B2462417FB4E003F1837 /* event_rn.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = event_rn.entitlements; path = event_rn/event_rn.entitlements; sourceTree = "<group>"; };
 		4877CD6B22603D3200D63344 /* iconfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = iconfont.ttf; sourceTree = "<group>"; };
 		48DCC0FB227ED1450038C80C /* RSKImageCropper.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RSKImageCropper.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -774,6 +779,9 @@
 				48016A7C242902930084224B /* CloudPhoneModule.m */,
 				48016AB52429174A0084224B /* MainViewController.h */,
 				48016AB62429174B0084224B /* MainViewController.m */,
+				48016AB8242BA2CD0084224B /* ActionModal.h */,
+				48016AB9242BA2CD0084224B /* ActionModal.m */,
+				48016ABB242BA2EA0084224B /* ActionModal.xib */,
 			);
 			name = event_rn;
 			sourceTree = "<group>";
@@ -1694,6 +1702,7 @@
 				61EEE975970B4B96991DF2A1 /* MaterialIcons.ttf in Resources */,
 				D20BF7A95D7845EABF69055F /* Octicons.ttf in Resources */,
 				1E290C172B1D4F469B9C653A /* Roboto_medium.ttf in Resources */,
+				48016ABC242BA2EA0084224B /* ActionModal.xib in Resources */,
 				9B243E9E75D54C678BDF4346 /* Roboto.ttf in Resources */,
 				80A1344D0DCC4B2C941A1FF1 /* rubicon-icon-font.ttf in Resources */,
 				8ACC3664A16D4B90A656D9AB /* SimpleLineIcons.ttf in Resources */,
@@ -1763,6 +1772,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				48016ABA242BA2CD0084224B /* ActionModal.m in Sources */,
 				48016A7D242902930084224B /* CloudPhoneModule.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				48016AB72429174B0084224B /* MainViewController.m in Sources */,

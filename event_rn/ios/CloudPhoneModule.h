@@ -13,6 +13,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CloudPhoneModule : RCTEventEmitter
 
+// 获取单例
++(instancetype)instance;
+
+// 关闭视频流
+-(void)closeVideoStream;
+
+/// 发送云手机事件消息
+-(void)sendCloudPhoneEvent:(NSString *)eventName;
+
 @end
 
 NS_ASSUME_NONNULL_END

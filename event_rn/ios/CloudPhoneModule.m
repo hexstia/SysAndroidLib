@@ -9,6 +9,7 @@
 #import "CloudPhoneModule.h"
 #import "MainViewController.h"
 #import <LJCloudPhone/LJCloudPhone.h>
+#import "ActionModal.h"
 
 
 @interface CloudPhoneModule ()<LJSDKUtilDelegate>
@@ -31,6 +32,21 @@
 
 @implementation CloudPhoneModule
 
+
+static CloudPhoneModule *modal;
+
+-(instancetype)init{
+  self = [super init];
+  if (self != nil) {
+    modal = self;
+  }
+  return self;
+}
+
++(instancetype)instance{
+  return modal;
+}
+
 - (dispatch_queue_t)methodQueue
 {
     return dispatch_get_main_queue();
@@ -41,6 +57,8 @@ RCT_EXPORT_MODULE()
 -(NSArray<NSString *> *)supportedEvents{
   return @[@"cloudPhoneEvent",@"webSocketEvent"];
 }
+
+
 /**
 启动websocket线程
 
@@ -71,9 +89,9 @@ RCT_EXPORT_METHOD(startWebsocketConnection:(NSDictionary *)data success:(RCTProm
  @success 成功的回调
  @faild 失败的回调
  */
-RCT_EXPORT_METHOD(sendWebsocketData:(NSString *)deviceId success:(RCTPromiseResolveBlock)success faild:(RCTPromiseRejectBlock)faild)
+RCT_EXPORT_METHOD(sendWebsocketData:(NSString *)data success:(RCTPromiseResolveBlock)success faild:(RCTPromiseRejectBlock)faild)
 {
-   if (deviceId == nil) {
+   if (data == nil) {
      faild(@"缺少参数",@"缺少参数",nil);
      return;
    }
@@ -82,9 +100,8 @@ RCT_EXPORT_METHOD(sendWebsocketData:(NSString *)deviceId success:(RCTPromiseReso
     faild(@"未启动websocket线程",@"未启动websocket线程",nil);
     return;
   }
-  NSInteger i_deviceId = [deviceId integerValue];
   
-  [self.ljSDKUtil sendOneWebSocketRequestWithDeviceId:i_deviceId];
+  [self.ljSDKUtil sendOneWebSocketRequestWithJsonStr:data];
   success(@"发送消息成功");
 }
 
@@ -127,7 +144,10 @@ RCT_EXPORT_METHOD(getDevicePermise:(NSString *)deviceId success:(RCTPromiseResol
    NSInteger i_deviceId = [deviceId integerValue];
    
    [self.ljSDKUtil openVideoStreamWithDeviceId:i_deviceId];
-   success(@"打开成功");
+  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    success(@"打开成功");
+  });
+   
 }
 
 
@@ -196,6 +216,7 @@ RCT_EXPORT_METHOD(startDumpScreen:(NSDictionary *)data success:(RCTPromiseResolv
 -(void)ljSDKUtilWebSocketConnectedSuccess{
   if (self.startWebsocketSuccess) {
     self.startWebsocketSuccess(@"socket链接打开");
+    self.startWebsocketSuccess = nil;
   }
   self.socketConnect = YES;
   [self sendWebSocketEvent:@"webSocketOnOpen" code:@"200" message:@"" params:@""];
@@ -204,6 +225,11 @@ RCT_EXPORT_METHOD(startDumpScreen:(NSDictionary *)data success:(RCTPromiseResolv
 
 /// websocket 连接报错
 -(void)ljSDKUtilWebSocketConnectedFailWithError:(NSError *_Nullable)error{
+  if(self.startWebsocketFaild){
+    self.startWebsocketFaild(@"链接失败",@"链接失败",nil);
+    self.startWebsocketFaild = nil;
+  }
+  [self.ljSDKUtil disConnectoWebSocket];
   self.socketConnect = NO;
   [self sendWebSocketEvent:@"webSocektOnError" code:@"400" message:@"" params:@""];
 
@@ -213,13 +239,10 @@ RCT_EXPORT_METHOD(startDumpScreen:(NSDictionary *)data success:(RCTPromiseResolv
 -(void)ljSDKUtilWebSocketDidClosedWithCode:(NSInteger)code reason:(NSString *_Nullable)reason{
   if (self.closeWebsocketSuccess) {
     self.closeWebsocketSuccess(@"成功关闭socket");
+    self.closeWebsocketSuccess = nil;
   }
   [self sendWebSocketEvent:@"webSocektOnClose" code:@"404" message:@"" params:@""];
   self.socketConnect = NO;
-  
-
-  
-
 }
 
 /// websocket 收到消息的调
@@ -231,7 +254,9 @@ RCT_EXPORT_METHOD(startDumpScreen:(NSDictionary *)data success:(RCTPromiseResolv
 /// 悬浮球的点击事件的回调
 -(void)ljSDKUtilPanBtnClickCallBack{
   
-  
+  ActionModal *ac = [ActionModal initActionModalWith:self.phoneModal];
+  ac.frame =  [ UIScreen mainScreen ].bounds;
+  [UIApplication.sharedApplication.keyWindow addSubview:ac];
 }
 
 
@@ -247,4 +272,9 @@ RCT_EXPORT_METHOD(startDumpScreen:(NSDictionary *)data success:(RCTPromiseResolv
     return _ljSDKUtil;
 }
 
+
+-(void)closeVideoStream{
+  NSInteger deviceId = [self.phoneModal[@"deviceId"] integerValue];
+  [self.ljSDKUtil closeVideoStreamWithDeviceId:deviceId];
+}
 @end

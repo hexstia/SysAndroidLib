@@ -17,16 +17,16 @@ let globalSocketEventCallback: SocketEventCallback | null = null
 *  监听云手机事件
 */
 eventEmitter.addListener('cloudPhoneEvent', (phone) => {
-    console.log('监听云手机事件', phone)
+    // console.log('监听云手机事件', phone)
     globalPhoneEventCallback && globalPhoneEventCallback(phone.eventName, phone)
 })
 
 /**
 *  监听Socket事件
 */
-eventEmitter.addListener('webSocketEvent', (phone) => {
-    console.log('监听Socket事件', phone)
-    globalSocketEventCallback && globalSocketEventCallback(phone.eventName, phone)
+eventEmitter.addListener('webSocketEvent', (event) => {
+    // console.log('监听Socket事件', phone)
+    globalSocketEventCallback && globalSocketEventCallback(event.eventName, event)
 })
 
 

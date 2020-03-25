@@ -193,6 +193,7 @@ public class CloudPhoneModule extends ReactContextBaseJavaModule implements WebS
     public void webSocketOnOpen(short code, String message) {
         if (connectSocketPromise != null){
             connectSocketPromise.resolve("socket链接打开");
+            connectSocketPromise = null;
         }
         Log.i("socket链接打开", "testOneAct ----- code:  " + code + " ; message : " + message);
         sendWebSocketEvent("webSocketOnOpen","200",message,"");
@@ -204,6 +205,7 @@ public class CloudPhoneModule extends ReactContextBaseJavaModule implements WebS
         Log.i("socket链接关闭", "testOneAct ----- code:  " + code + " ; reason : " + reason);
         if (closeSocketPromise != null){
             closeSocketPromise.resolve("成功关闭socket");
+            closeSocketPromise = null;
         }
         sdk = null;
         sendWebSocketEvent("webSocektOnClose","404","","");
@@ -216,6 +218,10 @@ public class CloudPhoneModule extends ReactContextBaseJavaModule implements WebS
         if (sdk != null){
             sdk.shutdownWebsocketConnect();
             sdk = null;
+        }
+        if(connectSocketPromise != null){
+            connectSocketPromise.reject("链接失败","链接失败");
+            connectSocketPromise = null;
         }
         sendWebSocketEvent("webSocektOnError","400","","");
 

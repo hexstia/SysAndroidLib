@@ -94,6 +94,7 @@ public class MyLanJinagTouchActivity extends LanJinagTouchActivity  implements V
 
 
     private void sendEvent(String eventName){
+//        通过contentProvider进行线程间通信
         getContentResolver().query(uri,null,eventName,null,null);
 
     }

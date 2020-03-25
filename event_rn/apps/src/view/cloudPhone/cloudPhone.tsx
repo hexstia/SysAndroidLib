@@ -209,32 +209,37 @@ export default class CloudPhone extends BaseNavNavgator {
 
         addSocketEventListener((eventName, socketMessage) => {
             let { phoneList, phoneIndex, reStartPhoneIds, renewPhoneIds } = this.state
-            console.log('收到消息', eventName)
-            console.log('消息内容', socketMessage);
 
-            switch (eventName) {
-                case 'webSocektMessage':
-                    if (socketMessage.code == '5000') {
-                        let newPhoneList = [...phoneList].map((p, i) => {
-                            if (i == phoneIndex) {
-                                let screenShot = 'data:image/png;base64,' + socketMessage.message
-                                return { ...p, screenShot }
+            console.log('收到socket消息', socketMessage);
+            try {
+                let messageData = JSON.parse(socketMessage.message);
+                switch (eventName) {
+                    case 'webSocektMessage':
+                        if (messageData.code == '5000') {
+                            let newPhoneList = [...phoneList].map((p, i) => {
+                                if (i == phoneIndex) {
+                                    let screenShot = 'data:image/png;base64,' + messageData.message
+                                    return { ...p, screenShot }
+                                }
+                                return p
+                            })
+                            this.setState({ phoneList: newPhoneList })
+                        } else if (messageData.code == '200') {
+                            if (messageData.method == 'rebootReceive') {
+                                // 重启成功 和 重置成功都是返回这个 一起处理
+                                let newRSIds = reStartPhoneIds.filter(id => id != messageData.data.deviceId)
+                                let newRNIds = renewPhoneIds.filter(id => id != messageData.data.deviceId)
+
+                                this.setState({ reStartPhoneIds: newRSIds, renewPhoneIds: newRNIds })
                             }
-                            return p
-                        })
-                        this.setState({ phoneList: newPhoneList })
-                    } else if (socketMessage.code == '200') {
-                        let messageData = JSON.parse(socketMessage.message);
-                        if (messageData.method == 'rebootReceive') {
-                            // 重启成功 和 重置成功都是返回这个 一起处理
-                            let newRSIds = reStartPhoneIds.filter(id => id != messageData.data.deviceId)
-                            let newRNIds = renewPhoneIds.filter(id => id != messageData.data.deviceId)
-
-                            this.setState({ reStartPhoneIds: newRSIds, renewPhoneIds: newRNIds })
                         }
-                    }
-                    break
+                        break
+                }
+            } catch (error) {
+                console.log('socket消息解析失败', socketMessage);
             }
+
+
         })
     }
 
@@ -543,7 +548,7 @@ export default class CloudPhone extends BaseNavNavgator {
                             selectAll: ''
                         }
                     }
-                    sendWebsocketData(Platform.OS == 'android' ? JSON.stringify(messageData2) : `${cloudPhone.deviceId}`).then(v => {
+                    sendWebsocketData(JSON.stringify(messageData2)).then(v => {
                         request.post('/cloudPhone/phone/resetDevice', { deviceIds: cloudPhone.deviceId, type: 2 }, true).then(result => {
                             this.setState({ renewPhoneIds: [...renewPhoneIds, cloudPhone.deviceId] })
                         })
@@ -601,7 +606,7 @@ export default class CloudPhone extends BaseNavNavgator {
             type: 'cloudPhone',
             data: {
                 device: [phone.deviceId],
-                selectAll: ''
+                selectAll: '1'
             }
         }
         sendWebsocketData(JSON.stringify(messageData)).then(v => {

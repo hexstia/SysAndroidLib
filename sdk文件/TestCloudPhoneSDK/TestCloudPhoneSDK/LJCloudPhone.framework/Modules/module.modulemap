@@ -1,6 +1,0 @@
-framework module LJCloudPhone {
-  umbrella header "LJCloudPhone.h"
-
-  export *
-  module * { export * }
-}

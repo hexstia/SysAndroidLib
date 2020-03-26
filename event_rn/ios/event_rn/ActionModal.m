@@ -9,6 +9,8 @@
 #import "ActionModal.h"
 #import "CloudPhoneModule.h"
 #import "MainViewController.h"
+#import "Nerwork.h"
+
 
 @interface ActionModal ()
 
@@ -19,6 +21,8 @@
 @property (weak, nonatomic) IBOutlet UIImageView *signalImage;
 @property (weak, nonatomic) IBOutlet UILabel *signalLabel;
 @property(strong,nonatomic) NSDictionary *phone;
+
+@property(weak,nonatomic) NSTimer *timer;
 
 
 @end
@@ -40,6 +44,21 @@
   self.blackBGView.layer.cornerRadius = 5;
   self.blackBGView.layer.masksToBounds = YES;
   
+}
+
+-(void)awakeFromNib{
+  [super awakeFromNib];
+  self.timer = [NSTimer scheduledTimerWithTimeInterval:1 repeats:YES block:^(NSTimer * _Nonnull timer) {
+    NSString * cc = [Nerwork getByteRate];
+
+    NSLog(@"当前网速--：%@",cc);
+
+  }];
+}
+
+-(void)dealloc{
+  
+  [self.timer invalidate];
 }
 
 - (IBAction)closeBtnClick:(id)sender {

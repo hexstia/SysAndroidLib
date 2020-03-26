@@ -10,6 +10,7 @@
 #import "MainViewController.h"
 #import <LJCloudPhone/LJCloudPhone.h>
 #import "ActionModal.h"
+#import "Nerwork.h"
 
 
 @interface CloudPhoneModule ()<LJSDKUtilDelegate>
@@ -102,7 +103,9 @@ RCT_EXPORT_METHOD(sendWebsocketData:(NSString *)data success:(RCTPromiseResolveB
   }
   
   [self.ljSDKUtil sendOneWebSocketRequestWithJsonStr:data];
-  success(@"发送消息成功");
+  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    success(@"发送消息成功");
+  });
 }
 
 /**
@@ -144,10 +147,7 @@ RCT_EXPORT_METHOD(getDevicePermise:(NSString *)deviceId success:(RCTPromiseResol
    NSInteger i_deviceId = [deviceId integerValue];
    
    [self.ljSDKUtil openVideoStreamWithDeviceId:i_deviceId];
-  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
     success(@"打开成功");
-  });
-   
 }
 
 
@@ -177,7 +177,7 @@ RCT_EXPORT_METHOD(startDumpScreen:(NSDictionary *)data success:(RCTPromiseResolv
   if (isSuc) {
     success(@"成功打开视频页面");
   }else{
-    faild(@"未打开视频流",@"未打开视频流",nil);
+    faild(@"未启动websocket线程",@"未启动websocket线程",nil);
   }
 
 }
@@ -249,6 +249,10 @@ RCT_EXPORT_METHOD(startDumpScreen:(NSDictionary *)data success:(RCTPromiseResolv
 /// @param message 收到的消息(json 串字符串)
 -(void)ljSDKUtilWebSocketDidReceiveMsg:(id _Nullable )message{
   [self sendWebSocketEvent:@"webSocektMessage" code:@"200" message:message params:message];
+  NSString * cc = [Nerwork getByteRate];
+
+  NSLog(@"当前网速++：%@",cc);
+
 }
 
 /// 悬浮球的点击事件的回调

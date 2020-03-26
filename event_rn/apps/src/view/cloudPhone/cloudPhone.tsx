@@ -215,22 +215,22 @@ export default class CloudPhone extends BaseNavNavgator {
                 let messageData = JSON.parse(socketMessage.message);
                 switch (eventName) {
                     case 'webSocektMessage':
-                        if (messageData.code == '5000') {
-                            let newPhoneList = [...phoneList].map((p, i) => {
-                                if (i == phoneIndex) {
-                                    let screenShot = 'data:image/png;base64,' + messageData.message
-                                    return { ...p, screenShot }
-                                }
-                                return p
-                            })
-                            this.setState({ phoneList: newPhoneList })
-                        } else if (messageData.code == '200') {
+                        if (messageData.code == '200') {
                             if (messageData.method == 'rebootReceive') {
                                 // 重启成功 和 重置成功都是返回这个 一起处理
                                 let newRSIds = reStartPhoneIds.filter(id => id != messageData.data.deviceId)
                                 let newRNIds = renewPhoneIds.filter(id => id != messageData.data.deviceId)
 
                                 this.setState({ reStartPhoneIds: newRSIds, renewPhoneIds: newRNIds })
+                            } else if (messageData.method == 'screenShot') {
+                                let newPhoneList = [...phoneList].map((p, i) => {
+                                    if (i == phoneIndex) {
+                                        let screenShot = 'data:image/png;base64,' + messageData.data.content
+                                        return { ...p, screenShot }
+                                    }
+                                    return p
+                                })
+                                this.setState({ phoneList: newPhoneList })
                             }
                         }
                         break
@@ -601,6 +601,7 @@ export default class CloudPhone extends BaseNavNavgator {
     *  获得手机截图
     */
     getScreenshot = (phone: CloudPhoneModal) => {
+
         let messageData = {
             method: 'apply',
             type: 'cloudPhone',
@@ -610,14 +611,7 @@ export default class CloudPhone extends BaseNavNavgator {
             }
         }
         sendWebsocketData(JSON.stringify(messageData)).then(v => {
-            let { contentHeight } = this.state
-            let addImgHeight = contentHeight - 10
-            let phoneSwiperHeight = contentHeight - 97;
-            let phoneSwiperWidth = Math.floor(addImgHeight * (185 / 363))
-            let phoneWidth = phoneSwiperWidth * 166 / 185
-            let phoneHeight = phoneSwiperHeight * 295 / 363
-
-            let param = { screenStatus: 2, height: phoneHeight, width: phoneWidth, deviceId: phone.deviceId }
+            let param = { screenStatus: 2, height: 568, width: 320, deviceId: phone.deviceId }
             request.post('/cloudPhone/phone/screenshotCloudphone', param, false).then(result => {
                 console.log(result)
             }).catch(err => {

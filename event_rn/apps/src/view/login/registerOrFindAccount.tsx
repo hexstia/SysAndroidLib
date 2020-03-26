@@ -83,7 +83,7 @@ export default class RegisterOrFindAccount extends BaseNavNavgator {
                         underlineColorAndroid="transparent"
                         placeholder='输入密码（6-20位）'
                         value={password}
-                        onChangeText={text => this.setState({ password: text })}
+                        onChangeText={text => this.setState({ password: text.trim() })}
                     />
                 </View>
                 {/* 再次输入密码 */}
@@ -96,7 +96,7 @@ export default class RegisterOrFindAccount extends BaseNavNavgator {
                         underlineColorAndroid="transparent"
                         placeholder='请再次输入密码'
                         value={passwordAgain}
-                        onChangeText={text => this.setState({ passwordAgain: text })}
+                        onChangeText={text => this.setState({ passwordAgain: text.trim() })}
                     />
                 </View>
 
@@ -125,15 +125,15 @@ export default class RegisterOrFindAccount extends BaseNavNavgator {
         let mobile = this.state.mobile
 
         if (isPhoneNum(mobile)) {
-            if(this.state.type == 'REGISTER'){
+            if (this.state.type == 'REGISTER') {
                 // 如果是注册，要验证一下手机号是否注册过
                 getTempToken((token, timestamp) => {
-                    request.post('/tcssPlatform/user/mobile/check',{token,timestamp,mobile},true).then(res=>{
+                    request.post('/tcssPlatform/user/mobile/check', { token, timestamp, mobile }, true).then(res => {
                         this.checkImgCode && this.checkImgCode.show()
                     })
                 })
 
-            }else{
+            } else {
                 this.checkImgCode && this.checkImgCode.show()
             }
         }
@@ -142,7 +142,7 @@ export default class RegisterOrFindAccount extends BaseNavNavgator {
     /**
     *  图形验证码通过
     */
-    imgCodePass = (imageId: string,checkcode:string) => {
+    imgCodePass = (imageId: string, checkcode: string) => {
         if (this.state.minutes > 0) { return }
 
         let mobile = this.state.mobile
@@ -190,6 +190,7 @@ export default class RegisterOrFindAccount extends BaseNavNavgator {
     */
     registerNow = () => {
         let { mobile, vcode, password, passwordAgain, imgId, checkcode, type } = this.state
+
         if (!isPhoneNum(mobile)) {
             return;
         }
@@ -204,13 +205,10 @@ export default class RegisterOrFindAccount extends BaseNavNavgator {
             return;
         }
 
-        if (password.length == 0) {
-            tips.showTips('请输密码')
-            return;
-        }
+        let passReg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,}$/;
 
-        if (password.length < 6 || password.length > 20) {
-            tips.showTips('密码必须在6~20位之间')
+        if (!passReg.test(password)) {
+            tips.showTips('密码至少8位字母数字组合');
             return;
         }
 

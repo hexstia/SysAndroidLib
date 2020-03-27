@@ -6,9 +6,9 @@ import com.facebook.react.bridge.WritableMap;
 
 public class PhoneModal {
 
-    private String deviceName;
-    private int deviceId;
-    private int id;
+    public String deviceName;
+    public int deviceId;
+    public int id;
 
     public PhoneModal(ReadableMap phone) {
         this.deviceId = phone.getInt("deviceId");

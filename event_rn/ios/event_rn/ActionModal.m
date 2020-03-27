@@ -9,7 +9,7 @@
 #import "ActionModal.h"
 #import "CloudPhoneModule.h"
 #import "MainViewController.h"
-#import "Nerwork.h"
+#import "NetSpeedCheck.h"
 
 
 @interface ActionModal ()
@@ -48,17 +48,36 @@
 
 -(void)awakeFromNib{
   [super awakeFromNib];
-  self.timer = [NSTimer scheduledTimerWithTimeInterval:1 repeats:YES block:^(NSTimer * _Nonnull timer) {
-    NSString * cc = [Nerwork getByteRate];
-
-    NSLog(@"当前网速--：%@",cc);
-
-  }];
+//  self.timer = [NSTimer scheduledTimerWithTimeInterval:1 repeats:YES block:^(NSTimer * _Nonnull timer) {
+//    NSString * cc = [Nerwork getByteRate];
+//
+//    NSLog(@"当前网速--：%@",cc);
+//
+//  }];
+  //     开始监控网速
+  [[NetSpeedCheck shareNetworkSpeed] startCheckNet];
+  
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkDownloadNetSpeed:) name:GJDownloadNetworkSpeedNotificationKey object:nil];
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkUploadNetSpeed:) name:GJDownloadNetworkSpeedNotificationKey object:nil];
 }
 
+
+#pragma mark - 下行速度
+-(void)checkDownloadNetSpeed:(NSNotification *)notification {
+    self.signalLabel.text = notification.object[@"NetSpeed"];
+}
+#pragma mark - 上行速度
+-(void)checkUploadNetSpeed:(NSNotification *)notification {
+    
+   NSString *text = [NSString stringWithFormat:@"上行速度：%@ ",notification.object[@"NetSpeed"]];
+  NSLog(text);
+}
+
+
+
 -(void)dealloc{
-  
-  [self.timer invalidate];
+//  停止监控网速
+  [[NetSpeedCheck shareNetworkSpeed] stopCheckNet];
 }
 
 - (IBAction)closeBtnClick:(id)sender {
@@ -93,6 +112,7 @@
 
 - (IBAction)quiteBtnClick:(id)sender {
   [[CloudPhoneModule instance] closeVideoStream];
+  [[CloudPhoneModule instance] sendCloudPhoneEvent:@"cloudPhoneClose"];
   [self removeFromSuperview];
 }
 - (IBAction)homeBtnClick:(id)sender {

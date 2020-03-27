@@ -3,7 +3,7 @@
 import { BaseComponent, configs, ImageBtn, tips } from 'dl-kit';
 import { CloudPhoneModal } from 'global';
 import React from 'react';
-import { Image, Modal, Text, View } from 'react-native';
+import { Image, Modal, Platform, Text, View } from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import { getFileType } from './publicFunc';
 
@@ -93,7 +93,7 @@ export default class UploadAppModal extends BaseComponent<Props> {
       return;
     }
 
-    DocumentPicker.pick({ type: [DocumentPicker.types.allFiles] }).then(res => {
+    DocumentPicker.pick({ type: Platform.OS == 'ios' ? 'public.item' : DocumentPicker.types.allFiles }).then(res => {
       console.log('选择文件', res); // res.uri
 
       this.setState({ visible: true })

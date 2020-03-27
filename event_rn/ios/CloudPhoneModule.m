@@ -10,7 +10,6 @@
 #import "MainViewController.h"
 #import <LJCloudPhone/LJCloudPhone.h>
 #import "ActionModal.h"
-#import "Nerwork.h"
 
 
 @interface CloudPhoneModule ()<LJSDKUtilDelegate>
@@ -20,6 +19,10 @@
 // 链接socket 回调
 @property(nonatomic,copy)RCTPromiseResolveBlock startWebsocketSuccess;
 @property(nonatomic,copy)RCTPromiseRejectBlock startWebsocketFaild;
+
+// 发送socket请求回调
+@property(nonatomic,copy)RCTPromiseResolveBlock sendSocketReqSuccess;
+@property(nonatomic,copy)RCTPromiseRejectBlock sendSocketReqFaild;
 
 // 关闭socket 回调
 @property(nonatomic,copy)RCTPromiseResolveBlock closeWebsocketSuccess;
@@ -101,11 +104,11 @@ RCT_EXPORT_METHOD(sendWebsocketData:(NSString *)data success:(RCTPromiseResolveB
     faild(@"未启动websocket线程",@"未启动websocket线程",nil);
     return;
   }
+//  self.sendSocketReqSuccess = success;
+//  self.sendSocketReqFaild = faild;
   
   [self.ljSDKUtil sendOneWebSocketRequestWithJsonStr:data];
-  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-    success(@"发送消息成功");
-  });
+  success(@"发送成功");
 }
 
 /**
@@ -147,7 +150,10 @@ RCT_EXPORT_METHOD(getDevicePermise:(NSString *)deviceId success:(RCTPromiseResol
    NSInteger i_deviceId = [deviceId integerValue];
    
    [self.ljSDKUtil openVideoStreamWithDeviceId:i_deviceId];
+  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
     success(@"打开成功");
+  });
+   
 }
 
 
@@ -217,6 +223,7 @@ RCT_EXPORT_METHOD(startDumpScreen:(NSDictionary *)data success:(RCTPromiseResolv
   if (self.startWebsocketSuccess) {
     self.startWebsocketSuccess(@"socket链接打开");
     self.startWebsocketSuccess = nil;
+    self.startWebsocketFaild = nil;
   }
   self.socketConnect = YES;
   [self sendWebSocketEvent:@"webSocketOnOpen" code:@"200" message:@"" params:@""];
@@ -228,6 +235,7 @@ RCT_EXPORT_METHOD(startDumpScreen:(NSDictionary *)data success:(RCTPromiseResolv
   if(self.startWebsocketFaild){
     self.startWebsocketFaild(@"链接失败",@"链接失败",nil);
     self.startWebsocketFaild = nil;
+    self.startWebsocketSuccess = nil;
   }
   [self.ljSDKUtil disConnectoWebSocket];
   self.socketConnect = NO;
@@ -248,11 +256,29 @@ RCT_EXPORT_METHOD(startDumpScreen:(NSDictionary *)data success:(RCTPromiseResolv
 /// websocket 收到消息的调
 /// @param message 收到的消息(json 串字符串)
 -(void)ljSDKUtilWebSocketDidReceiveMsg:(id _Nullable )message{
+//  NSDictionary *msgDict = [self dictionaryWithJsonString:message];
+//  if ([msgDict[@"code"] isEqualToString:@"200"]) {
+////    申请设备回调消息
+//    if ([msgDict[@"method"] isEqualToString:@"apply"]) {
+//
+//      if (self.sendSocketReqSuccess && self.sendSocketReqFaild) {
+//        NSDictionary *data = msgDict[@"data"];
+//        NSArray * controlDevice = data[@"controlDevice"];
+//        if (controlDevice.count == 0) {
+//          self.sendSocketReqFaild(@"申请设备失败", @"申请设备失败", nil);
+//        }else{
+//          self.sendSocketReqSuccess(@"申请设备成功");
+//        }
+//        self.sendSocketReqSuccess = nil;
+//        self.sendSocketReqFaild = nil;
+//      }
+//    } else if([msgDict[@"method"] isEqualToString:@"openVideoAppReceive"]){
+//
+//    }else{
+//      [self sendWebSocketEvent:@"webSocektMessage" code:@"200" message:message params:message];
+//    }
+//  }
   [self sendWebSocketEvent:@"webSocektMessage" code:@"200" message:message params:message];
-  NSString * cc = [Nerwork getByteRate];
-
-  NSLog(@"当前网速++：%@",cc);
-
 }
 
 /// 悬浮球的点击事件的回调
@@ -263,6 +289,25 @@ RCT_EXPORT_METHOD(startDumpScreen:(NSDictionary *)data success:(RCTPromiseResolv
   [UIApplication.sharedApplication.keyWindow addSubview:ac];
 }
 
+
+- (NSDictionary *)dictionaryWithJsonString:(NSString *)jsonString
+{
+    if (jsonString == nil) {
+        return nil;
+    }
+
+    NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *err;
+    NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData
+                                                        options:NSJSONReadingMutableContainers
+                                                          error:&err];
+    if(err)
+    {
+        NSLog(@"json解析失败：%@",err);
+        return nil;
+    }
+    return dic;
+}
 
 
 
@@ -280,5 +325,6 @@ RCT_EXPORT_METHOD(startDumpScreen:(NSDictionary *)data success:(RCTPromiseResolv
 -(void)closeVideoStream{
   NSInteger deviceId = [self.phoneModal[@"deviceId"] integerValue];
   [self.ljSDKUtil closeVideoStreamWithDeviceId:deviceId];
+  
 }
 @end

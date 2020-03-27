@@ -6,7 +6,7 @@ import { NativeEventEmitter, NativeModules } from 'react-native';
 let CloudPhoneModule = NativeModules.CloudPhoneModule
 const eventEmitter = new NativeEventEmitter(CloudPhoneModule);
 
-type PhoneEventCallback = (eventName: 'cloudPhoneRestart' | 'cloudUploadFile' | 'cloudUploadApk' | 'cloudPhoneRenew' | 'cloudPhoneBack' | 'cloudPhoneHome', phone: CloudPhoneModal) => void
+type PhoneEventCallback = (eventName: 'cloudPhoneRestart' | 'cloudUploadFile' | 'cloudUploadApk' | 'cloudPhoneRenew' | 'cloudPhoneBack' | 'cloudPhoneHome' | 'cloudPhoneClose', phone: CloudPhoneModal) => void
 type SocketEventCallback = (eventName: 'webSocketOnOpen' | 'webSocektOnClose' | 'webSocektOnError' | 'webSocektMessage', socketMessage: SocketMessage) => void
 
 let globalPhoneEventCallback: PhoneEventCallback | null = null

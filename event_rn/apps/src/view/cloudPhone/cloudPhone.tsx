@@ -203,6 +203,10 @@ export default class CloudPhone extends BaseNavNavgator {
 
                     })
                     break;
+
+                case 'cloudPhoneClose':
+                    this.getScreenshot(phone)
+                    break;
             }
         })
 
@@ -215,24 +219,24 @@ export default class CloudPhone extends BaseNavNavgator {
                 let messageData = JSON.parse(socketMessage.message);
                 switch (eventName) {
                     case 'webSocektMessage':
-                        if (messageData.code == '200') {
-                            if (messageData.method == 'rebootReceive') {
-                                // 重启成功 和 重置成功都是返回这个 一起处理
-                                let newRSIds = reStartPhoneIds.filter(id => id != messageData.data.deviceId)
-                                let newRNIds = renewPhoneIds.filter(id => id != messageData.data.deviceId)
 
-                                this.setState({ reStartPhoneIds: newRSIds, renewPhoneIds: newRNIds })
-                            } else if (messageData.method == 'screenShot') {
-                                let newPhoneList = [...phoneList].map((p, i) => {
-                                    if (i == phoneIndex) {
-                                        let screenShot = 'data:image/png;base64,' + messageData.data.content
-                                        return { ...p, screenShot }
-                                    }
-                                    return p
-                                })
-                                this.setState({ phoneList: newPhoneList })
-                            }
+                        if (messageData.method == 'rebootReceive') {
+                            // 重启成功 和 重置成功都是返回这个 一起处理
+                            let newRSIds = reStartPhoneIds.filter(id => id != messageData.data.deviceId)
+                            let newRNIds = renewPhoneIds.filter(id => id != messageData.data.deviceId)
+
+                            this.setState({ reStartPhoneIds: newRSIds, renewPhoneIds: newRNIds })
+                        } else if (messageData.method == 'screenShot') {
+                            let newPhoneList = [...phoneList].map((p, i) => {
+                                if (i == phoneIndex) {
+                                    let screenShot = 'data:image/png;base64,' + messageData.data.content
+                                    return { ...p, screenShot }
+                                }
+                                return p
+                            })
+                            this.setState({ phoneList: newPhoneList })
                         }
+
                         break
                 }
             } catch (error) {
@@ -520,7 +524,7 @@ export default class CloudPhone extends BaseNavNavgator {
                     // this.uploadAppModal && this.uploadAppModal.uploadApp(cloudPhone);
                     // return;
 
-                    DocumentPicker.pick({ type: [DocumentPicker.types.allFiles] }).then(res => {
+                    DocumentPicker.pick({ type: Platform.OS == 'ios' ? 'public.item' : DocumentPicker.types.allFiles }).then(res => {
                         console.log('选择文件', res);
 
                         request.upload('/cloudPhone/phone/installApk', { paths: [res.uri], deviceIds: cloudPhone.deviceId + '', selectAll: 2, searchGroupId: '', status: '' }, true).then(res => {

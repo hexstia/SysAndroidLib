@@ -60,6 +60,7 @@ public class MyLanJinagTouchActivity extends LanJinagTouchActivity  implements V
                 break;
 
             case R.id.btn_quit:
+                this.sendEvent("cloudPhoneClose");
                 this.closeVideo();
                 break;
 

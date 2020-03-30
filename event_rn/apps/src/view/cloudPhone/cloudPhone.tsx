@@ -214,7 +214,7 @@ export default class CloudPhone extends BaseNavNavgator {
         addSocketEventListener((eventName, socketMessage) => {
             let { phoneList, phoneIndex, reStartPhoneIds, renewPhoneIds } = this.state
 
-            console.log('收到socket消息', socketMessage);
+            // console.log('收到socket消息', socketMessage);
             try {
                 let messageData = JSON.parse(socketMessage.message);
                 switch (eventName) {
@@ -301,7 +301,6 @@ export default class CloudPhone extends BaseNavNavgator {
                                     <View style={{ marginTop: 10, flex: 1, width: phoneSwiperWidth, height: phoneSwiperHeight, alignSelf: 'center', overflow: 'hidden' }}>
                                         <Swiper
                                             loop={false}
-                                            removeClippedSubviews={false}
                                             showsPagination={false}
                                             onIndexChanged={this.phoneIndexChange}>
                                             {
@@ -313,7 +312,8 @@ export default class CloudPhone extends BaseNavNavgator {
                                                     return (
                                                         <TouchableOpacity style={{}}
                                                             activeOpacity={1}
-                                                            onPress={this.enterCloudPhone.bind(this, phone)} >
+                                                            onPress={this.enterCloudPhone.bind(this, phone)}
+                                                            key={phone.deviceId} >
                                                             <ImageBackground style={{ width: phoneSwiperWidth, height: phoneSwiperHeight, alignItems: 'center' }} resizeMode='contain' source={require('#/home/tempPhone.png')} >
                                                                 <ImageBackground style={{ width: phoneWidth, height: phoneHeight, marginTop: phoneTop, alignItems: 'center', }} resizeMode='contain' source={phone.screenShot ? { uri: phone.screenShot } : require('#/home/tempPhoneContent.png')} >
                                                                     {
@@ -358,14 +358,15 @@ export default class CloudPhone extends BaseNavNavgator {
                             <Swiper
                                 loop={true}
                                 autoplay={true}
-                                removeClippedSubviews={false}
                                 autoplayTimeout={4}
                                 paginationStyle={{ bottom: 1 }}>
                                 {
                                     bannerDatas.map((banner, index) => {
+
                                         return (
                                             <TouchableOpacity style={{ width: defaultStyle.device.width, height: 56 }}
-                                                onPress={this.bannerClick.bind(this, banner)}>
+                                                onPress={this.bannerClick.bind(this, banner)}
+                                                key={banner.id}>
                                                 <Image style={{ width: defaultStyle.device.width, height: 56 }} resizeMode='cover' source={{ uri: banner.imagePath }} />
                                             </TouchableOpacity>
                                         )

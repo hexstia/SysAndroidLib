@@ -4,6 +4,7 @@ import { BaseComponent, configs, ImageBtn, tips } from 'dl-kit';
 import { CloudPhoneModal } from 'global';
 import React from 'react';
 import { Image, Modal, Platform, Text, View } from 'react-native';
+import Upload from 'react-native-background-upload';
 import DocumentPicker from 'react-native-document-picker';
 import { getFileType } from './publicFunc';
 
@@ -18,8 +19,9 @@ interface Props {
 interface UploadTask {
   status: 'upload' | 'success' | 'faild',
   statusTextColor: string,
+  // 1 ~ 100
   progress: number,
-  jobId: number,
+  uploadId: string,
 }
 
 interface State {
@@ -97,9 +99,9 @@ export default class UploadAppModal extends BaseComponent<Props> {
       console.log('选择文件', res); // res.uri
 
       this.setState({ visible: true })
-      this.uploadFiles([res.uri])
-
-    }).catch(err => {
+      // this.uploadFiles([res.uri])
+      this.uploadFile(res.uri)
+    }).catch((err: any) => {
       if (DocumentPicker.isCancel(err)) {
         // User cancelled the picker, exit any dialogs or menus and move on
       } else {
@@ -108,6 +110,72 @@ export default class UploadAppModal extends BaseComponent<Props> {
     })
   }
 
+  /**
+  *  上传文件
+  */
+  uploadFile = (path: string) => {
+    let { cloudPhone, uploadTask } = this.state
+
+    var uploadUrl = configs.apiHost + '/cloudPhone/phone/installApk';
+    let params = {
+      token: configs.token,
+      deviceIds: cloudPhone!.deviceId + '',
+      selectAll: '2',
+      searchGroupId: '',
+      status: ''
+    }
+    const options = {
+      url: uploadUrl,
+      path: path,
+      method: 'POST',
+      type: 'multipart',
+      maxRetries: 2, // set retry count (Android only). Default 2
+      headers: {
+        Accept: 'application/json',
+        'content-type': 'application/octet-stream', // Customize content-type
+      },
+      field: 'file',
+      parameters: params,
+      // Below are options only supported on Android
+      notification: {
+        enabled: true
+      },
+      useUtf8Charset: true
+    }
+
+    Upload.startUpload(options).then((uploadId: string) => {
+      let task: UploadTask = {
+        status: 'upload',
+        progress: 0,
+        uploadId,
+        statusTextColor: '#6498FF'
+      }
+      this.setState({ uploadTask: task })
+
+      Upload.addListener('progress', uploadId, (data: any) => {
+        this.setState({ uploadTask: { ...this.state.uploadTask, progress: data.progress.toFixed(1) } })
+        console.log(`Progress: ${data.progress}%`)
+      })
+      Upload.addListener('error', uploadId, (data: any) => {
+        this.setState({ uploadTask: { ...this.state.uploadTask, status: 'faild', statusTextColor: '#FE5437' } }, this.closeDealy)
+        console.log(`Error: ${data.error}%`)
+      })
+
+      Upload.addListener('completed', uploadId, (data: any) => {
+        this.setState({ uploadTask: { ...this.state.uploadTask, status: 'success', statusTextColor: '#18A918' } }, this.closeDealy)
+        console.log('Completed!')
+      })
+    }).catch((err: any) => {
+      this.setState({ uploadTask: { ...this.state.uploadTask, status: 'faild', statusTextColor: '#FE5437' } }, this.closeDealy)
+    })
+  }
+
+
+  closeDealy = () => {
+    setTimeout(() => {
+      this.setState({ visible: false })
+    }, 1000);
+  }
 
   uploadFiles = (paths: string[]) => {
     let { cloudPhone, uploadTask } = this.state
@@ -162,6 +230,7 @@ export default class UploadAppModal extends BaseComponent<Props> {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
+        'content-type': 'application/octet-stream',
       },
       fields: {
         token: configs.token,

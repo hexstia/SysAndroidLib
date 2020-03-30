@@ -310,7 +310,7 @@ export default class CloudPhone extends BaseNavNavgator {
                                                     let isRenew = renewPhoneIds.indexOf(phone.deviceId) != -1
 
                                                     return (
-                                                        <TouchableOpacity style={{}}
+                                                        <TouchableOpacity
                                                             activeOpacity={1}
                                                             onPress={this.enterCloudPhone.bind(this, phone)}
                                                             key={phone.deviceId} >
@@ -522,26 +522,24 @@ export default class CloudPhone extends BaseNavNavgator {
                     break;
 
                 case 'upApp':
-                    // this.uploadAppModal && this.uploadAppModal.uploadApp(cloudPhone);
-                    // return;
+                    if (Platform.OS == 'ios') {
+                        this.uploadAppModal && this.uploadAppModal.uploadApp(cloudPhone);
+                    } else {
+                        DocumentPicker.pick({ type: Platform.OS == 'ios' ? 'public.item' : DocumentPicker.types.allFiles }).then(res => {
+                            console.log('选择文件', res);
 
-                    DocumentPicker.pick({ type: Platform.OS == 'ios' ? 'public.item' : DocumentPicker.types.allFiles }).then(res => {
-                        console.log('选择文件', res);
+                            request.upload('/cloudPhone/phone/installApk', { paths: [res.uri], deviceIds: cloudPhone.deviceId + '', selectAll: 2, searchGroupId: '', status: '' }, true).then(res => {
+                                tips.showTips('上传成功!');
+                            })
 
-                        request.upload('/cloudPhone/phone/installApk', { paths: [res.uri], deviceIds: cloudPhone.deviceId + '', selectAll: 2, searchGroupId: '', status: '' }, true).then(res => {
-                            tips.showTips('上传成功!');
+                        }).catch(err => {
+                            if (DocumentPicker.isCancel(err)) {
+                                // User cancelled the picker, exit any dialogs or menus and move on
+                            } else {
+                                throw err;
+                            }
                         })
-
-
-                    }).catch(err => {
-                        if (DocumentPicker.isCancel(err)) {
-                            // User cancelled the picker, exit any dialogs or menus and move on
-                        } else {
-                            throw err;
-                        }
-                    })
-
-
+                    }
                     break;
 
                 case 'renew': // 恢复出厂设置

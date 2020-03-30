@@ -3,6 +3,7 @@ package com.event_rn;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.vydia.RNUploader.UploaderReactPackage;
 import com.rnfs.RNFSPackage;
 import io.github.elyx0.reactnativedocumentpicker.DocumentPickerPackage;
 import com.dingle.pay.RNArenaPayPackage;
@@ -47,6 +48,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new UploaderReactPackage(),
             new RNFSPackage(),
             new DocumentPickerPackage(),
             new RNArenaPayPackage(),

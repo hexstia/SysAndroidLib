@@ -4,6 +4,7 @@ import { BaseComponent, configs, ImageBtn, imagePicker, tips } from 'dl-kit';
 import { CloudPhoneModal } from 'global';
 import React from 'react';
 import { Image, Modal, Text, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { getFileType } from './publicFunc';
 var RNFS = require('react-native-fs');
 
@@ -43,6 +44,8 @@ export default class UploadFileModal extends BaseComponent<Props> {
     let { visible, uploadTasks } = this.state
     let itemWidth = 90
     let itemHeight = 100
+    let itemCount = uploadTasks.length + 1
+    let fileViewHeight = itemCount > 9 ? 3 * itemHeight : Math.ceil(itemCount / 3) * itemHeight
     return (
       <Modal visible={visible}
         transparent={true}
@@ -58,26 +61,31 @@ export default class UploadFileModal extends BaseComponent<Props> {
             </View>
 
             {/* 文件上传 */}
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginBottom: 10, alignSelf: 'stretch' }}>
-              {
-                uploadTasks.map(task => {
-                  return (
-                    <View style={{ width: itemWidth, height: itemHeight, alignItems: 'center' }} key={task.jobId}>
-                      {/* 文件夹📂 */}
-                      <Image style={{ width: 60, height: 60, marginTop: 10 }} resizeMode='contain' source={require('#/home/filePage.png')} />
-                      {/* 进度条 */}
-                      <View style={{ width: 60, height: 5, marginTop: 6, backgroundColor: '#EEEEEE', borderRadius: 2.5, overflow: 'hidden' }}>
-                        <View style={{ width: 60 * task.progress * 0.01, height: 5, backgroundColor: '#6498FF', borderRadius: 2.5 }} />
-                      </View>
-                      {/* 文字 */}
-                      <Text style={{ color: task.statusTextColor, fontSize: 10, marginTop: 4 }}>{task.status == 'success' ? '成功' : (task.status == 'faild' ? '失败' : `${task.progress}%`)}</Text>
-                    </View>
-                  )
-                })
-              }
-              <View style={{ width: itemWidth, height: itemHeight, alignItems: 'center' }}>
-                <ImageBtn style={{ marginTop: 15 }} imgWidth={50} imgHeight={50} source={require('#/home/addFile.png')} onPress={this.addFileClick} />
-              </View>
+            <View style={{ marginBottom: 10, alignSelf: 'stretch', height: fileViewHeight }}>
+              <ScrollView>
+                <View style={{ flexDirection: 'row', flexWrap: 'wrap', }}>
+                  {
+                    uploadTasks.map(task => {
+                      return (
+                        <View style={{ width: itemWidth, height: itemHeight, alignItems: 'center' }} key={task.jobId}>
+                          {/* 文件夹📂 */}
+                          <Image style={{ width: 60, height: 60, marginTop: 10 }} resizeMode='contain' source={require('#/home/filePage.png')} />
+                          {/* 进度条 */}
+                          <View style={{ width: 60, height: 5, marginTop: 6, backgroundColor: '#EEEEEE', borderRadius: 2.5, overflow: 'hidden' }}>
+                            <View style={{ width: 60 * task.progress * 0.01, height: 5, backgroundColor: '#6498FF', borderRadius: 2.5 }} />
+                          </View>
+                          {/* 文字 */}
+                          <Text style={{ color: task.statusTextColor, fontSize: 10, marginTop: 4 }}>{task.status == 'success' ? '成功' : (task.status == 'faild' ? '失败' : `${task.progress}%`)}</Text>
+                        </View>
+                      )
+                    })
+                  }
+                  <View style={{ width: itemWidth, height: itemHeight, alignItems: 'center' }}>
+                    <ImageBtn style={{ marginTop: 15 }} imgWidth={50} imgHeight={50} source={require('#/home/addFile.png')} onPress={this.addFileClick} />
+                  </View>
+                </View>
+              </ScrollView>
+
             </View>
           </View>
 
@@ -201,7 +209,7 @@ export default class UploadFileModal extends BaseComponent<Props> {
   *  关闭
   */
   close = () => {
-    this.setState({ visible: false })
+    this.setState({ visible: false, uploadTasks: [] })
   }
 
   /**

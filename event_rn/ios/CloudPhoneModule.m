@@ -85,6 +85,22 @@ RCT_EXPORT_METHOD(startWebsocketConnection:(NSDictionary *)data success:(RCTProm
     [self.ljSDKUtil connectoWebSocketWithToken:token];
 }
 
+/**
+检查websocket是否连接
+
+ @param NSDictionary 支付数据, token:秘钥数据
+ @success 成功的回调
+ @faild 失败的回调
+ */
+RCT_EXPORT_METHOD(checkSocketConnect:(RCTPromiseResolveBlock)success faild:(RCTPromiseRejectBlock)faild)
+{
+  if(self.socketConnect){
+    success(@"socket连接");
+  }else{
+    faild(@"socket未连接",@"socket未连接",nil);
+  }
+}
+
 
 /**
 发送一个websocket请求

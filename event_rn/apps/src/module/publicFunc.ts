@@ -117,7 +117,7 @@ let saveLoginInfo = (loginResult: { refreshToken: string, token: string, userInf
     AsyncStorage.setItem(constact.locationSaveKey.userInfo, userInfoStr)
 
     //启动websocket
-    startWebsocketConnection()
+    startWebsocket()
   } catch (error) {
   }
 }
@@ -139,8 +139,7 @@ let loadLoginInfoFromLocal = async (callBack: (success: boolean) => void) => {
       configs.token = token
       callBack(true)
 
-      //启动websocket
-      startWebsocketConnection()
+      startWebsocket()
       console.log('从本地获取了用户信息', userInfo);
       console.log('本地token：', token);
       console.log('本地刷新token：', refreshToken);
@@ -151,6 +150,24 @@ let loadLoginInfoFromLocal = async (callBack: (success: boolean) => void) => {
   } else {
     callBack(false)
     console.log('本地没有存储登录信息');
+  }
+}
+
+/**
+*  开启socket连接
+*/
+let startWebsocket = () => {
+  if (configs.token) {
+    //启动websocket
+    startWebsocketConnection().then((msg: string) => {
+
+    }).catch((err: { code: string }) => {
+      setTimeout(() => {
+        startWebsocket();
+      }, 3000);
+    })
+  } else {
+    tips.showTips('未登录，不能开启socket')
   }
 }
 

@@ -78,7 +78,20 @@ public class CloudPhoneModule extends ReactContextBaseJavaModule implements WebS
             sdk.setToken(ptoken);
             sdk.startWebsocketConnection(this);
         } else {
-            callback.reject("socket已存在", "socket已存在");
+            callback.resolve("socket已存在");
+        }
+    }
+
+
+    /*
+     * 检查websocket是否连接
+     * */
+    @ReactMethod
+    public void checkSocketConnect(Promise callback) {
+        if(sdk != null){
+            callback.resolve("socket连接");
+        }else{
+            callback.reject("socket未连接","socket未连接");
         }
     }
 
@@ -226,14 +239,15 @@ public class CloudPhoneModule extends ReactContextBaseJavaModule implements WebS
         Log.i("socket链接报错", "testOneAct ----- ex:  " + ex);
         if (sdk != null) {
             sdk.shutdownWebsocketConnect();
-            sdk = null;
         }
+
         if (connectSocketPromise != null) {
             connectSocketPromise.reject("链接失败", "链接失败");
             connectSocketPromise = null;
         }
-        sendWebSocketEvent("webSocektOnError", "400", "", "");
+        sdk = null;
 
+        sendWebSocketEvent("webSocektOnError", "400", "", "");
     }
 
     @Override

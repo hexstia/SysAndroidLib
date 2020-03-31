@@ -57,7 +57,13 @@ export function startWebsocketConnection() {
         // 再启动websocket线程
         return CloudPhoneModule.startWebsocketConnection({ token: configs.token }) as Promise<any>
     })
+}
 
+/**
+*  检查websocket是否连接
+*/
+export function checkSocketConnect() {
+    return CloudPhoneModule.checkSocketConnect() as Promise<string>
 }
 
 /**

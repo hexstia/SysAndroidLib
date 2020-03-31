@@ -43,9 +43,17 @@ export default class CustomerService extends BaseNavNavgator {
                     dataSource={{ data: this.commonQuestions, pageNum: 0 }}
                     renderItem={this.renderItem}
                     listHeaderComponent={this.renderListHeader}
-                    listFooterComponent={this.renderListFooter}
                     onPressItem={this.onPressItem}
                 />
+
+                <View style={{ alignItems: 'center' }}>
+                    <TouchableOpacity style={{ width: 210, height: 50, borderRadius: 25, marginTop: 20, alignSelf: 'center', backgroundColor: '#258BEC', justifyContent: 'center', alignItems: 'center' }}
+                        onPress={this.gotoQuestionList}>
+                        <Text style={{ color: '#fff', fontSize: 18, fontWeight: '900' }}>转留言</Text>
+                    </TouchableOpacity>
+                    <Text style={{ color: '#999', fontSize: 13, marginTop: 9 }}>客服电话：400-6699-160</Text>
+                    <Text style={{ color: '#999', fontSize: 13, marginTop: 10, marginBottom: 10 }}>在线客服时间：9:00-20:00</Text>
+                </View>
             </View>
         );
     }
@@ -57,20 +65,6 @@ export default class CustomerService extends BaseNavNavgator {
             </View>
         )
     }
-
-    renderListFooter = () => {
-        return (
-            <View style={{ alignItems: 'center' }}>
-                <TouchableOpacity style={{ width: 210, height: 50, borderRadius: 25, marginTop: 20, alignSelf: 'center', backgroundColor: '#258BEC', justifyContent: 'center', alignItems: 'center' }}
-                    onPress={this.gotoQuestionList}>
-                    <Text style={{ color: '#fff', fontSize: 18, fontWeight: '900' }}>转留言</Text>
-                </TouchableOpacity>
-                <Text style={{ color: '#999', fontSize: 13, marginTop: 9 }}>客服电话：400-6699-160</Text>
-                <Text style={{ color: '#999', fontSize: 13, marginTop: 10, marginBottom: 10 }}>在线客服时间：9:00-20:00</Text>
-            </View>
-        )
-    }
-
     renderItem = (item: Question, index: number) => {
         return (
             <View style={{ height: 45, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#fff' }}>

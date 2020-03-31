@@ -45,15 +45,15 @@ export default class OrderDetail extends BaseNavNavgator {
                         {
                             proList.map(pro => {
                                 proNum = proNum + pro.num
-                                return <Text style={{ color: '#FE5437', fontSize: 12, lineHeight: 16 }}>商品：{pro.proName}</Text>
+                                return <Text style={{ color: '#FE5437', fontSize: 12, lineHeight: 16 }}>设备号：{pro.deviceId}</Text>
                             })
                         }
                     </View>
 
                     {/* 设备信息 */}
-                    <View style={{ marginTop: 10,marginBottom:15, marginHorizontal: 15, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
+                    <View style={{ marginTop: 10, marginBottom: 15, marginHorizontal: 15, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
                         <Text style={{ color: '#666', fontSize: 13 }}>设备台数：{proNum}台</Text>
-                        <Text style={{ color: '#666', fontSize: 13 ,marginLeft:9}}>总计金额：¥ {orderInfo.orderAmount}</Text>
+                        <Text style={{ color: '#666', fontSize: 13, marginLeft: 9 }}>总计金额：¥ {orderInfo.orderAmount}</Text>
                     </View>
 
                 </View>

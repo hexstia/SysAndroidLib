@@ -210,35 +210,19 @@ export interface Message {
 *  
 */
 export interface OrderDetailItem {
-    /**
-    *  创建时间
-    */
-    createTime: string,
-    id: number,
-    /**
-    *  数量
-    */
-    num: number,
-    orderId: number,
-    proHours: number,
-    /**
-    *  商品id
-    */
-    proId: number,
-    /**
-    *  商品图片
-    */
-    proImg: string,
-    /**
-    *  商品名称
-    */
-    proName: string,
-    /**
-    *  商品金额
-    */
-    proPrice: number,
-    renewParameter: string,
-    updateTime: string,
+    createTime: string
+    deviceId: number
+    endTime: string
+    id: number
+    num: number
+    orderId: number
+    proId: number
+    proImg: string
+    proName: string
+    proPrice: number
+    relationId: number
+    renewParameter: null
+    updateTime: string
 }
 
 

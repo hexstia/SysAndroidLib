@@ -26,7 +26,7 @@ export default class NewQuestion extends BaseNavNavgator {
             <View style={{ flex: 1 }}>
                 <View style={{ backgroundColor: '#fff' }}>
                     {/* 问题标题 */}
-                    <View style={{ height: 45, paddingHorizontal: 15 }}>
+                    <View style={{ height: 40, paddingHorizontal: 15 }}>
                         <TextInput
                             style={{ padding: 0, flex: 1, fontSize: 16 }}
                             autoCapitalize='none'
@@ -40,7 +40,7 @@ export default class NewQuestion extends BaseNavNavgator {
                     <View style={{ height: 0.5, backgroundColor: '#eee', marginHorizontal: 15 }} />
 
                     {/* 问题内容 */}
-                    <View style={{ paddingVertical: 13, paddingHorizontal: 15, height: 160 }}>
+                    <View style={{ paddingVertical: 10, paddingHorizontal: 15, height: 160 }}>
                         <TextInput
                             style={{ padding: 0, flex: 1, fontSize: 16 }}
                             autoCapitalize='none'

@@ -5,7 +5,7 @@ import React from 'react';
 import { Image, ImageBackground, Platform, Text, TouchableOpacity, View } from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import Swiper from 'react-native-swiper';
-import { addCloudPhoneEventListener, addSocketEventListener, enterCloudPhone, sendWebsocketData } from '../../module/CloudPhoneModule';
+import { addCloudPhoneEventListener, addSocketEventListener, checkSocketConnect, enterCloudPhone, sendWebsocketData } from '../../module/CloudPhoneModule';
 import CloudPhoneSettingModal from '../../module/cloudPhoneSettingModal';
 import EditPhoneNameModal from '../../module/editPhoneNameModal';
 import TipModal from '../../module/tipModal';
@@ -42,7 +42,11 @@ interface State {
     /**
     *  banner 数据
     */
-    bannerDatas: Banner[]
+    bannerDatas: Banner[],
+    /**
+    *  手机截图截集合
+    */
+    screenShotSet: any,
 }
 
 /**
@@ -58,7 +62,8 @@ export default class CloudPhone extends BaseNavNavgator {
         phoneIndex: 0,
         reStartPhoneIds: [],
         renewPhoneIds: [],
-        bannerDatas: []
+        bannerDatas: [],
+        screenShotSet: {}
     }
 
     editPhoneNameModal: EditPhoneNameModal | null = null;
@@ -83,11 +88,7 @@ export default class CloudPhone extends BaseNavNavgator {
         // 获取云手机列表
         request.post('/cloudPhone/phone/list', param, true).then(result => {
             console.log('获取云手机列表', result)
-            this.setState({ phoneList: result.list }, () => {
-                if (this.state.phoneList.length > 0) {
-                    this.getScreenshot(this.state.phoneList[0])
-                }
-            })
+            this.setState({ phoneList: result.list }, this.getAllScreenshot)
         }).catch(err => {
             console.log('获取云手机列表', err)
         })
@@ -95,6 +96,25 @@ export default class CloudPhone extends BaseNavNavgator {
         // 获取云手机的banner图
         request.post('/tcssPlatform/user/queryAdBanner', { type: Platform.OS == 'ios' ? 2 : 1, proType: 1 }, true).then(result => {
             this.setState({ bannerDatas: result.list })
+        })
+    }
+
+    /**
+    *  获取所有手机的截图
+    */
+    getAllScreenshot = () => {
+        checkSocketConnect().then(v => {
+            this.state.phoneList.map((p, index) => {
+                setTimeout(() => {
+                    this.getScreenshot(p);
+                }, index * 1000);
+            })
+
+        }).catch((err: { code: string }) => {
+            // socket未连接，等三秒再试试
+            setTimeout(() => {
+                this.getAllScreenshot()
+            }, 3000);
         })
     }
 
@@ -212,9 +232,9 @@ export default class CloudPhone extends BaseNavNavgator {
 
 
         addSocketEventListener((eventName, socketMessage) => {
-            let { phoneList, phoneIndex, reStartPhoneIds, renewPhoneIds } = this.state
+            let { phoneList, reStartPhoneIds, renewPhoneIds, screenShotSet } = this.state
 
-            // console.log('收到socket消息', socketMessage);
+            console.log('收到socket消息', socketMessage);
             try {
                 let messageData = JSON.parse(socketMessage.message);
                 switch (eventName) {
@@ -227,14 +247,10 @@ export default class CloudPhone extends BaseNavNavgator {
 
                             this.setState({ reStartPhoneIds: newRSIds, renewPhoneIds: newRNIds })
                         } else if (messageData.method == 'screenShot') {
-                            let newPhoneList = [...phoneList].map((p, i) => {
-                                if (i == phoneIndex) {
-                                    let screenShot = 'data:image/png;base64,' + messageData.data.content
-                                    return { ...p, screenShot }
-                                }
-                                return p
-                            })
-                            this.setState({ phoneList: newPhoneList })
+
+                            let newScreenShotSet = { ...screenShotSet }
+                            newScreenShotSet[messageData.data.deviceId] = 'data:image/png;base64,' + messageData.data.content
+                            this.setState({ screenShotSet: newScreenShotSet })
                         }
 
                         break
@@ -248,14 +264,11 @@ export default class CloudPhone extends BaseNavNavgator {
     }
 
 
-
-
-
     /**
     *  加载 视图内容
     */
     loadViewContent = () => {
-        let { phoneList, contentHeight, phoneIndex, bannerDatas, reStartPhoneIds, renewPhoneIds } = this.state
+        let { phoneList, contentHeight, phoneIndex, bannerDatas, reStartPhoneIds, renewPhoneIds, screenShotSet } = this.state
         let addImgHeight = contentHeight - 10
         let addImgWith = Math.floor(addImgHeight * (210 / 413))
         let nowSelectPhone = phoneList[phoneIndex]
@@ -298,45 +311,63 @@ export default class CloudPhone extends BaseNavNavgator {
                                     </View>
 
                                     {/* 图片 page */}
-                                    <View style={{ marginTop: 10, flex: 1, width: phoneSwiperWidth, height: phoneSwiperHeight, alignSelf: 'center', overflow: 'hidden' }}>
+                                    <View style={{ marginTop: 10, flex: 1, alignSelf: 'center', overflow: 'hidden' }}>
                                         <Swiper
                                             loop={false}
                                             showsPagination={false}
-                                            onIndexChanged={this.phoneIndexChange}>
+                                            onIndexChanged={this.phoneIndexChanged}>
+                                            {/* 手机们 */}
                                             {
                                                 phoneList.map((phone, index) => {
 
                                                     let isRestart = reStartPhoneIds.indexOf(phone.deviceId) != -1
                                                     let isRenew = renewPhoneIds.indexOf(phone.deviceId) != -1
-
+                                                    let screenShot = screenShotSet[`${phone.deviceId}`]
+                                                    let screenShotSource = screenShot ? { uri: screenShot } : require('#/home/tempPhoneContent.png')
                                                     return (
-                                                        <TouchableOpacity
-                                                            activeOpacity={1}
-                                                            onPress={this.enterCloudPhone.bind(this, phone)}
-                                                            key={phone.deviceId} >
-                                                            <ImageBackground style={{ width: phoneSwiperWidth, height: phoneSwiperHeight, alignItems: 'center' }} resizeMode='contain' source={require('#/home/tempPhone.png')} >
-                                                                <ImageBackground style={{ width: phoneWidth, height: phoneHeight, marginTop: phoneTop, alignItems: 'center', }} resizeMode='contain' source={phone.screenShot ? { uri: phone.screenShot } : require('#/home/tempPhoneContent.png')} >
-                                                                    {
-                                                                        (isRestart || isRenew) && (
-                                                                            <View style={{ marginTop: 110, alignItems: 'center' }}>
-                                                                                <View style={{ width: 84, height: 84, borderRadius: 42, borderColor: '#6498FF', borderWidth: 6, justifyContent: 'center', alignItems: 'center' }}>
-                                                                                    <View style={{ width: 60, height: 60, borderRadius: 30, backgroundColor: '#A0C3FF', justifyContent: 'center', alignItems: 'center' }}>
-                                                                                        <View style={{ width: 48, height: 48, borderRadius: 24, backgroundColor: '#6498FF', justifyContent: 'center', alignItems: 'center' }} >
-                                                                                            <Text style={{ color: '#fff', fontSize: 12 }}>loading</Text>
+                                                        <View style={{ alignItems: 'center', flex: 1 }}>
+                                                            <TouchableOpacity
+                                                                style={{ width: phoneSwiperWidth, height: phoneSwiperHeight, }}
+                                                                activeOpacity={1}
+                                                                onPress={this.enterCloudPhone.bind(this, phone)}
+                                                                key={phone.deviceId} >
+                                                                <ImageBackground style={{ width: phoneSwiperWidth, height: phoneSwiperHeight, alignItems: 'center' }} resizeMode='contain' source={require('#/home/tempPhone.png')} >
+                                                                    <ImageBackground style={{ width: phoneWidth, height: phoneHeight, marginTop: phoneTop, alignItems: 'center', }}
+                                                                        resizeMode='contain'
+                                                                        source={screenShotSource} >
+                                                                        {
+                                                                            (isRestart || isRenew) && (
+                                                                                <View style={{ marginTop: 110, alignItems: 'center' }}>
+                                                                                    <View style={{ width: 84, height: 84, borderRadius: 42, borderColor: '#6498FF', borderWidth: 6, justifyContent: 'center', alignItems: 'center' }}>
+                                                                                        <View style={{ width: 60, height: 60, borderRadius: 30, backgroundColor: '#A0C3FF', justifyContent: 'center', alignItems: 'center' }}>
+                                                                                            <View style={{ width: 48, height: 48, borderRadius: 24, backgroundColor: '#6498FF', justifyContent: 'center', alignItems: 'center' }} >
+                                                                                                <Text style={{ color: '#fff', fontSize: 12 }}>loading</Text>
+                                                                                            </View>
                                                                                         </View>
                                                                                     </View>
+                                                                                    <Text style={{ color: '#fff', fontSize: 12, marginTop: 6, lineHeight: 15, textAlign: 'center', fontWeight: '600' }}>{isRestart ? '设备重启中\n请稍后' : '一键新机中\n请稍后'}</Text>
                                                                                 </View>
-                                                                                <Text style={{ color: '#fff', fontSize: 12, marginTop: 6, lineHeight: 15, textAlign: 'center', fontWeight: '600' }}>{isRestart ? '一键重启中\n请稍后' : '一键新机中\n请稍后'}</Text>
-                                                                            </View>
-                                                                        )
-                                                                    }
+                                                                            )
+                                                                        }
+                                                                    </ImageBackground>
                                                                 </ImageBackground>
+                                                            </TouchableOpacity>
+                                                        </View>
 
-                                                            </ImageBackground>
-                                                        </TouchableOpacity>
                                                     )
                                                 })
                                             }
+
+                                            {/* 最后的添加手机 */}
+                                            <View style={{ alignItems: 'center', flex: 1 }}>
+                                                <TouchableOpacity style={{ width: phoneSwiperWidth, height: phoneSwiperHeight, alignSelf: 'center' }}
+                                                    activeOpacity={1}
+                                                    onPress={this.addCloudPhoneClick}>
+                                                    <Image style={{ alignSelf: 'stretch', width: phoneSwiperWidth, height: phoneSwiperHeight }}
+                                                        resizeMode='contain'
+                                                        source={require('#/home/addCloudPhone.png')} />
+                                                </TouchableOpacity>
+                                            </View>
                                         </Swiper>
                                     </View>
 
@@ -472,6 +503,15 @@ export default class CloudPhone extends BaseNavNavgator {
         this.editPhoneNameModal?.showModal(phone)
     }
 
+    /**
+    *  当前展示的手机序号发生变化
+    */
+    phoneIndexChanged = (index: number) => {
+        if (index < this.state.phoneList.length) {
+            this.setState({ phoneIndex: index })
+        }
+    }
+
 
     /**
     *  更新设备名称
@@ -525,7 +565,7 @@ export default class CloudPhone extends BaseNavNavgator {
                     if (Platform.OS == 'ios') {
                         this.uploadAppModal && this.uploadAppModal.uploadApp(cloudPhone);
                     } else {
-                        DocumentPicker.pick({ type: Platform.OS == 'ios' ? 'public.item' : DocumentPicker.types.allFiles }).then(res => {
+                        DocumentPicker.pick({ type: Platform.OS == '' ? 'public.item' : DocumentPicker.types.allFiles }).then(res => {
                             console.log('选择文件', res);
 
                             request.upload('/cloudPhone/phone/installApk', { paths: [res.uri], deviceIds: cloudPhone.deviceId + '', selectAll: 2, searchGroupId: '', status: '' }, true).then(res => {
@@ -587,18 +627,6 @@ export default class CloudPhone extends BaseNavNavgator {
         this.navigate('BaseWebView', { title: banner.proTypeStr, uri: banner.skipUrl })
 
     }
-
-
-    /**
-    *  当前显示的手机序号改变
-    */
-    phoneIndexChange = (index: number) => {
-        console.log('当前显示的手机序号改变', index)
-        this.setState({ phoneIndex: index }, () => {
-            this.getScreenshot(this.state.phoneList[index]);
-        })
-    }
-
 
     /**
     *  获得手机截图

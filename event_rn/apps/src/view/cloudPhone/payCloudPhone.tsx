@@ -77,10 +77,15 @@ export default class PayCloudPhone extends BaseNavNavgator {
                 )
               })
             }
-            <TouchableOpacity style={{ height: 35, alignItems: 'center', justifyContent: 'center' }}
-              onPress={() => this.setState({ watchMore: !watchMore })}>
-              <Text style={{ color: '#6498FF', fontSize: 14 }}>{watchMore ? '收起' : '更多套餐'}</Text>
-            </TouchableOpacity>
+            {
+              proList.length > 5 ? (
+                <TouchableOpacity style={{ height: 35, alignItems: 'center', justifyContent: 'center' }}
+                  onPress={() => this.setState({ watchMore: !watchMore })}>
+                  <Text style={{ color: '#6498FF', fontSize: 14 }}>{watchMore ? '收起' : '更多套餐'}</Text>
+                </TouchableOpacity>
+              ) : <View style={{ height: 10 }} />
+            }
+
           </View>
 
           {/* 支付方式的选择 */}
@@ -114,14 +119,11 @@ export default class PayCloudPhone extends BaseNavNavgator {
 
         </ScrollView>
 
-        {
-          nowSelectIndex != undefined ? (
-            <View style={{ height: 60, backgroundColor: '#fff', borderTopWidth: 1, borderTopColor: '#ccc', flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={{ color: '#666', fontSize: 14, marginLeft: 20, flex: 1 }}>总价：<Text style={{ color: '#FE5437', fontSize: 18 }}>{proList[nowSelectIndex].proPrice}元</Text></Text>
-              <ImageBtn style={{ marginRight: 12 }} imgWidth={106} imgHeight={46} source={require('#/home/payBtn.png')} onPress={this.payBtnClick} />
-            </View>
-          ) : null
-        }
+        {/* 底部支付部分 */}
+        <View style={{ height: 60, backgroundColor: '#fff', borderTopWidth: 1, borderTopColor: '#ccc', flexDirection: 'row', alignItems: 'center' }}>
+          <Text style={{ color: '#666', fontSize: 14, marginLeft: 20, flex: 1 }}>总价：<Text style={{ color: '#FE5437', fontSize: 18 }}>{nowSelectIndex == undefined ? '0' : proList[nowSelectIndex].proPrice * proNum}元</Text></Text>
+          <ImageBtn style={{ marginRight: 12 }} imgWidth={106} imgHeight={46} source={require('#/home/payBtn.png')} onPress={this.payBtnClick} />
+        </View>
       </View>
     );
   }

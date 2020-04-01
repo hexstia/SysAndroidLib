@@ -258,8 +258,6 @@ export default class CloudPhone extends BaseNavNavgator {
             } catch (error) {
                 console.log('socket消息解析失败', socketMessage);
             }
-
-
         })
     }
 

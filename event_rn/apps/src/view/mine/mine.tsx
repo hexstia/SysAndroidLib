@@ -1,5 +1,5 @@
 
-import { BaseNavNavgator, configs, defaultStyle, ImageBtn, msg } from 'dl-kit';
+import { BaseNavNavgator, configs, defaultStyle, ImageBtn, imagePicker, msg, request, tips } from 'dl-kit';
 import { TRouterName } from 'global';
 import React from 'react';
 import { Image, ImageBackground, ImageSourcePropType, Text, TouchableOpacity, View } from 'react-native';
@@ -79,9 +79,11 @@ export default class Mine extends BaseNavNavgator {
                         imgWidth={32}
                         imgHeight={32}
                         onPress={() => this.navigate('MessageList', { title: '消息列表' })} />
-
                     {/* 头像 */}
-                    <Image style={{ width: 82, height: 82, marginBottom: -17, alignSelf: 'center' }} source={require('#/mine/defaultHeaderIcon.png')} />
+                    <TouchableOpacity style={{ width: 82, height: 82, marginBottom: -17, alignSelf: 'center' }}
+                        onPress={this.uploadUserImg}>
+                        <Image style={{ width: 82, height: 82, alignSelf: 'center' }} source={require('#/mine/defaultHeaderIcon.png')} />
+                    </TouchableOpacity>
                 </ImageBackground>
 
                 {/* 手机号 */}
@@ -126,9 +128,25 @@ export default class Mine extends BaseNavNavgator {
         this.navigate(item.nav, item.data)
     }
 
-
+    /**
+    *  退出登录
+    */
     logout = () => {
         logoutAndClear()
         msg.emit('logout', { message: '退出登录' })
+    }
+
+    /**
+    *  换头像
+    */
+    uploadUserImg = () => {
+        imagePicker({ multiple: false, mediaType: 'photo' }, (data: any) => {
+
+            console.log('图片选择', data)
+            request.upload('/tcssPlatform/user/info/uploadUserImg', { paths: [data.uri] }, true).then(res => {
+                tips.showTips('上传成功!');
+            })
+
+        })
     }
 }

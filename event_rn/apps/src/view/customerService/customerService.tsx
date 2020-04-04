@@ -18,12 +18,32 @@ export default class CustomerService extends BaseNavNavgator {
     listView: DefaultListView | null = null;
     commonQuestions: Question[] = [
         {
-            title: '蓝云手机有哪些功能？',
-            url: 'https://www.baidu.com'
+            title: '购买成功未显示设备？',
+            url: 'http://91lanjiang.com/cloud/cloudPhone/book?type=question1'
         },
         {
-            title: '如何申请免费设备？',
-            url: 'https://www.baidu.com'
+            title: '如何上传应用到云手机？',
+            url: 'http://91lanjiang.com/cloud/cloudPhone/book?type=question2'
+        },
+        {
+            title: '使用云手机是否消耗本地流量?',
+            url: 'http://91lanjiang.com/cloud/cloudPhone/book?type=question4'
+        },
+        {
+            title: '设备到期后会怎样?',
+            url: 'http://91lanjiang.com/cloud/cloudPhone/book?type=question3'
+        },
+        {
+            title: '常见综合问题',
+            url: 'http://91lanjiang.com/cloud/cloudPhone/book?type=FQA'
+        },
+        {
+            title: '应用在云手机运行是否安全？',
+            url: 'http://91lanjiang.com/cloud/cloudPhone/book?type=question5'
+        },
+        {
+            title: '关于蓝将',
+            url: 'http://91lanjiang.com/cloud/cloudPhone/book?type=aboutApp'
         }
     ]
 

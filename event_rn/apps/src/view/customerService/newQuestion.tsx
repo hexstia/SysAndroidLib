@@ -1,7 +1,7 @@
 
 import { BaseNavNavgator, Icon, ImageBtn, imagePicker, request, tips } from 'dl-kit';
 import React from 'react';
-import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Image, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 interface State {
     title: string,
@@ -23,7 +23,7 @@ export default class NewQuestion extends BaseNavNavgator {
     render() {
         let { title, content, imgPath } = this.state;
         return (
-            <View style={{ flex: 1 }}>
+            <ScrollView style={{ flex: 1 }} keyboardDismissMode='on-drag'>
                 <View style={{ backgroundColor: '#fff' }}>
                     {/* 问题标题 */}
                     <View style={{ height: 40, paddingHorizontal: 15 }}>
@@ -33,6 +33,7 @@ export default class NewQuestion extends BaseNavNavgator {
                             autoCorrect={false}
                             underlineColorAndroid="transparent"
                             placeholder='问题标题'
+                            placeholderTextColor='#aaa'
                             value={title}
                             onChangeText={text => this.setState({ title: text })}
                         />
@@ -42,12 +43,13 @@ export default class NewQuestion extends BaseNavNavgator {
                     {/* 问题内容 */}
                     <View style={{ paddingVertical: 10, paddingHorizontal: 15, height: 160 }}>
                         <TextInput
-                            style={{ padding: 0, flex: 1, fontSize: 16 }}
+                            style={{ padding: 0, flex: 1, fontSize: 16, textAlignVertical: 'top' }}
                             autoCapitalize='none'
                             autoCorrect={false}
                             multiline={true}
                             underlineColorAndroid="transparent"
                             placeholder='问题内容'
+                            placeholderTextColor='#aaa'
                             value={content}
                             onChangeText={text => this.setState({ content: text })}
                         />
@@ -78,9 +80,8 @@ export default class NewQuestion extends BaseNavNavgator {
                         <ImageBtn imgWidth={133} imgHeight={48} source={require('#/service/backBtn.png')} onPress={this.goBack.bind(this)} />
                     </View>
 
-
                 </View>
-            </View>
+            </ScrollView>
         );
     }
 

@@ -23,7 +23,7 @@ interface State {
     /**
     *  图片base64 码
     */
-   imgData:string,
+    imgData: string,
     /**
     *  提示文字
     */
@@ -31,7 +31,7 @@ interface State {
 }
 
 interface Props {
-    passCallback: (imageId: string,checkcode:string) => void
+    passCallback: (imageId: string, checkcode: string) => void
 }
 
 /**
@@ -42,7 +42,7 @@ export default class CheckImgCode extends BaseComponent<Props> {
         visible: false,
         vcode: '',
         imgId: '',
-        imgData:'',
+        imgData: '',
         checkcode: '',
         tipText: '',
     }
@@ -53,12 +53,12 @@ export default class CheckImgCode extends BaseComponent<Props> {
     getImgCode = () => {
         request.post('/tcssPlatform/user/checkcode', {}, false).then(result => {
 
-            this.setState({ imgId: result.imgId, checkcode: result.checkcode ,imgData:result.imgData})
+            this.setState({ imgId: result.imgId, checkcode: result.checkcode, imgData: result.imgData })
         })
     }
 
     render() {
-        let { visible, checkcode, vcode, tipText ,imgData} = this.state
+        let { visible, checkcode, vcode, tipText, imgData } = this.state
         return (
             <Modal visible={visible}
                 transparent={true}
@@ -82,6 +82,7 @@ export default class CheckImgCode extends BaseComponent<Props> {
                                     autoCorrect={false}
                                     underlineColorAndroid="transparent"
                                     placeholder='输入图片中的字符'
+                                    placeholderTextColor='#aaa'
                                     value={vcode}
                                     onChangeText={text => this.setState({ vcode: text })}
                                 />
@@ -89,7 +90,7 @@ export default class CheckImgCode extends BaseComponent<Props> {
 
                             <View style={{ marginLeft: 10, marginRight: 15, width: 100, alignItems: 'center' }}>
                                 {/* <Text style={{ width: 100, height: 50, backgroundColor: '#f5f5f5' }}>{checkcode}</Text> */}
-                                <Image style={{ width: 100, height: 50, backgroundColor: '#f5f5f5' }}  source={{uri:'data:image/png;base64,' + imgData}} />
+                                <Image style={{ width: 100, height: 50, backgroundColor: '#f5f5f5' }} source={{ uri: 'data:image/png;base64,' + imgData }} />
                                 <Text style={{ color: '#999', fontSize: 12, marginTop: 6 }} onPress={this.changeImg}>看不清？换一张</Text>
                             </View>
                         </View>
@@ -153,12 +154,12 @@ export default class CheckImgCode extends BaseComponent<Props> {
         if (checkcode.toUpperCase() == vcode.toUpperCase()) {
             // 填写正确，立即回调
             this.setState({ visible: false, vcode: '' }, () => {
-                this.props.passCallback(imgId,checkcode);
+                this.props.passCallback(imgId, checkcode);
             })
         } else {
-            this.setState({tipText:'验证码不正确'})
+            this.setState({ tipText: '验证码不正确' })
             setTimeout(() => {
-                this.setState({tipText:''})
+                this.setState({ tipText: '' })
             }, 2000);
         }
     }

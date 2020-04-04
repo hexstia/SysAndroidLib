@@ -30,6 +30,7 @@
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
+
   return YES;
 }
 
@@ -56,10 +57,14 @@
     return [AliPayManager applicationOpenUrl:url];
   }
   
+  
   //  微信支付或者微信登录
-  if ([optionKey isEqualToString:@"com.tencent.xin"] && ([absolute containsString:@"pay"] || [absolute containsString:@"oauth"])) {
+  if ([url.scheme isEqualToString:@"wx4da13368004666f5"]) {
     return [WXPayManager applicationOpenUrl:url];
   }
+//  if ([optionKey isEqualToString:@"com.tencent.xin"] && ([absolute containsString:@"pay"] || [absolute containsString:@"oauth"])) {
+//    return [WXPayManager applicationOpenUrl:url];
+//  }
   
 //  QQ 授权回调
   if([absolute hasPrefix:@"tencent"]){

@@ -8,7 +8,7 @@
  * @format
  */
 
-import { createNavNavigator, msg, tips } from 'dl-kit';
+import { configs, createNavNavigator, msg, tips } from 'dl-kit';
 import { TRouterName } from 'global';
 import React, { Component } from 'react';
 import { View } from 'react-native';
@@ -35,10 +35,10 @@ export default class App extends Component<Props, {}> {
     super(props)
 
     // 注册微信appid
-    RNArenaPay.wechatRegister('wx4da13368004666f5');
+    RNArenaPay.wechatRegister(configs.wxAppKey);
 
     // 注册QQ的AppId
-    RNArenaPay.QQRegister('101845112')
+    RNArenaPay.QQRegister(configs.QQAppKey)
 
     loadLoginInfoFromLocal((success => {
       if (success) {

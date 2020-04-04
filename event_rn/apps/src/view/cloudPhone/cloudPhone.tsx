@@ -278,6 +278,61 @@ export default class CloudPhone extends BaseNavNavgator {
         let phoneHeight = phoneSwiperHeight * 295 / 363
         let phoneTop = phoneSwiperHeight * 29.5 / 363
 
+        let phoneItems = []
+
+        phoneList.forEach((phone, index) => {
+
+            let isRestart = reStartPhoneIds.indexOf(phone.deviceId) != -1
+            let isRenew = renewPhoneIds.indexOf(phone.deviceId) != -1
+            let screenShot = screenShotSet[`${phone.deviceId}`]
+            let screenShotSource = screenShot ? { uri: screenShot } : require('#/home/tempPhoneContent.png')
+            phoneItems.push(
+                <View style={{ alignItems: 'center', flex: 1 }} key={phone.deviceId}>
+                    <TouchableOpacity
+                        style={{ width: phoneSwiperWidth, height: phoneSwiperHeight, }}
+                        activeOpacity={1}
+                        onPress={this.enterCloudPhone.bind(this, phone)}
+                        key={phone.deviceId} >
+                        <ImageBackground style={{ width: phoneSwiperWidth, height: phoneSwiperHeight, alignItems: 'center' }} resizeMode='contain' source={require('#/home/tempPhone.png')} >
+                            <ImageBackground style={{ width: phoneWidth, height: phoneHeight, marginTop: phoneTop, alignItems: 'center', }}
+                                resizeMode='contain'
+                                source={screenShotSource} >
+                                {
+                                    (isRestart || isRenew) && (
+                                        <View style={{ marginTop: 110, alignItems: 'center' }}>
+                                            <View style={{ width: 84, height: 84, borderRadius: 42, borderColor: '#6498FF', borderWidth: 6, justifyContent: 'center', alignItems: 'center' }}>
+                                                <View style={{ width: 60, height: 60, borderRadius: 30, backgroundColor: '#A0C3FF', justifyContent: 'center', alignItems: 'center' }}>
+                                                    <View style={{ width: 48, height: 48, borderRadius: 24, backgroundColor: '#6498FF', justifyContent: 'center', alignItems: 'center' }} >
+                                                        <Text style={{ color: '#fff', fontSize: 12 }}>loading</Text>
+                                                    </View>
+                                                </View>
+                                            </View>
+                                            <Text style={{ color: '#fff', fontSize: 12, marginTop: 6, lineHeight: 15, textAlign: 'center', fontWeight: '600' }}>{isRestart ? '设备重启中\n请稍后' : '一键新机中\n请稍后'}</Text>
+                                        </View>
+                                    )
+                                }
+                            </ImageBackground>
+                        </ImageBackground>
+                    </TouchableOpacity>
+                </View>
+
+            )
+        })
+
+        /* 最后的添加手机 */
+        phoneItems.push(
+            <View style={{ alignItems: 'center', flex: 1 }} key='asda'>
+                <TouchableOpacity style={{ width: phoneSwiperWidth, height: phoneSwiperHeight, alignSelf: 'center' }}
+                    activeOpacity={1}
+                    onPress={this.addCloudPhoneClick}>
+                    <Image style={{ alignSelf: 'stretch', width: phoneSwiperWidth, height: phoneSwiperHeight }}
+                        resizeMode='contain'
+                        source={require('#/home/addCloudPhone.png')} />
+                </TouchableOpacity>
+            </View>
+        )
+
+
         return (
             <View style={{ flex: 1 }}>
                 <View style={{ flex: 1 }} onLayout={(e) => this.setState({ contentHeight: e.nativeEvent.layout.height })}>
@@ -309,63 +364,15 @@ export default class CloudPhone extends BaseNavNavgator {
                                     </View>
 
                                     {/* 图片 page */}
-                                    <View style={{ marginTop: 10, flex: 1, alignSelf: 'center', overflow: 'hidden' }}>
+                                    <View style={{ marginTop: 10, flex: 1 }}>
                                         <Swiper
                                             loop={false}
                                             showsPagination={false}
                                             onIndexChanged={this.phoneIndexChanged}>
                                             {/* 手机们 */}
                                             {
-                                                phoneList.map((phone, index) => {
-
-                                                    let isRestart = reStartPhoneIds.indexOf(phone.deviceId) != -1
-                                                    let isRenew = renewPhoneIds.indexOf(phone.deviceId) != -1
-                                                    let screenShot = screenShotSet[`${phone.deviceId}`]
-                                                    let screenShotSource = screenShot ? { uri: screenShot } : require('#/home/tempPhoneContent.png')
-                                                    return (
-                                                        <View style={{ alignItems: 'center', flex: 1 }}>
-                                                            <TouchableOpacity
-                                                                style={{ width: phoneSwiperWidth, height: phoneSwiperHeight, }}
-                                                                activeOpacity={1}
-                                                                onPress={this.enterCloudPhone.bind(this, phone)}
-                                                                key={phone.deviceId} >
-                                                                <ImageBackground style={{ width: phoneSwiperWidth, height: phoneSwiperHeight, alignItems: 'center' }} resizeMode='contain' source={require('#/home/tempPhone.png')} >
-                                                                    <ImageBackground style={{ width: phoneWidth, height: phoneHeight, marginTop: phoneTop, alignItems: 'center', }}
-                                                                        resizeMode='contain'
-                                                                        source={screenShotSource} >
-                                                                        {
-                                                                            (isRestart || isRenew) && (
-                                                                                <View style={{ marginTop: 110, alignItems: 'center' }}>
-                                                                                    <View style={{ width: 84, height: 84, borderRadius: 42, borderColor: '#6498FF', borderWidth: 6, justifyContent: 'center', alignItems: 'center' }}>
-                                                                                        <View style={{ width: 60, height: 60, borderRadius: 30, backgroundColor: '#A0C3FF', justifyContent: 'center', alignItems: 'center' }}>
-                                                                                            <View style={{ width: 48, height: 48, borderRadius: 24, backgroundColor: '#6498FF', justifyContent: 'center', alignItems: 'center' }} >
-                                                                                                <Text style={{ color: '#fff', fontSize: 12 }}>loading</Text>
-                                                                                            </View>
-                                                                                        </View>
-                                                                                    </View>
-                                                                                    <Text style={{ color: '#fff', fontSize: 12, marginTop: 6, lineHeight: 15, textAlign: 'center', fontWeight: '600' }}>{isRestart ? '设备重启中\n请稍后' : '一键新机中\n请稍后'}</Text>
-                                                                                </View>
-                                                                            )
-                                                                        }
-                                                                    </ImageBackground>
-                                                                </ImageBackground>
-                                                            </TouchableOpacity>
-                                                        </View>
-
-                                                    )
-                                                })
+                                                phoneItems
                                             }
-
-                                            {/* 最后的添加手机 */}
-                                            <View style={{ alignItems: 'center', flex: 1 }}>
-                                                <TouchableOpacity style={{ width: phoneSwiperWidth, height: phoneSwiperHeight, alignSelf: 'center' }}
-                                                    activeOpacity={1}
-                                                    onPress={this.addCloudPhoneClick}>
-                                                    <Image style={{ alignSelf: 'stretch', width: phoneSwiperWidth, height: phoneSwiperHeight }}
-                                                        resizeMode='contain'
-                                                        source={require('#/home/addCloudPhone.png')} />
-                                                </TouchableOpacity>
-                                            </View>
                                         </Swiper>
                                     </View>
 
@@ -373,7 +380,6 @@ export default class CloudPhone extends BaseNavNavgator {
                                     <View style={{ height: 32, justifyContent: 'center', alignItems: 'center' }}>
                                         <Text style={{ color: '#6498FF', fontSize: 16 }}>{phoneIndex + 1}<Text style={{ color: '#ccc' }}>/{phoneList.length}</Text></Text>
                                     </View>
-
                                 </View>
                             )
                     }
@@ -456,7 +462,7 @@ export default class CloudPhone extends BaseNavNavgator {
                 <Image style={{ width: 26, height: 44, marginLeft: 8, marginVertical: 12 }} resizeMode='contain' source={require('#/home/phone_img.png')} />
                 <View style={{ marginLeft: 10, flex: 1 }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Text style={{ color: '#333', fontSize: 16 }}>手机名称：{item.deviceName}</Text>
+                        <Text style={{ color: '#333', fontSize: 16, flex: 1 }} numberOfLines={1}>手机名称：{item.deviceName}</Text>
                         <ImageBtn style={{ marginLeft: 10 }}
                             imgWidth={15}
                             imgHeight={15}
@@ -465,7 +471,7 @@ export default class CloudPhone extends BaseNavNavgator {
                     </View>
                     <Text style={{ color: '#999', fontSize: 16, marginTop: 6 }}>剩余时间：{item.remainingTime}</Text>
                 </View>
-                <ImageBtn style={{ marginRight: 15 }}
+                <ImageBtn style={{ marginRight: 15, marginLeft: 15 }}
                     imgWidth={40}
                     imgHeight={40}
                     source={require('#/home/player.png')}

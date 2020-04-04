@@ -2,6 +2,7 @@ package com.event_rn;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.WindowManager;
 
 import com.dingle.pay.RNArenaPayModule;
 import com.example.nopermisstionad_sdk.LanJiangBaseActivity;
@@ -25,6 +26,8 @@ public class MainActivity extends ReactActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
         activity=this;
     }
 

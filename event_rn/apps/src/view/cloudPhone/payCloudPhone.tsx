@@ -1,6 +1,6 @@
 
 import { BaseNavNavgator, DefaultListView, ImageBtn, request, tips } from 'dl-kit';
-import { CloudPhoneModal, Product } from 'global';
+import { CloudPhoneModal, OrderPay, Product } from 'global';
 import React from 'react';
 import { Image, ImageBackground, RefreshControl, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import RNArenaPay from 'react-native-arena-pay';
@@ -70,7 +70,8 @@ export default class PayCloudPhone extends BaseNavNavgator {
                 let select = index == nowSelectIndex
                 return (
                   <TouchableOpacity style={{ marginTop: 10, marginHorizontal: 20, height: 40, borderRadius: 2, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderColor: select ? '#F2D7A0' : '#ccc', borderWidth: 0.5, backgroundColor: select ? '#FEFCEE' : '#fff' }}
-                    onPress={() => this.setState({ nowSelectIndex: index })}>
+                    onPress={() => this.setState({ nowSelectIndex: index })}
+                    key={pro.id}>
                     <Text style={{ color: select ? '#B3944C' : '#666', fontSize: 14, marginLeft: 15 }}>{pro.proName}</Text>
                     <Text style={{ color: select ? '#885C20' : '#FE5437', fontSize: 10, marginRight: 20 }}>￥<Text style={{ fontSize: 14 }}>{pro.proPrice}</Text>元</Text>
                   </TouchableOpacity>
@@ -88,39 +89,39 @@ export default class PayCloudPhone extends BaseNavNavgator {
 
           </View>
 
-          {/* 支付方式的选择 */}
-          <View style={{ marginTop: 10, backgroundColor: '#fff' }}>
-            {
-              this.state.cloudPhone ? null : (
-                <View style={{ height: 40, flexDirection: 'row', alignItems: 'center', borderBottomColor: '#eee', borderBottomWidth: 1 }}>
-                  <Text style={{ color: '#333', fontSize: 15, marginLeft: 25 }}>购买数量</Text>
-                  <Text style={{ color: '#999', fontSize: 13, marginLeft: 5, flex: 1 }}>（单次最多99台）</Text>
-                  <ImageBtn imgWidth={30} imgHeight={30} source={require('#/home/reduce.png')} onPress={this.proNumReduce} />
-                  <View style={{ width: 30, height: 30, marginHorizontal: 0.5, backgroundColor: '#f0f0f0', justifyContent: 'center', alignItems: 'center' }}>
-                    <Text style={{ color: '#333', fontSize: 18, fontWeight: '800' }}>{proNum}</Text>
-                  </View>
-                  <ImageBtn style={{ marginRight: 20 }} imgWidth={30} imgHeight={30} source={require('#/home/add.png')} onPress={this.proNumAdd} />
-                </View>
-              )
-            }
-            <TouchableOpacity style={{ height: 40, flexDirection: 'row', alignItems: 'center' }}
-              onPress={() => this.setState({ payType: 'weixin' })}>
-              <Image style={{ width: 26, height: 26, marginLeft: 25 }} resizeMode='contain' source={require('#/home/weixinBtn.png')} />
-              <Text style={{ color: '#999', fontSize: 15, marginLeft: 7, flex: 1 }}>微信支付</Text>
-              <Image style={{ width: 21, height: 21, marginRight: 20 }} source={weixinPay ? require('#/home/selectBtn.png') : require('#/home/normalBtn.png')} />
-            </TouchableOpacity>
-            <TouchableOpacity style={{ height: 40, flexDirection: 'row', alignItems: 'center', borderTopColor: '#eee', borderTopWidth: 1 }}
-              onPress={() => this.setState({ payType: 'zhifubao' })}>
-              <Image style={{ width: 26, height: 26, marginLeft: 25 }} resizeMode='contain' source={require('#/home/zfbBtn.png')} />
-              <Text style={{ color: '#999', fontSize: 15, marginLeft: 7, flex: 1 }}>支付宝支付</Text>
-              <Image style={{ width: 21, height: 21, marginRight: 20 }} source={weixinPay ? require('#/home/normalBtn.png') : require('#/home/selectBtn.png')} />
-            </TouchableOpacity>
-          </View>
-
         </ScrollView>
 
+        {/* 支付方式的选择 */}
+        <View style={{ marginTop: 10, backgroundColor: '#fff' }}>
+          {
+            this.state.cloudPhone ? null : (
+              <View style={{ height: 40, flexDirection: 'row', alignItems: 'center', borderBottomColor: '#eee', borderBottomWidth: 1 }}>
+                <Text style={{ color: '#333', fontSize: 15, marginLeft: 25 }}>购买数量</Text>
+                <Text style={{ color: '#999', fontSize: 13, marginLeft: 5, flex: 1 }}>（单次最多99台）</Text>
+                <ImageBtn imgWidth={30} imgHeight={30} source={require('#/home/reduce.png')} onPress={this.proNumReduce} />
+                <View style={{ width: 30, height: 30, marginHorizontal: 0.5, backgroundColor: '#f0f0f0', justifyContent: 'center', alignItems: 'center' }}>
+                  <Text style={{ color: '#333', fontSize: 18, fontWeight: '800' }}>{proNum}</Text>
+                </View>
+                <ImageBtn style={{ marginRight: 20 }} imgWidth={30} imgHeight={30} source={require('#/home/add.png')} onPress={this.proNumAdd} />
+              </View>
+            )
+          }
+          <TouchableOpacity style={{ height: 40, flexDirection: 'row', alignItems: 'center' }}
+            onPress={() => this.setState({ payType: 'weixin' })}>
+            <Image style={{ width: 26, height: 26, marginLeft: 25 }} resizeMode='contain' source={require('#/home/weixinBtn.png')} />
+            <Text style={{ color: '#999', fontSize: 15, marginLeft: 7, flex: 1 }}>微信支付</Text>
+            <Image style={{ width: 21, height: 21, marginRight: 20 }} source={weixinPay ? require('#/home/selectBtn.png') : require('#/home/normalBtn.png')} />
+          </TouchableOpacity>
+          <TouchableOpacity style={{ height: 40, flexDirection: 'row', alignItems: 'center', borderTopColor: '#eee', borderTopWidth: 1 }}
+            onPress={() => this.setState({ payType: 'zhifubao' })}>
+            <Image style={{ width: 26, height: 26, marginLeft: 25 }} resizeMode='contain' source={require('#/home/zfbBtn.png')} />
+            <Text style={{ color: '#999', fontSize: 15, marginLeft: 7, flex: 1 }}>支付宝支付</Text>
+            <Image style={{ width: 21, height: 21, marginRight: 20 }} source={weixinPay ? require('#/home/normalBtn.png') : require('#/home/selectBtn.png')} />
+          </TouchableOpacity>
+        </View>
+
         {/* 底部支付部分 */}
-        <View style={{ height: 60, backgroundColor: '#fff', borderTopWidth: 1, borderTopColor: '#ccc', flexDirection: 'row', alignItems: 'center' }}>
+        <View style={{ height: 60, backgroundColor: '#fff', marginTop: 2, flexDirection: 'row', alignItems: 'center' }}>
           <Text style={{ color: '#666', fontSize: 14, marginLeft: 20, flex: 1 }}>总价：<Text style={{ color: '#FE5437', fontSize: 18 }}>{nowSelectIndex == undefined ? '0' : proList[nowSelectIndex].proPrice * proNum}元</Text></Text>
           <ImageBtn style={{ marginRight: 12 }} imgWidth={106} imgHeight={46} source={require('#/home/payBtn.png')} onPress={this.payBtnClick} />
         </View>
@@ -156,8 +157,12 @@ export default class PayCloudPhone extends BaseNavNavgator {
   *  支付按钮点击事件
   */
   payBtnClick = () => {
-    let { cloudPhone, proList, watchMore, nowSelectIndex, payType, proNum } = this.state;
-    let proId = proList[nowSelectIndex!].id
+    let { cloudPhone, proList, nowSelectIndex, proNum } = this.state;
+    if (nowSelectIndex == undefined) {
+      tips.showTips('请选择商品')
+      return;
+    }
+    let proId = proList[nowSelectIndex].id
 
     if (cloudPhone) {
       // 续费
@@ -171,7 +176,7 @@ export default class PayCloudPhone extends BaseNavNavgator {
       request.post('/tcssPlatform/order/confirmOrder', { productArr: JSON.stringify([proId]) }, true).then(res => {
         // 创建订单
         let product = [{ proId: res.list[0].id, num: proNum }]
-        request.post('/tcssPlatform/order/createOrder', { productJson: JSON.stringify(product) }, true).then(res => {
+        request.post('/tcssPlatform/order/createOrder', { productJson: JSON.stringify(product), orderType: 1 }, true).then(res => {
           this.orderPay(res.order.id)
         })
       })
@@ -184,48 +189,34 @@ export default class PayCloudPhone extends BaseNavNavgator {
   orderPay = (orderId: string) => {
     let { payType } = this.state;
 
-    request.post('/tcssPlatform/pay/orderPay', { orderId, payType: payType == 'weixin' ? 1 : 2 }, true).then(res => {
-      // this.replace('PayResult', { title: '支付结果', orderPay: res.orderPay })
+    request.post('/tcssPlatform/pay/orderPay', { orderId, payType: payType == 'weixin' ? 1 : 2, payMethod: 2 }, true).then(res => {
+
       if (payType == 'weixin') {
         this.wexinPay(res.orderPay)
       } else {
-        this.aliPay(res)
+        this.aliPay(res.orderPay)
       }
-
-    }).catch(err => {
-      // this.replace('PayResult', { title: '支付结果' })
     })
   }
 
   /**
   *  微信支付
   */
-  wexinPay = (orderPay: any) => {
-
-    let outPayData = JSON.parse(orderPay.outPayData);
-    console.log('微信信息', outPayData);
-
+  wexinPay = (orderPay: OrderPay) => {
+    let outCodeData = JSON.parse(orderPay.outCodeUrl);
 
     let payData = {
-      appid: outPayData.appid,
-      partnerid: outPayData.mch_id,
-      prepayid: '',
-      noncestr: outPayData.nonce_str,
-      timestamp: '',
-      package: 'Sign=WXPay',
-      sign: outPayData.sign
+      appid: outCodeData.appid,
+      partnerid: outCodeData.partnerid,
+      prepayid: outCodeData.prepayid,
+      noncestr: outCodeData.noncestr,
+      timestamp: outCodeData.timestamp,
+      package: outCodeData.package,
+      sign: outCodeData.sign
     }
-    return;
+
     RNArenaPay.wechatPay(payData).then((data: any) => {
-      tips.showTips('支付成功');
-
-      // if (this.data.fromRoute == 'myVIP') {
-      //   this.goBack()
-      // } else {
-      //   this.replace('MyVIP')
-      // }
-
-
+      this.replace('PayResult', { title: '支付结果', orderPay })
     }, (error: any) => {
       tips.showTips(error.code);
     })
@@ -234,16 +225,16 @@ export default class PayCloudPhone extends BaseNavNavgator {
   /**
   *  支付宝支付
   */
-  aliPay = (data: any) => {
+  aliPay = (orderPay: OrderPay) => {
 
-    return;
+    let outCodeUrl = orderPay.outCodeUrl
+
     // 支付宝支付
-    RNArenaPay.aliPay({}).then((data: any) => {
-      console.log('支付成功')
+    RNArenaPay.aliPay({ payInfo: outCodeUrl }).then((data: any) => {
+      this.replace('PayResult', { title: '支付结果', orderPay })
     }, (error: any) => {
-      console.log('支付失败' + error.code)
+      tips.showTips(error.code);
     })
-
   }
 
 

@@ -1,7 +1,7 @@
 
-import { BaseNavNavgator, defaultStyle, msg, request, tips } from 'dl-kit';
+import { BaseNavNavgator, configs, defaultStyle, msg, request, tips } from 'dl-kit';
 import React from 'react';
-import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Image, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import RNArenaPay from 'react-native-arena-pay';
 import CheckImgCode from '../../module/checkImgCode';
 import { getTempToken, isPhoneNum, saveLoginInfo } from '../../module/publicFunc';
@@ -39,7 +39,7 @@ export default class Login extends BaseNavNavgator {
         let { loginType, phone, password, verCode, minutes } = this.state;
 
         return (
-            <View style={{ flex: 1 }}>
+            <ScrollView style={{ flex: 1 }} keyboardDismissMode='on-drag'>
                 {/* logo */}
                 <Image style={{ marginTop: defaultStyle.safeArea.navMarginTop + 25, width: 75, height: 75, borderRadius: 8, backgroundColor: '#eee', alignSelf: 'center' }}
                     resizeMode='contain'
@@ -52,7 +52,9 @@ export default class Login extends BaseNavNavgator {
                         autoCapitalize='none'
                         autoCorrect={false}
                         underlineColorAndroid="transparent"
+                        keyboardType='phone-pad'
                         placeholder='请输入手机号'
+                        placeholderTextColor='#aaa'
                         value={phone}
                         onChangeText={text => this.setState({ phone: text })}
                     />
@@ -69,6 +71,7 @@ export default class Login extends BaseNavNavgator {
                                 autoCorrect={false}
                                 underlineColorAndroid="transparent"
                                 placeholder='请输入密码'
+                                placeholderTextColor='#aaa'
                                 value={password}
                                 onChangeText={text => this.setState({ password: text })}
                             />
@@ -81,6 +84,7 @@ export default class Login extends BaseNavNavgator {
                                     autoCorrect={false}
                                     underlineColorAndroid="transparent"
                                     placeholder='请输入验证码'
+                                    placeholderTextColor='#aaa'
                                     value={verCode}
                                     onChangeText={text => this.setState({ verCode: text })}
                                 />
@@ -139,7 +143,7 @@ export default class Login extends BaseNavNavgator {
                     passCallback={this.imgCodePass}
                 />
 
-            </View>
+            </ScrollView>
         );
     }
 
@@ -246,9 +250,10 @@ export default class Login extends BaseNavNavgator {
     qqLogin = () => {
         RNArenaPay.QQLogin().then((res: any) => {
             console.log(res);
-
-        }, (err: any) => {
-            console.log(err)
+            this.authLogin(configs.QQAppKey, res.accessToken, res.openId)
+        }, (error: any) => {
+            console.log(JSON.stringify(error));
+            tips.showTips('QQ登录失败')
         })
 
     }
@@ -260,21 +265,31 @@ export default class Login extends BaseNavNavgator {
 
         // 微信登录
         RNArenaPay.wechatLogin().then((data: any) => {
-
+            console.log('微信登录')
             console.log(data.code);
+            this.authLogin(configs.wxAppKey, data.code);
 
-            // request.post('/wxUser/wxlogin', { code: data.code, regMethod: 1 }, true).then(result => {
-            //   console.log(result);
-            //   configs.token = result
-            //   AsyncStorage.setItem(constact.locationSaveKey.localToken, result)
-            //   msg.emit('changeRootRoute', { rootRoute: 'TabNavigator' })
-            // })
         }, (error: any) => {
-            console.log('err');
             console.log(JSON.stringify(error));
             tips.showTips('微信登录失败')
-            // tips.showTips(JSON.stringify(error))
-            // console.log('支付失败' + error.code)
+        })
+    }
+
+    /**
+    *  第三方登录
+    */
+    authLogin = (appId: string, code: string, openId?: string) => {
+
+        let { phone, password, verCode } = this.state;
+        getTempToken((token, timestamp) => {
+
+            let param = { token, timestamp, mobile: phone, password, from: 1, vcode: verCode, loginType: 2, appId, code, openId }
+            request.post('/tcssPlatform/user/loginApp', param, true).then(result => {
+                saveLoginInfo(result)
+                msg.emit('changeRootRoute', { rootRoute: 'TabNavigator' })
+            }).catch(err => {
+                this.navigate('BindMobile', { title: '绑定手机', appId, code, openId })
+            })
         })
     }
 

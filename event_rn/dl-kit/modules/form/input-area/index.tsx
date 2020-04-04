@@ -79,6 +79,7 @@ export default class InputArea extends BaseComponent<PickerProps> {
 				<TextInput
 					underlineColorAndroid="transparent"
 					placeholder={this.props.placeholder}
+
 					multiline={true}
 					onChangeText={this.onTextChange}
 					placeholderTextColor={'#999'}

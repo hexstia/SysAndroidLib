@@ -2,7 +2,7 @@
 import { BaseComponent } from 'dl-kit';
 import { CloudPhoneModal } from 'global';
 import React from 'react';
-import { Modal, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 
 
@@ -32,11 +32,10 @@ export default class EditPhoneNameModal extends BaseComponent<Props> {
   }
   render() {
     let { visible, value, phone } = this.state
-    return (
-      <Modal visible={visible}
-        transparent={true}
-        animationType='none'>
-        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'flex-end' }}>
+    if (visible) {
+      return (
+        <View style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'flex-end' }}>
+
           <View style={{ marginHorizontal: 55, borderRadius: 5, marginBottom: 350, backgroundColor: '#fff', overflow: 'hidden' }}>
             {/* 标题 */}
             <Text style={{ color: '#000', fontSize: 16, fontWeight: '700', marginTop: 10, marginBottom: 14, alignSelf: 'center' }}>修改名称</Text>
@@ -48,6 +47,7 @@ export default class EditPhoneNameModal extends BaseComponent<Props> {
                 autoCorrect={false}
                 underlineColorAndroid="transparent"
                 placeholder={phone?.deviceName || '请输入'}
+                placeholderTextColor='#aaa'
                 value={value}
                 onChangeText={text => this.setState({ value: text })}
                 maxLength={10}
@@ -67,8 +67,11 @@ export default class EditPhoneNameModal extends BaseComponent<Props> {
 
           </View>
         </View>
-      </Modal>
-    );
+      );
+    } else {
+      return null
+    }
+
   }
 
 

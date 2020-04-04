@@ -30,9 +30,13 @@ import QuestionDetail from '../view/customerService/questionDetail';
 */
 import QuestionList from '../view/customerService/questionList';
 /**
-*  绑定账号
+*  第三方登录 - 绑定账号
 */
 import BindAccount from '../view/login/bindAccount';
+/**
+*  第三方登录 - 绑定手机号
+*/
+import BindMobile from '../view/login/bindMobile';
 /**
 *  登录页面
 */
@@ -116,8 +120,8 @@ export default {
   SysSetting: { screen: SysSetting },
   OrderDetail: { screen: OrderDetail },
   QuestionList: { screen: QuestionList },
-  NewQuestion:{screen:NewQuestion},
-  QuestionDetail:{screen:QuestionDetail},
+  NewQuestion: { screen: NewQuestion },
+  QuestionDetail: { screen: QuestionDetail },
+  BindMobile: { screen: BindMobile },
 
-  
 }

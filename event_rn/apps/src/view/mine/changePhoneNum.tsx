@@ -1,7 +1,7 @@
 
 import { BaseNavNavgator, request, tips } from 'dl-kit';
 import React from 'react';
-import { Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import CheckImgCode from '../../module/checkImgCode';
 import { getTempToken, isPhoneNum } from '../../module/publicFunc';
 
@@ -35,7 +35,7 @@ export default class ChangePhoneNum extends BaseNavNavgator {
     render() {
         let { mobile, vcode, minutes } = this.state
         return (
-            <View style={{ flex: 1 }}>
+            <ScrollView style={{ flex: 1 }} keyboardDismissMode='on-drag'>
                 {/* 手机号 */}
                 <View style={{ marginTop: 15, marginHorizontal: 22, height: 45, backgroundColor: '#fff', borderRadius: 5, paddingHorizontal: 10 }}>
                     <TextInput
@@ -43,9 +43,12 @@ export default class ChangePhoneNum extends BaseNavNavgator {
                         autoCapitalize='none'
                         autoCorrect={false}
                         underlineColorAndroid="transparent"
+                        keyboardType='phone-pad'
                         placeholder='请输入手机号'
+                        placeholderTextColor='#aaa'
                         value={mobile}
                         onChangeText={text => this.setState({ mobile: text })}
+
                     />
                 </View>
 
@@ -56,7 +59,9 @@ export default class ChangePhoneNum extends BaseNavNavgator {
                         autoCapitalize='none'
                         autoCorrect={false}
                         underlineColorAndroid="transparent"
+                        keyboardType='number-pad'
                         placeholder='请输入验证码'
+                        placeholderTextColor='#aaa'
                         value={vcode}
                         onChangeText={text => this.setState({ vcode: text })}
                     />
@@ -77,7 +82,7 @@ export default class ChangePhoneNum extends BaseNavNavgator {
                     ref={modal => this.checkImgCode = modal}
                     passCallback={this.imgCodePass}
                 />
-            </View>
+            </ScrollView>
         );
     }
 
@@ -167,12 +172,12 @@ export default class ChangePhoneNum extends BaseNavNavgator {
 
         // getTempToken((token, timestamp) => {
 
-            let param = { mobile}
-            request.post('/tcssPlatform/user/info/updateMobile', param, true).then(result => {
-               tips.showTips('',2000,()=>{
+        let param = { mobile }
+        request.post('/tcssPlatform/user/info/updateMobile', param, true).then(result => {
+            tips.showTips('', 2000, () => {
 
-               })
             })
+        })
 
         // })
     }

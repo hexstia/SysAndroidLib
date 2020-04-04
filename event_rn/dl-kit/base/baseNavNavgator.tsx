@@ -61,14 +61,14 @@ export default class BaseNavNavgator extends BaseComponent<Props> {
       headerStyle: {
         backgroundColor: '#fff',
         shadowOpacity: 0,
-        elevation: 0
+        elevation: 0,
       },
       title: title || params.title, // 这里navigation有bug， 首页第一次进来不能同时设定title和right
       headerTintColor: '#000',
       headerLeft: leftView,
       headerRight: rightView,
       header: header,
-      headerTitle: headerTitle
+      headerTitle: headerTitle,
     };
 
   };

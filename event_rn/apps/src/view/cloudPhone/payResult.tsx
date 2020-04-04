@@ -1,5 +1,6 @@
 
 import { BaseNavNavgator, ImageBtn } from 'dl-kit';
+import { OrderPay } from 'global';
 import React from 'react';
 import { Image, Text, View } from 'react-native';
 
@@ -19,7 +20,7 @@ export default class PayResult extends BaseNavNavgator {
     this.setTitle('支付结果')
   }
   render() {
-    let orderPay = this.data.orderPay;
+    let orderPay: OrderPay = this.data.orderPay;
 
     return (
       <View style={{ flex: 1, alignItems: 'center' }}>

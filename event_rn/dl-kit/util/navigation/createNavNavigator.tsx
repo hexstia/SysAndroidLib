@@ -9,16 +9,17 @@ export default function createNavNavigator(routes: NavigationRouteConfigMap, ini
   const stackNavigator = createStackNavigator(routes, {
     initialRouteName: initialRoute || 'Base',
     cardStyle: { flex: 1, backgroundColor: '#f3f4f5' },
+    headerLayoutPreset: 'center',
 
     defaultNavigationOptions: {
       headerStyle: {
         backgroundColor: '#fff',
         shadowOpacity: 0,
-        elevation: 0
+        elevation: 0,
       },
       headerTintColor: '#000',
       headerBackTitle: '返回',
-      headerTitleAllowFontScaling: false
+      headerTitleAllowFontScaling: false,
     }
   })
 

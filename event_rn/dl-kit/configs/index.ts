@@ -25,12 +25,24 @@ interface ConfigStyle {
   /**
   *  时间戳
   */
-  timestamp?: number
+  timestamp?: number,
+
+  /**
+  *  微信的Key
+  */
+  wxAppKey: string,
+
+  /**
+  *  QQ 的Key
+  */
+  QQAppKey: string,
 }
 
 
 const Config: ConfigStyle = {
   apiHost: 'http://test.91lanjiang.com/tcss-api',
+  wxAppKey: 'wx4da13368004666f5',
+  QQAppKey: '101845112'
 };
 
 

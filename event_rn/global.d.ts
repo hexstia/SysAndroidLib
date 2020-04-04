@@ -370,6 +370,41 @@ export interface SocketMessage {
     params: string
 }
 
+
+/**
+*  支付信息
+*/
+export interface OrderPay {
+    /**
+    *  金额
+    */
+    amount: number
+    countDevice: null
+    createTime: string
+    id: number
+    mobile: null
+    orderId: number
+    orderType: null
+    /**
+    *  微信支付信息
+    */
+    outCodeUrl: string
+    outNotifyData: null
+    outPayData: string
+    outSn: string
+    overTime: null
+    paramProName: null
+    payEndTime: null
+    payNumber: string
+    payStartTime: null
+    payStatus: number
+    payTime: string
+    payType: number
+    proTypeId: null
+    updateTime: string
+}
+
+
 /**
  * 云手机事件名称
  * cloudPhoneRestart：重启

@@ -170,7 +170,7 @@ export default class request {
 							if (loding) {
 								tips.showTips(response.message);
 							}
-							reject({ message: response.message });
+							reject({ message: response.message, status: response.status });
 						}
 
 					} else {

@@ -165,6 +165,7 @@ export default class Input extends BaseComponent<InputProps> {
 					underlineColorAndroid="transparent"
 					value={this.state.inputVal}
 					placeholder={this.props.placeholder}
+					placeholderTextColor='#aaa'
 					maxLength={this.props.maxLength}
 					multiline={this.props.multiline}
 					keyboardType={this.props.keyboardType}

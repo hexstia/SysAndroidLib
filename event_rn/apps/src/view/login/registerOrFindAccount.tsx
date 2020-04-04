@@ -1,7 +1,7 @@
 
 import { BaseNavNavgator, request, tips } from 'dl-kit';
 import React from 'react';
-import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Image, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import CheckImgCode from '../../module/checkImgCode';
 import { getTempToken, isPhoneNum } from '../../module/publicFunc';
 
@@ -42,7 +42,7 @@ export default class RegisterOrFindAccount extends BaseNavNavgator {
     render() {
         let { mobile, vcode, password, passwordAgain, minutes, type } = this.state
         return (
-            <View style={{ flex: 1 }}>
+            <ScrollView style={{ flex: 1 }} keyboardDismissMode='on-drag'>
                 {/* 手机号 */}
                 <View style={{ marginTop: 15, marginHorizontal: 15, height: 45, backgroundColor: '#fff', borderRadius: 5, paddingHorizontal: 10 }}>
                     <TextInput
@@ -50,7 +50,9 @@ export default class RegisterOrFindAccount extends BaseNavNavgator {
                         autoCapitalize='none'
                         autoCorrect={false}
                         underlineColorAndroid="transparent"
+                        keyboardType='phone-pad'
                         placeholder='请输入手机号'
+                        placeholderTextColor='#aaa'
                         value={mobile}
                         onChangeText={text => this.setState({ mobile: text })}
                     />
@@ -63,7 +65,9 @@ export default class RegisterOrFindAccount extends BaseNavNavgator {
                         autoCapitalize='none'
                         autoCorrect={false}
                         underlineColorAndroid="transparent"
+                        keyboardType='number-pad'
                         placeholder='请输入验证码'
+                        placeholderTextColor='#aaa'
                         value={vcode}
                         onChangeText={text => this.setState({ vcode: text })}
                     />
@@ -82,6 +86,7 @@ export default class RegisterOrFindAccount extends BaseNavNavgator {
                         autoCorrect={false}
                         underlineColorAndroid="transparent"
                         placeholder='输入密码（6-20位）'
+                        placeholderTextColor='#aaa'
                         value={password}
                         onChangeText={text => this.setState({ password: text.trim() })}
                     />
@@ -95,6 +100,7 @@ export default class RegisterOrFindAccount extends BaseNavNavgator {
                         autoCorrect={false}
                         underlineColorAndroid="transparent"
                         placeholder='请再次输入密码'
+                        placeholderTextColor='#aaa'
                         value={passwordAgain}
                         onChangeText={text => this.setState({ passwordAgain: text.trim() })}
                     />
@@ -111,7 +117,7 @@ export default class RegisterOrFindAccount extends BaseNavNavgator {
                     ref={modal => this.checkImgCode = modal}
                     passCallback={this.imgCodePass}
                 />
-            </View>
+            </ScrollView>
         );
     }
 

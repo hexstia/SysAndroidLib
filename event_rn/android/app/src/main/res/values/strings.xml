@@ -1,3 +1,4 @@
 <resources>
+	<string moduleConfig="true" name="CodePushDeploymentKey">kuwMrJr7cg9WRkeNIYEozlY8N3ExMNozrlrax</string>
     <string name="app_name">蓝云手机</string>
 </resources>

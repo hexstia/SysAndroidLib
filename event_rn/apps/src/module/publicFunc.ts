@@ -123,6 +123,15 @@ let saveLoginInfo = (loginResult: { refreshToken: string, token: string, userInf
 }
 
 /**
+*  保存用户信息
+*/
+let saveUserInfo = (userInfo: UserModel) => {
+  let userInfoStr = JSON.stringify(userInfo)
+  configs.userInfo = userInfo
+  AsyncStorage.setItem(constact.locationSaveKey.userInfo, userInfoStr)
+}
+
+/**
 *  从本地获取登录信息
 */
 let loadLoginInfoFromLocal = async (callBack: (success: boolean) => void) => {
@@ -214,5 +223,5 @@ let getOrderStatusStr = (orderStatu: number) => {
 
 }
 
-export { getTempToken, isPhoneNum, saveLoginInfo, loadLoginInfoFromLocal, logoutAndClear, refreshToken, getOrderStatusStr, getFileType };
+export { getTempToken, isPhoneNum, saveLoginInfo, loadLoginInfoFromLocal, logoutAndClear, refreshToken, getOrderStatusStr, getFileType, saveUserInfo };
 

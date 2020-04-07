@@ -1,11 +1,12 @@
 
 import { BaseNavNavgator, configs, defaultStyle, ImageBtn, imagePicker, msg, request, tips } from 'dl-kit';
-import { TRouterName } from 'global';
+import { TRouterName, UserModel } from 'global';
 import React from 'react';
 import { Image, ImageBackground, ImageSourcePropType, Text, TouchableOpacity, View } from 'react-native';
-import { logoutAndClear } from '../../module/publicFunc';
+import { logoutAndClear, saveUserInfo } from '../../module/publicFunc';
 
 interface State {
+    userInfo?: UserModel
 }
 
 interface Item {
@@ -23,6 +24,7 @@ export default class Mine extends BaseNavNavgator {
     static navigationOptions = { header: null }
 
     state: State = {
+        userInfo: configs.userInfo
     }
 
     itemDatas: Item[] = [
@@ -70,6 +72,7 @@ export default class Mine extends BaseNavNavgator {
     }
     render() {
         let bgHeight = defaultStyle.device.width * 173 / 360
+        let { userInfo } = this.state;
         return (
             <View style={{ flex: 1 }}>
                 {/* 顶部 */}
@@ -82,7 +85,7 @@ export default class Mine extends BaseNavNavgator {
                     {/* 头像 */}
                     <TouchableOpacity style={{ width: 82, height: 82, marginBottom: -17, alignSelf: 'center' }}
                         onPress={this.uploadUserImg}>
-                        <Image style={{ width: 82, height: 82, alignSelf: 'center' }} source={require('#/mine/defaultHeaderIcon.png')} />
+                        <Image style={{ width: 82, height: 82, borderRadius: 41, alignSelf: 'center' }} source={userInfo ? { uri: userInfo.userImg } : require('#/mine/defaultHeaderIcon.png')} />
                     </TouchableOpacity>
                 </ImageBackground>
 
@@ -143,8 +146,12 @@ export default class Mine extends BaseNavNavgator {
         imagePicker({ multiple: false, mediaType: 'photo' }, (data: any) => {
 
             console.log('图片选择', data)
-            request.upload('/tcssPlatform/user/info/uploadUserImg', { paths: [data.uri] }, true).then(res => {
+            request.upload('/tcssPlatform/user/info/uploadUserImg', { paths: [data.path] }, true).then(res => {
                 tips.showTips('上传成功!');
+                saveUserInfo(res.userInfo);
+                this.setState({
+                    userInfo: res.userInfo
+                })
             })
 
         })

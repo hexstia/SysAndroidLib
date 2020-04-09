@@ -565,6 +565,7 @@
 		482FDAF8242E0DF200E3A9ED /* NetSpeedCheck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NetSpeedCheck.m; path = event_rn/NetSpeedCheck.m; sourceTree = "<group>"; };
 		4869B2462417FB4E003F1837 /* event_rn.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = event_rn.entitlements; path = event_rn/event_rn.entitlements; sourceTree = "<group>"; };
 		4877CD6B22603D3200D63344 /* iconfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = iconfont.ttf; sourceTree = "<group>"; };
+		489123C8243F8C3B00FB868F /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		48DCC0FB227ED1450038C80C /* RSKImageCropper.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RSKImageCropper.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		48DCC0FE227ED1450038C80C /* QBImagePicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = QBImagePicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D28DB62CDC54D589D778769 /* libRNArenaPay.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNArenaPay.a; sourceTree = "<group>"; };
@@ -1262,6 +1263,7 @@
 				English,
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
@@ -1901,6 +1903,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				13B07FB21A68108700A75B9A /* Base */,
+				489123C8243F8C3B00FB868F /* zh-Hans */,
 			);
 			name = LaunchScreen.xib;
 			path = event_rn;

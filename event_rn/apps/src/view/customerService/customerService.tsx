@@ -41,10 +41,10 @@ export default class CustomerService extends BaseNavNavgator {
             title: '应用在云手机运行是否安全？',
             url: 'http://91lanjiang.com/cloud/cloudPhone/book?type=question5'
         },
-        {
-            title: '关于蓝将',
-            url: 'http://91lanjiang.com/cloud/cloudPhone/book?type=aboutApp'
-        }
+        // {
+        //     title: '关于蓝将',
+        //     url: 'http://91lanjiang.com/cloud/cloudPhone/book?type=aboutApp'
+        // }
     ]
 
     constructor(props: any) {

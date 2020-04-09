@@ -12,7 +12,9 @@ interface State {
     phone: string,
     password: string,
     verCode: string,
-    minutes: number
+    minutes: number,
+    imgId: string,
+    checkcode: string,
 }
 
 export default class Login extends BaseNavNavgator {
@@ -24,7 +26,9 @@ export default class Login extends BaseNavNavgator {
         phone: '',
         password: '',
         verCode: '',
-        minutes: 0
+        minutes: 0,
+        imgId: '',
+        checkcode: '',
     }
 
     interval: NodeJS.Timeout | undefined = undefined;
@@ -85,6 +89,8 @@ export default class Login extends BaseNavNavgator {
                                     underlineColorAndroid="transparent"
                                     placeholder='请输入验证码'
                                     placeholderTextColor='#aaa'
+                                    maxLength={6}
+                                    keyboardType='number-pad'
                                     value={verCode}
                                     onChangeText={text => this.setState({ verCode: text })}
                                 />
@@ -156,7 +162,15 @@ export default class Login extends BaseNavNavgator {
         let mobile = this.state.phone
 
         if (isPhoneNum(mobile)) {
-            this.checkImgCode && this.checkImgCode.show()
+
+            // 如果是验证码登录，要验证一下手机号是否注册过
+            getTempToken((token, timestamp) => {
+                request.post('/tcssPlatform/user/mobile/check', { token, timestamp, mobile }, true).then(res => {
+                    tips.showTips('该账号未注册');
+                }).catch(err => {
+                    this.checkImgCode && this.checkImgCode.show()
+                })
+            })
         }
     }
 
@@ -164,7 +178,7 @@ export default class Login extends BaseNavNavgator {
     /**
     *  图形验证码通过
     */
-    imgCodePass = (imageId: string) => {
+    imgCodePass = (imageId: string, checkcode: string) => {
         if (this.state.minutes > 0) { return }
 
         let mobile = this.state.phone
@@ -176,6 +190,8 @@ export default class Login extends BaseNavNavgator {
                     tips.showTips('验证码发送成功')
                     this.setState({
                         minutes: 60,
+                        imgId: imageId,
+                        checkcode
                     }, this.startInterval)
                 })
             })
@@ -223,18 +239,34 @@ export default class Login extends BaseNavNavgator {
     */
     loginBtnClick = () => {
 
-        let { loginType, phone, password, verCode, minutes } = this.state;
+        let { loginType, phone, password, verCode, minutes, imgId } = this.state;
 
-        if (isPhoneNum(phone)) {
-            getTempToken((token, timestamp) => {
-
-                let param = { token, timestamp, mobile: phone, password, from: 1, vcode: verCode, loginType: loginType == 'passwordLogin' ? 0 : 1 }
-                request.post('/tcssPlatform/user/loginApp', param, true).then(result => {
-                    saveLoginInfo(result)
-                    msg.emit('changeRootRoute', { rootRoute: 'TabNavigator' })
-                })
-            })
+        if (!isPhoneNum(phone)) {
+            return;
         }
+
+        // 验证码登录要检查验证码是否有输入
+        if (loginType == 'verCode') {
+            if (verCode.length == 0) {
+                tips.showTips('请输入验证码')
+                return;
+            }
+
+            if (imgId.length == 0) {
+                tips.showTips('请先获取验证码')
+                return;
+            }
+        }
+
+        getTempToken((token, timestamp) => {
+
+            let param = { token, timestamp, mobile: phone, password, from: 1, vcode: verCode, loginType: loginType == 'passwordLogin' ? 0 : 1 }
+            request.post('/tcssPlatform/user/loginApp', param, true).then(result => {
+                saveLoginInfo(result)
+                msg.emit('changeRootRoute', { rootRoute: 'TabNavigator' })
+            })
+        })
+
     }
 
     /**
@@ -289,6 +321,7 @@ export default class Login extends BaseNavNavgator {
                 msg.emit('changeRootRoute', { rootRoute: 'TabNavigator' })
             }).catch(err => {
                 this.navigate('BindMobile', { title: '绑定手机', appId, code, openId })
+                tips.showTips('请绑定账号');
             })
         })
     }

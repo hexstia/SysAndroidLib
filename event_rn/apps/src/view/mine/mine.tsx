@@ -3,7 +3,7 @@ import { BaseNavNavgator, configs, defaultStyle, ImageBtn, imagePicker, msg, req
 import { TRouterName, UserModel } from 'global';
 import React from 'react';
 import { Image, ImageBackground, ImageSourcePropType, Text, TouchableOpacity, View } from 'react-native';
-import { logoutAndClear, saveUserInfo } from '../../module/publicFunc';
+import { checkAuthor, logoutAndClear, saveUserInfo } from '../../module/publicFunc';
 
 interface State {
     userInfo?: UserModel
@@ -15,6 +15,7 @@ interface Item {
     text: string,
     nav: TRouterName,
     data: any,
+    needAuth?: boolean
 }
 
 /**
@@ -55,7 +56,8 @@ export default class Mine extends BaseNavNavgator {
             title: '手机号',
             text: (configs.userInfo?.mobile || '').replaceStrIndex(3, '****'),
             nav: 'ChangePhoneNum',
-            data: { title: '修改手机号' }
+            data: { title: '修改手机号' },
+            needAuth: true
         },
         {
             icon: require('#/mine/settingIcon.png'),
@@ -63,6 +65,13 @@ export default class Mine extends BaseNavNavgator {
             text: '',
             nav: 'SysSetting',
             data: { title: '系统设置' }
+        },
+        {
+            icon: require('#/mine/aboutLanjiang.png'),
+            title: '关于蓝将',
+            text: '',
+            nav: 'BaseWebView',
+            data: { title: '关于蓝将', uri: 'http://91lanjiang.com/cloud/cloudPhone/book?type=aboutApp' }
         }
     ]
 
@@ -128,7 +137,9 @@ export default class Mine extends BaseNavNavgator {
     *  每个栏目的点击事件
     */
     itemClick = (item: Item) => {
-        this.navigate(item.nav, item.data)
+        if (!item.needAuth || checkAuthor()) {
+            this.navigate(item.nav, item.data)
+        }
     }
 
     /**
@@ -143,17 +154,19 @@ export default class Mine extends BaseNavNavgator {
     *  换头像
     */
     uploadUserImg = () => {
-        imagePicker({ multiple: false, mediaType: 'photo' }, (data: any) => {
+        if (checkAuthor()) {
+            imagePicker({ cropping: true, width: 400, height: 400, multiple: false, mediaType: 'photo' }, (data: any) => {
 
-            console.log('图片选择', data)
-            request.upload('/tcssPlatform/user/info/uploadUserImg', { paths: [data.path] }, true).then(res => {
-                tips.showTips('上传成功!');
-                saveUserInfo(res.userInfo);
-                this.setState({
-                    userInfo: res.userInfo
+                console.log('图片选择', data)
+                request.upload('/tcssPlatform/user/info/uploadUserImg', { paths: [data.path] }, true).then(res => {
+                    tips.showTips('上传成功!');
+                    saveUserInfo(res.userInfo);
+                    this.setState({
+                        userInfo: res.userInfo
+                    })
                 })
             })
+        }
 
-        })
     }
 }

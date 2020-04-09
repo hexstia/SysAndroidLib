@@ -17,7 +17,6 @@ interface State {
 
 /**
 *  第三方登录 - 绑定手机号
-    type  REGISTER:注册  FIND：找回密码
 */
 export default class BindMobile extends BaseNavNavgator {
 
@@ -66,6 +65,7 @@ export default class BindMobile extends BaseNavNavgator {
             placeholder='请输入验证码'
             placeholderTextColor='#aaa'
             keyboardType='number-pad'
+            maxLength={6}
             value={vcode}
             onChangeText={text => this.setState({ vcode: text })}
           />
@@ -139,6 +139,8 @@ export default class BindMobile extends BaseNavNavgator {
       getTempToken((token, timestamp) => {
         request.post('/tcssPlatform/user/mobile/check', { token, timestamp, mobile }, true).then(res => {
           this.checkImgCode && this.checkImgCode.show()
+        }).catch(err => {
+          tips.showTips('该账号已注册，请选择绑定已有账号')
         })
       })
     }
@@ -205,7 +207,7 @@ export default class BindMobile extends BaseNavNavgator {
     }
 
     if (imgId.length == 0) {
-      tips.showTips('请输入图形验证码')
+      tips.showTips('请先获取验证码')
       return;
     }
 
@@ -217,7 +219,7 @@ export default class BindMobile extends BaseNavNavgator {
     }
 
     if (password != passwordAgain) {
-      tips.showTips('两次密码输入不一致')
+      tips.showTips('两次密码不一致，请重新输入')
       return;
     }
 

@@ -223,5 +223,19 @@ let getOrderStatusStr = (orderStatu: number) => {
 
 }
 
-export { getTempToken, isPhoneNum, saveLoginInfo, loadLoginInfoFromLocal, logoutAndClear, refreshToken, getOrderStatusStr, getFileType, saveUserInfo };
+/**
+*  检查用户是否有操作权限，
+  用户哪些需要操作权限的地方，拦截用
+*/
+let checkAuthor = () => {
+  if (configs.token) {
+    return true
+  } else {
+    msg.emit('logout', { code: 40002, message: '账号未登录，无法获取' })
+    return false
+  }
+}
+
+
+export { getTempToken, isPhoneNum, saveLoginInfo, loadLoginInfoFromLocal, logoutAndClear, refreshToken, getOrderStatusStr, getFileType, saveUserInfo, checkAuthor };
 

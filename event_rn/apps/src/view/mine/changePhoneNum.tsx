@@ -62,6 +62,7 @@ export default class ChangePhoneNum extends BaseNavNavgator {
                         keyboardType='number-pad'
                         placeholder='请输入验证码'
                         placeholderTextColor='#aaa'
+                        maxLength={6}
                         value={vcode}
                         onChangeText={text => this.setState({ vcode: text })}
                     />
@@ -100,6 +101,8 @@ export default class ChangePhoneNum extends BaseNavNavgator {
             getTempToken((token, timestamp) => {
                 request.post('/tcssPlatform/user/mobile/check', { token, timestamp, mobile }, true).then(res => {
                     this.checkImgCode && this.checkImgCode.show()
+                }).catch(err => {
+                    tips.showTips('该账号已经注册')
                 })
             })
         }
@@ -165,12 +168,9 @@ export default class ChangePhoneNum extends BaseNavNavgator {
         }
 
         if (imgId.length == 0) {
-            tips.showTips('请输入图形验证码')
+            tips.showTips('请先获取验证码')
             return;
         }
-
-
-        // getTempToken((token, timestamp) => {
 
         let param = { mobile }
         request.post('/tcssPlatform/user/info/updateMobile', param, true).then(result => {
@@ -178,8 +178,6 @@ export default class ChangePhoneNum extends BaseNavNavgator {
 
             })
         })
-
-        // })
     }
 
 

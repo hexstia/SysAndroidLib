@@ -164,7 +164,7 @@ export default class request {
 							msg.emit('logout', { code: 40002, message: '身份信息过期，请重新登录' })
 						} else if (response.status == 400001005) {
 							// 该请求未通过身份认证
-							msg.emit('logout', { code: 40002, message: '访问此功能需要登录' })
+							msg.emit('logout', { code: 40002, message: '账号未登录，无法获取' })
 
 						} else { // 其他错误
 							if (loding) {

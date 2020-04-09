@@ -67,6 +67,7 @@ export default class RegisterOrFindAccount extends BaseNavNavgator {
                         underlineColorAndroid="transparent"
                         keyboardType='number-pad'
                         placeholder='请输入验证码'
+                        maxLength={6}
                         placeholderTextColor='#aaa'
                         value={vcode}
                         onChangeText={text => this.setState({ vcode: text })}
@@ -136,11 +137,20 @@ export default class RegisterOrFindAccount extends BaseNavNavgator {
                 getTempToken((token, timestamp) => {
                     request.post('/tcssPlatform/user/mobile/check', { token, timestamp, mobile }, true).then(res => {
                         this.checkImgCode && this.checkImgCode.show()
+                    }).catch(err => {
+                        tips.showTips('该账号已经注册')
                     })
                 })
 
             } else {
-                this.checkImgCode && this.checkImgCode.show()
+                // 如果是找回密码，要验证一下手机号是否注册过
+                getTempToken((token, timestamp) => {
+                    request.post('/tcssPlatform/user/mobile/check', { token, timestamp, mobile }, true).then(res => {
+                        tips.showTips('该账号未注册')
+                    }).catch(err => {
+                        this.checkImgCode && this.checkImgCode.show()
+                    })
+                })
             }
         }
     }
@@ -207,7 +217,7 @@ export default class RegisterOrFindAccount extends BaseNavNavgator {
         }
 
         if (imgId.length == 0) {
-            tips.showTips('请输入图形验证码')
+            tips.showTips('请先获取验证码')
             return;
         }
 
@@ -219,7 +229,7 @@ export default class RegisterOrFindAccount extends BaseNavNavgator {
         }
 
         if (password != passwordAgain) {
-            tips.showTips('两次密码输入不一致')
+            tips.showTips('两次密码不一致，请重新输入')
             return;
         }
 

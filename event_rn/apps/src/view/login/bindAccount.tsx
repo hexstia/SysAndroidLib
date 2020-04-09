@@ -14,8 +14,7 @@ interface State {
 }
 
 /**
-*  快速注册
-    type  REGISTER:注册  FIND：找回密码
+*  绑定已有账号
 */
 export default class BindAccount extends BaseNavNavgator {
 
@@ -62,6 +61,7 @@ export default class BindAccount extends BaseNavNavgator {
                         placeholder='请输入验证码'
                         placeholderTextColor='#aaa'
                         keyboardType='number-pad'
+                        maxLength={6}
                         value={vcode}
                         onChangeText={text => this.setState({ vcode: text })}
                     />
@@ -75,6 +75,11 @@ export default class BindAccount extends BaseNavNavgator {
                 <TouchableOpacity style={{ marginTop: 20, marginHorizontal: 10, height: 58, flexDirection: 'row' }}
                     onPress={this.bindAccount}>
                     <Image style={{ flex: 1, height: 58 }} resizeMode='contain' source={require('#/login/finishBtn.png')} />
+                </TouchableOpacity>
+
+                <TouchableOpacity style={{ alignSelf: 'center', marginTop: 8, paddingVertical: 2, borderBottomColor: '#6498FF', borderBottomWidth: 1 }}
+                    onPress={this.replaceBindMobile}>
+                    <Text style={{ color: '#6498FF', fontSize: 15 }}>绑定新账号</Text>
                 </TouchableOpacity>
 
                 {/* 图形验证码 */}
@@ -96,7 +101,14 @@ export default class BindAccount extends BaseNavNavgator {
         let mobile = this.state.mobile
 
         if (isPhoneNum(mobile)) {
-            this.checkImgCode && this.checkImgCode.show()
+            // 如果是验证码登录，要验证一下手机号是否注册过
+            getTempToken((token, timestamp) => {
+                request.post('/tcssPlatform/user/mobile/check', { token, timestamp, mobile }, true).then(res => {
+                    tips.showTips('该账号未注册');
+                }).catch(err => {
+                    this.checkImgCode && this.checkImgCode.show()
+                })
+            })
         }
     }
 
@@ -161,7 +173,7 @@ export default class BindAccount extends BaseNavNavgator {
         }
 
         if (imgId.length == 0) {
-            tips.showTips('请输入图形验证码')
+            tips.showTips('请先获取验证码')
             return;
         }
 
@@ -178,6 +190,12 @@ export default class BindAccount extends BaseNavNavgator {
     }
 
 
+    /**
+      *  切换为绑定已有账号
+      */
+    replaceBindMobile = () => {
+        this.replace('BindMobile', { ...this.data, title: '绑定手机' })
+    }
 
 
 }

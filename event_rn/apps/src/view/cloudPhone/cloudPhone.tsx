@@ -131,37 +131,39 @@ export default class CloudPhone extends BaseNavNavgator {
 
                         {/* 切换的tab */}
                         <ImageBackground style={{ width: 180, height: 35, flexDirection: 'row' }} resizeMode='contain' source={showType == 'viewType' ? require('#/home/viewBGImage.png') : require('#/home/listBgImage.png')} >
-                            <TouchableOpacity style={{ flex: 1 }} onPress={() => this.setState({ showType: showType == 'viewType' ? 'listType' : 'viewType' })} />
-                            <TouchableOpacity style={{ flex: 1 }} onPress={() => this.setState({ showType: showType == 'viewType' ? 'listType' : 'viewType' })} />
+                            <TouchableOpacity style={{ flex: 1 }} onPress={() => this.setState({ showType: 'viewType' })} />
+                            <TouchableOpacity style={{ flex: 1 }} onPress={() => this.setState({ showType: 'listType' })} />
                         </ImageBackground>
 
                         {/* 右侧俩按钮 */}
                         {
-                            showType == 'viewType' ? (
-                                <View style={{ width: 90, height: 44, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
+                            <View style={{ width: 90, height: 44, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
 
-                                    {/* 添加手机的时候，不显示设置按钮 */}
-                                    {
-                                        (nowSelectPhone && nowSelectPhone.id) ? (
-                                            <TouchableOpacity style={{ width: 30, height: 30, justifyContent: 'center', alignItems: 'center' }}
-                                                onPress={() => this.cloudPhoneSettingModal?.showModal(nowSelectPhone)}>
-                                                <Image style={{ width: 20, height: 20 }} resizeMode='contain' source={require('#/home/setting.png')} />
-                                            </TouchableOpacity>
-                                        ) : null
-                                    }
-                                    <TouchableOpacity style={{ width: 30, height: 30, marginLeft: 10, marginRight: 10, justifyContent: 'center', alignItems: 'center' }}
-                                        onPress={this.loadData}>
-                                        <Image style={{ width: 20, height: 20 }} resizeMode='contain' source={require('#/home/refresh.png')} />
-                                    </TouchableOpacity>
-                                </View>
-                            ) : (<View style={{ width: 90 }} />)
+                                {/* 添加手机的时候，不显示设置按钮 */}
+                                {
+                                    (nowSelectPhone && nowSelectPhone.id && showType == 'viewType') ? (
+                                        <TouchableOpacity style={{ width: 30, height: 30, justifyContent: 'center', alignItems: 'center' }}
+                                            onPress={() => this.cloudPhoneSettingModal?.showModal(nowSelectPhone)}>
+                                            <Image style={{ width: 20, height: 20 }} resizeMode='contain' source={require('#/home/setting.png')} />
+                                        </TouchableOpacity>
+                                    ) : null
+                                }
+                                <TouchableOpacity style={{ width: 30, height: 30, marginLeft: 10, marginRight: 10, justifyContent: 'center', alignItems: 'center' }}
+                                    onPress={this.loadData}>
+                                    <Image style={{ width: 20, height: 20 }} resizeMode='contain' source={require('#/home/refresh.png')} />
+                                </TouchableOpacity>
+                            </View>
                         }
 
                     </View>
                 </View>
 
                 {/* 手机内容部分 */}
-                {showType == 'viewType' ? this.loadViewContent() : this.loadListContent()}
+                <View style={{ flex: 1 }}>
+                    {this.loadViewContent()}
+                    {this.loadListContent()}
+                </View>
+                {/* {showType == 'viewType' ? this.loadViewContent() : this.loadListContent()} */}
 
                 {/* 修改手机名称的modal */}
                 <EditPhoneNameModal
@@ -266,10 +268,9 @@ export default class CloudPhone extends BaseNavNavgator {
     *  加载 视图内容
     */
     loadViewContent = () => {
-        let { phoneList, contentHeight, phoneIndex, bannerDatas, reStartPhoneIds, renewPhoneIds, screenShotSet } = this.state
-        let addImgHeight = contentHeight - 10
+        let { phoneList, contentHeight, bannerDatas, reStartPhoneIds, renewPhoneIds, screenShotSet } = this.state
+        let addImgHeight = contentHeight - 10 - 10
         let addImgWith = Math.floor(addImgHeight * (210 / 413))
-        let nowSelectPhone = phoneList[phoneIndex]
 
         let phoneSwiperHeight = contentHeight - 97;
         let phoneSwiperWidth = Math.floor(addImgHeight * (185 / 363))
@@ -288,8 +289,29 @@ export default class CloudPhone extends BaseNavNavgator {
             let screenShotSource = screenShot ? { uri: screenShot } : require('#/home/tempPhoneContent.png')
             phoneItems.push(
                 <View style={{ alignItems: 'center', flex: 1 }} key={phone.deviceId}>
+                    {/* 顶部蓝色条目 */}
+                    <View style={{ height: 50, marginTop: 5, marginHorizontal: 1, backgroundColor: '#6498FF', flexDirection: 'row' }}>
+                        <View style={{ flex: 1, marginLeft: 15, justifyContent: 'center' }}>
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <Text style={{ color: '#fff', fontSize: 14 }}>手机名称：{phone.deviceName} </Text>
+                                <ImageBtn style={{ marginLeft: 10 }}
+                                    imgWidth={15}
+                                    imgHeight={15}
+                                    source={require('#/home/write.png')}
+                                    onPress={this.editBtnClick.bind(this, phone)} />
+                            </View>
+                            <Text style={{ color: '#fff', fontSize: 14 }}>剩余时间：{phone.remainingTime}</Text>
+                        </View>
+
+                        {/* 续费按钮 */}
+                        <ImageBtn style={{ marginRight: 13 }}
+                            imgWidth={64} imgHeight={29}
+                            source={require('#/home/xufei.png')}
+                            onPress={this.renewBtnClick.bind(this, phone)} />
+                    </View>
+                    {/* 手机 */}
                     <TouchableOpacity
-                        style={{ width: phoneSwiperWidth, height: phoneSwiperHeight, }}
+                        style={{ width: phoneSwiperWidth, height: phoneSwiperHeight, marginTop: 10 }}
                         activeOpacity={1}
                         onPress={this.enterCloudPhone.bind(this, phone)}
                         key={phone.deviceId} >
@@ -314,6 +336,11 @@ export default class CloudPhone extends BaseNavNavgator {
                             </ImageBackground>
                         </ImageBackground>
                     </TouchableOpacity>
+
+                    {/* 页码 */}
+                    <View style={{ height: 32, justifyContent: 'center', alignItems: 'center' }}>
+                        <Text style={{ color: '#6498FF', fontSize: 16 }}>{index + 1}<Text style={{ color: '#ccc' }}>/{phoneList.length}</Text></Text>
+                    </View>
                 </View>
 
             )
@@ -322,10 +349,10 @@ export default class CloudPhone extends BaseNavNavgator {
         /* 最后的添加手机 */
         phoneItems.push(
             <View style={{ alignItems: 'center', flex: 1 }} key='asda'>
-                <TouchableOpacity style={{ width: phoneSwiperWidth, height: phoneSwiperHeight, alignSelf: 'center' }}
+                <TouchableOpacity style={{ marginVertical: 10, width: addImgWith, height: addImgHeight, alignSelf: 'center' }}
                     activeOpacity={1}
                     onPress={this.addCloudPhoneClick}>
-                    <Image style={{ alignSelf: 'stretch', width: phoneSwiperWidth, height: phoneSwiperHeight }}
+                    <Image style={{ alignSelf: 'stretch', width: addImgWith, height: addImgHeight }}
                         resizeMode='contain'
                         source={require('#/home/addCloudPhone.png')} />
                 </TouchableOpacity>
@@ -339,47 +366,22 @@ export default class CloudPhone extends BaseNavNavgator {
 
                     {
                         phoneList.length == 0 ? (
-                            <TouchableOpacity style={{ marginTop: 10, width: addImgWith, height: addImgHeight, alignSelf: 'center' }}
+                            <TouchableOpacity style={{ marginVertical: 10, width: addImgWith, height: addImgHeight, alignSelf: 'center' }}
                                 activeOpacity={1}
                                 onPress={this.addCloudPhoneClick}>
                                 <Image style={{ alignSelf: 'stretch', width: addImgWith, height: addImgHeight }} resizeMode='contain' source={require('#/home/addCloudPhone.png')} />
                             </TouchableOpacity>
                         ) : (
                                 <View style={{ flex: 1 }}>
-                                    {/* 顶部蓝色条目 */}
-                                    <View style={{ height: 50, marginTop: 5, backgroundColor: '#6498FF', flexDirection: 'row' }}>
-                                        <View style={{ flex: 1, marginLeft: 15, justifyContent: 'center' }}>
-                                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                                <Text style={{ color: '#fff', fontSize: 14 }}>手机名称：{nowSelectPhone.deviceName} </Text>
-                                                <ImageBtn style={{ marginLeft: 10 }}
-                                                    imgWidth={15}
-                                                    imgHeight={15}
-                                                    source={require('#/home/write.png')}
-                                                    onPress={this.editBtnClick.bind(this, nowSelectPhone)} />
-                                            </View>
-                                            <Text style={{ color: '#fff', fontSize: 14 }}>剩余时间：{nowSelectPhone.remainingTime}</Text>
-                                        </View>
-
-                                        <ImageBtn style={{ marginRight: 13 }} imgWidth={64} imgHeight={29} source={require('#/home/xufei.png')} onPress={this.renewBtnClick.bind(this, nowSelectPhone)} />
-                                    </View>
-
-                                    {/* 图片 page */}
-                                    <View style={{ marginTop: 10, flex: 1 }}>
-                                        <Swiper
-                                            loop={false}
-                                            showsPagination={false}
-                                            onIndexChanged={this.phoneIndexChanged}>
-                                            {/* 手机们 */}
-                                            {
-                                                phoneItems
-                                            }
-                                        </Swiper>
-                                    </View>
-
-                                    {/* 页码 */}
-                                    <View style={{ height: 32, justifyContent: 'center', alignItems: 'center' }}>
-                                        <Text style={{ color: '#6498FF', fontSize: 16 }}>{phoneIndex + 1}<Text style={{ color: '#ccc' }}>/{phoneList.length}</Text></Text>
-                                    </View>
+                                    <Swiper
+                                        loop={false}
+                                        showsPagination={false}
+                                        onIndexChanged={this.phoneIndexChanged}>
+                                        {/* 手机们 */}
+                                        {
+                                            phoneItems
+                                        }
+                                    </Swiper>
                                 </View>
                             )
                     }
@@ -411,6 +413,8 @@ export default class CloudPhone extends BaseNavNavgator {
                         ) : null
                     }
 
+                    <Text style={{ position: 'absolute', top: 5, right: 15, color: '#FE5437', fontSize: 14 }}>广告</Text>
+
                 </View>
 
             </View>
@@ -421,18 +425,21 @@ export default class CloudPhone extends BaseNavNavgator {
     *  加载 列表内容
     */
     loadListContent = () => {
-        let { phoneList } = this.state
+        let { phoneList, showType } = this.state
 
-        return (
-            <View style={{ flex: 1 }}>
-                <DefaultListView
-                    useExternalSource={true}
-                    dataSource={{ data: phoneList, pageNum: 0 }}
-                    renderItem={this.renderCloudPhoneCell}
-                    listEmptyComponent={this.renderListEmptyComponent}
-                    listHeaderComponent={this.renderListHeader} />
-            </View>
-        )
+        if (showType == 'listType') {
+            return (
+                <View style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, backgroundColor: '#f3f4f5' }}>
+                    <DefaultListView
+                        useExternalSource={true}
+                        dataSource={{ data: phoneList, pageNum: 0 }}
+                        renderItem={this.renderCloudPhoneCell}
+                        listEmptyComponent={this.renderListEmptyComponent}
+                        listHeaderComponent={this.renderListHeader} />
+                </View>
+            )
+        }
+
     }
 
     /**
@@ -511,9 +518,7 @@ export default class CloudPhone extends BaseNavNavgator {
     *  当前展示的手机序号发生变化
     */
     phoneIndexChanged = (index: number) => {
-        if (index < this.state.phoneList.length) {
-            this.setState({ phoneIndex: index })
-        }
+        this.setState({ phoneIndex: index })
     }
 
 

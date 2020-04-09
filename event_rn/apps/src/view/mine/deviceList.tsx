@@ -124,7 +124,13 @@ export default class DeviceList extends BaseNavNavgator {
                 <View style={{ marginTop: 10, marginHorizontal: 10, backgroundColor: '#F6F6F6', paddingHorizontal: 10, marginBottom: 14 }}>
                     <Text style={{ color: '#333333', fontSize: 13, marginTop: 12, lineHeight: 16 }}>购买时间：{item.beginTime}</Text>
                     <Text style={{ color: '#333333', fontSize: 13, marginTop: 8, lineHeight: 16 }}>到期时间：{item.endTime}</Text>
-                    <Text style={{ color: '#333333', fontSize: 13, marginTop: 8, marginBottom: 12, lineHeight: 16 }}>剩余时间：{item.remainingTime}</Text>
+                    {
+                        item.status == 15 ? (
+                            <Text style={{ color: '#333333', fontSize: 13, marginTop: 8, marginBottom: 12, lineHeight: 16 }}>销毁时间：{item.remainingTime}</Text>
+                        ) : (
+                                <Text style={{ color: '#333333', fontSize: 13, marginTop: 8, marginBottom: 12, lineHeight: 16 }}>剩余时间：{item.remainingTime}</Text>
+                            )
+                    }
                 </View>
 
             </View>

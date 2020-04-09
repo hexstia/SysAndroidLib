@@ -34,11 +34,8 @@ export default class UploadFileModal extends BaseComponent<Props> {
     visible: false,
     uploadTasks: []
   }
-
-  constructor(props: Props) {
-    super(props)
-
-  }
+  // 刷新上传进度的次数  我决定只有25%的进度需要刷新
+  updateTime: number = 0;
 
   render() {
     let { visible, uploadTasks } = this.state
@@ -110,11 +107,18 @@ export default class UploadFileModal extends BaseComponent<Props> {
 
       console.log('图片选择', data)
       let imgs = data as any[]
-      let paths = imgs.map(i => i.path)
-      if (paths.length > 0) {
-        this.setState({ visible: true })
-        this.uploadFiles(paths)
-      }
+
+      imgs.forEach((img, index) => {
+        setTimeout(() => {
+          this.setState({ visible: true })
+          this.uploadFiles([img.path])
+        }, 300 * index);
+      })
+      // let paths = imgs.map(i => i.path)
+      // if (paths.length > 0) {
+      //   this.setState({ visible: true })
+      //   this.uploadFiles(paths)
+      // }
     })
 
   }
@@ -154,7 +158,14 @@ export default class UploadFileModal extends BaseComponent<Props> {
     };
 
     var uploadProgress = (response: { jobId: number, totalBytesExpectedToSend: number, totalBytesSent: number }) => {
+
+      this.updateTime = this.updateTime + 1
+      if (this.updateTime % 4 != 1) {
+        return;
+      }
+
       var percentage = Math.floor((response.totalBytesSent / response.totalBytesExpectedToSend) * 100);
+
       console.log('上传进度：' + response.jobId + '==》' + percentage);
 
       let newTasks = [...this.state.uploadTasks].map(task => {

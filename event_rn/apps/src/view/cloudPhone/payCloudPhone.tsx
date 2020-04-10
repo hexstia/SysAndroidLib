@@ -166,8 +166,8 @@ export default class PayCloudPhone extends BaseNavNavgator {
 
     if (cloudPhone) {
       // 续费
-      let deviceId = cloudPhone.deviceId
-      let product = [{ proId, deviceId }]
+      let relationId = cloudPhone.id
+      let product = [{ proId, relationId }]
       request.post('/tcssPlatform/order/renewCreateOrder', { productJson: JSON.stringify(product) }, true).then(res => {
         this.orderPay(res.order.id);
       })

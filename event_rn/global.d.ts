@@ -55,6 +55,10 @@ export interface CloudPhoneModal {
     */
     createTime: string,
     /**
+    *  销毁时间
+    */
+    destructionTtime: string,
+    /**
     *  设备编号
     */
     deviceId: number,

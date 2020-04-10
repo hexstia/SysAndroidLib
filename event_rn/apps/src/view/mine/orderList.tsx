@@ -28,7 +28,7 @@ export default class OrderList extends BaseNavNavgator {
     loadData = (pageNum: number) => {
 
         if (pageNum == 0) {
-            request.post('/tcssPlatform/order/orderList', { }, false).then(result => {
+            request.post('/tcssPlatform/order/orderList', {}, false).then(result => {
 
                 this.setState({ orderList: result.orderList }, () => {
                     this.setListViewData()
@@ -56,7 +56,7 @@ export default class OrderList extends BaseNavNavgator {
                             return (
                                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                                     <TouchableOpacity style={{ backgroundColor: select ? '#6498FF' : '#fff', borderRadius: 3, paddingHorizontal: 15, paddingVertical: 4, justifyContent: 'center', alignItems: 'center' }}
-                                        onPress={this.tabSelect.bind(this,index)}>
+                                        onPress={this.tabSelect.bind(this, index)}>
                                         <Text style={{ color: select ? '#fff' : '#333', fontSize: 15, lineHeight: 17 }}>{t}</Text>
                                     </TouchableOpacity>
                                 </View>
@@ -78,8 +78,8 @@ export default class OrderList extends BaseNavNavgator {
     /**
     *  顶部Tab点击事件
     */
-    tabSelect = (index:number)=>{
-        this.setState({ nowSelectTabIndex: index },()=>{
+    tabSelect = (index: number) => {
+        this.setState({ nowSelectTabIndex: index }, () => {
             this.setListViewData()
         })
     }
@@ -125,7 +125,8 @@ export default class OrderList extends BaseNavNavgator {
         let orderFail = item.orderStatus == 0
         let pro = item.detailList[0] || {}
         return (
-            <View style={{ backgroundColor: '#fff', marginTop: 10, marginHorizontal: 15, borderRadius: 5, shadowColor: '#999', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.6  }}>
+            <View style={{ backgroundColor: '#fff', marginTop: 10, marginHorizontal: 15, borderRadius: 5, shadowColor: '#999', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.6 }}
+                key={item.id}>
                 {/* 订单信息 */}
                 <View style={{ flexDirection: 'row' }}>
                     <View style={{ marginTop: 12, marginLeft: 15, flex: 1 }}>
@@ -139,12 +140,12 @@ export default class OrderList extends BaseNavNavgator {
                 <View style={{ marginLeft: 11, marginTop: 7, borderRadius: 2, borderWidth: 1, alignSelf: 'flex-start', paddingHorizontal: 8, paddingVertical: 4, borderColor: '#F2D7A0', backgroundColor: '#FEFCEE', justifyContent: 'center', alignItems: 'center' }}>
                     <Text style={{ color: '#B3944C', fontSize: 13, lineHeight: 15 }}>{pro.proName}</Text>
                 </View>
-                
+
                 {/* 支付金额  */}
-                <View style={{ marginLeft: 15, marginRight: 10, marginTop: 18,marginBottom:21, flexDirection: 'row', alignItems: 'center' }}>
+                <View style={{ marginLeft: 15, marginRight: 10, marginTop: 18, marginBottom: 21, flexDirection: 'row', alignItems: 'center' }}>
                     <Text style={{ color: '#666', fontSize: 13, flex: 1 }}>实付金额：<Text style={{ color: '#FE5437', fontSize: 15 }}>￥{item.orderAmount}</Text></Text>
                     <Text style={{ color: '#666', fontSize: 13 }}>查看订单</Text>
-                    <Icon style={{ color: '#666', fontSize: 12 ,marginLeft:3}} iconCode={0xe649} />
+                    <Icon style={{ color: '#666', fontSize: 12, marginLeft: 3 }} iconCode={0xe649} />
                 </View>
             </View>
         )

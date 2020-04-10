@@ -56,7 +56,7 @@ export default class MessageList extends BaseNavNavgator {
   renderItem = (item: Message, index: number) => {
     let createTime = dayjs(item.createTime).format('YYYY-MM-DD')
     return (
-      <View style={{ backgroundColor: '#fff' }}>
+      <View style={{ backgroundColor: '#fff' }} key={item.id}>
         <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 15 }}>
           <View style={{ width: 12, height: 12, marginLeft: 20, borderRadius: 6, backgroundColor: item.readStatus == 2 ? '#F84D4E' : '#CCCCCC' }} />
           <Text style={{ color: '#333', fontSize: 15, marginLeft: 5, lineHeight: 18, flex: 1 }} numberOfLines={1}>{item.title}</Text>

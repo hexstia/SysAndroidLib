@@ -1,7 +1,7 @@
 
 import { BaseNavNavgator, configs, defaultStyle, msg, request, tips } from 'dl-kit';
 import React from 'react';
-import { Image, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Image, ImageBackground, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import RNArenaPay from 'react-native-arena-pay';
 import CheckImgCode from '../../module/checkImgCode';
 import { getTempToken, isPhoneNum, saveLoginInfo } from '../../module/publicFunc';
@@ -44,111 +44,114 @@ export default class Login extends BaseNavNavgator {
 
         return (
             <ScrollView style={{ flex: 1 }} keyboardDismissMode='on-drag'>
-                {/* logo */}
-                <Image style={{ marginTop: defaultStyle.safeArea.navMarginTop + 25, width: 75, height: 75, borderRadius: 8, backgroundColor: '#eee', alignSelf: 'center' }}
-                    resizeMode='contain'
-                    source={require('#/login/logo.png')} />
+                <View style={{ ...defaultStyle.device }}>
+                    {/* 顶部背景图 */}
+                    <ImageBackground style={{ marginTop: 0, width: defaultStyle.device.width, height: 184 }}
+                        source={require('#/login/topBG.png')} >
+                        <Text style={{ marginTop: 60, marginLeft: 30, fontSize: 22, color: '#fff' }}>嗨，欢迎登录云手机！</Text>
+                    </ImageBackground>
 
-                {/* 手机号 */}
-                <View style={{ marginTop: 25, marginHorizontal: 15, height: 45, backgroundColor: '#fff', borderRadius: 5, paddingHorizontal: 10 }}>
-                    <TextInput
-                        style={{ padding: 0, flex: 1, fontSize: 16 }}
-                        autoCapitalize='none'
-                        autoCorrect={false}
-                        underlineColorAndroid="transparent"
-                        keyboardType='phone-pad'
-                        placeholder='请输入手机号'
-                        placeholderTextColor='#aaa'
-                        value={phone}
-                        onChangeText={text => this.setState({ phone: text })}
-                    />
-                </View>
-
-                {/* 密码 或者 验证码 */}
-                {
-                    loginType == 'passwordLogin' ? (
-                        <View style={{ marginTop: 10, marginHorizontal: 15, height: 45, backgroundColor: '#fff', borderRadius: 5, paddingHorizontal: 10 }}>
+                    {/* 输入部分 */}
+                    <View style={{ marginTop: -72, marginHorizontal: 30, paddingHorizontal: 15, backgroundColor: '#fff', borderRadius: 5, overflow: 'hidden' }}>
+                        {/* 手机号 */}
+                        <View style={{ marginTop: 10, height: 45, borderBottomColor: '#ccc', borderBottomWidth: 1 }}>
                             <TextInput
                                 style={{ padding: 0, flex: 1, fontSize: 16 }}
                                 autoCapitalize='none'
-                                secureTextEntry={true}
                                 autoCorrect={false}
                                 underlineColorAndroid="transparent"
-                                placeholder='请输入密码（8-20位字母数字组合）'
-                                maxLength={20}
+                                keyboardType='phone-pad'
+                                placeholder='请输入手机号'
                                 placeholderTextColor='#aaa'
-                                value={password}
-                                onChangeText={text => this.setState({ password: text })}
+                                value={phone}
+                                onChangeText={text => this.setState({ phone: text })}
                             />
                         </View>
-                    ) : (
-                            <View style={{ marginTop: 10, marginHorizontal: 15, height: 45, backgroundColor: '#fff', borderRadius: 5, alignSelf: 'stretch', flexDirection: 'row' }}>
-                                <TextInput
-                                    style={{ padding: 0, flex: 1, fontSize: 16, marginLeft: 10 }}
-                                    autoCapitalize='none'
-                                    autoCorrect={false}
-                                    underlineColorAndroid="transparent"
-                                    placeholder='请输入验证码'
-                                    placeholderTextColor='#aaa'
-                                    maxLength={6}
-                                    keyboardType='number-pad'
-                                    value={verCode}
-                                    onChangeText={text => this.setState({ verCode: text })}
-                                />
-                                <TouchableOpacity style={{ width: 100, marginLeft: 10, justifyContent: 'center', alignItems: 'center' }}
-                                    onPress={this.sendVcode}>
-                                    <Text style={{ color: '#FF6A41', fontSize: 14 }}>{minutes == 0 ? '获取验证码' : `重新获取 ${minutes}s`}</Text>
-                                </TouchableOpacity>
-                            </View>
-                        )
-                }
 
-                {/* 忘记密码  切换登录方式  按钮*/}
-                <View style={{ marginTop: 10, marginHorizontal: 20, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Text style={{ color: '#6498FF', fontSize: 14 }} onPress={this.gotoRetrievePassword}>忘记密码</Text>
-                    <Text style={{ color: '#6498FF', fontSize: 14 }} onPress={this.changeLoginType} >{loginType == 'passwordLogin' ? '验证码登录' : '密码登录'}</Text>
-                </View>
+                        {/* 密码 或者 验证码 */}
+                        {
+                            loginType == 'passwordLogin' ? (
+                                <View style={{ height: 45, borderBottomColor: '#ccc', borderBottomWidth: 1 }}>
+                                    <TextInput
+                                        style={{ padding: 0, flex: 1, fontSize: 16 }}
+                                        autoCapitalize='none'
+                                        secureTextEntry={true}
+                                        autoCorrect={false}
+                                        underlineColorAndroid="transparent"
+                                        placeholder='请输入密码（8-20位字母数字组合）'
+                                        maxLength={20}
+                                        placeholderTextColor='#aaa'
+                                        value={password}
+                                        onChangeText={text => this.setState({ password: text })}
+                                    />
+                                </View>
+                            ) : (
+                                    <View style={{ height: 45, borderBottomColor: '#ccc', borderBottomWidth: 1, flexDirection: 'row', alignItems: 'center' }}>
+                                        <TextInput
+                                            style={{ padding: 0, flex: 1, fontSize: 16 }}
+                                            autoCapitalize='none'
+                                            autoCorrect={false}
+                                            underlineColorAndroid="transparent"
+                                            placeholder='请输入验证码'
+                                            placeholderTextColor='#aaa'
+                                            maxLength={6}
+                                            keyboardType='number-pad'
+                                            value={verCode}
+                                            onChangeText={text => this.setState({ verCode: text })}
+                                        />
+                                        <TouchableOpacity style={{ width: 75, height: 26, borderRadius: 13, justifyContent: 'center', alignItems: 'center', backgroundColor: '#497EFF' }}
+                                            onPress={this.sendVcode}>
+                                            <Text style={{ color: '#fff', fontSize: 12 }}>{minutes == 0 ? '获取验证码' : `重新获取${minutes}s`}</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                )
+                        }
 
-                {/* 登录按钮 */}
-                <TouchableOpacity style={{ marginTop: 14, marginHorizontal: 10, height: 58, flexDirection: 'row' }}
-                    onPress={this.loginBtnClick}>
-                    <Image style={{ flex: 1, height: 58 }} resizeMode='contain' source={require('#/login/loginBtn.png')} />
-                </TouchableOpacity>
+                        {/* 忘记密码  切换登录方式  按钮*/}
+                        <View style={{ marginTop: 10, marginBottom: 70, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <Text style={{ color: '#6498FF', fontSize: 14 }} onPress={this.gotoRetrievePassword}>忘记密码</Text>
+                            <Text style={{ color: '#6498FF', fontSize: 14 }} onPress={this.changeLoginType} >{loginType == 'passwordLogin' ? '验证码登录' : '密码登录'}</Text>
+                        </View>
+                    </View>
 
-                {/* 注册按钮 */}
-                <TouchableOpacity style={{ marginTop: 2, marginHorizontal: 10, height: 58, flexDirection: 'row' }}
-                    onPress={this.gotoRegisterPage}>
-                    <Image style={{ flex: 1, height: 58 }} resizeMode='contain' source={require('#/login/registerBtn.png')} />
-                </TouchableOpacity>
 
-                {/* 第三方登录 标题 */}
-                <View style={{ flexDirection: 'row', alignItems: 'center', marginHorizontal: 14, marginTop: 20 }}>
-                    <View style={{ flex: 1, height: 1, backgroundColor: '#D8D8D8' }} />
-                    <Text style={{ color: '#999999', fontSize: 14, marginHorizontal: 16 }}>第三方快捷登录</Text>
-                    <View style={{ flex: 1, height: 1, backgroundColor: '#D8D8D8' }} />
-                </View>
-
-                {/* 微信和QQ的图标 */}
-                <View style={{ marginTop: 20, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 90 }}>
-                    <TouchableOpacity style={{ alignItems: 'center' }}
-                        onPress={this.qqLogin}>
-                        <Image style={{ width: 40, height: 40 }} source={require('#/login/QQ_icon.png')} />
-                        <Text style={{ marginTop: 10, color: '#999', fontSize: 14 }}>QQ登录</Text>
+                    {/* 登录按钮 */}
+                    <TouchableOpacity style={{ marginTop: -30, width: 282, height: 58, alignSelf: 'center' }}
+                        onPress={this.loginBtnClick}>
+                        <Image style={{ width: 282, height: 58 }} resizeMode='contain' source={require('#/login/loginBtn.png')} />
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={{ alignItems: 'center' }}
-                        onPress={this.wexinLogin}>
-                        <Image style={{ width: 40, height: 40 }} source={require('#/login/weixin_icon.png')} />
-                        <Text style={{ marginTop: 10, color: '#999', fontSize: 14 }}>微信登录</Text>
+
+                    {/* 注册按钮 */}
+                    <TouchableOpacity style={{ marginTop: 8, paddingVertical: 1, alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: '#6498FF' }}
+                        onPress={this.gotoRegisterPage}>
+                        <Text style={{ color: '#6498FF', fontSize: 16 }}>注册账号</Text>
                     </TouchableOpacity>
+
+                    {/* 微信和QQ的图标 */}
+                    <View style={{ marginTop: 60, flex: 1, flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', paddingHorizontal: 90 }}>
+                        <TouchableOpacity style={{ alignItems: 'center' }}
+                            onPress={this.qqLogin}>
+                            <Image style={{ width: 40, height: 40 }} source={require('#/login/QQ_icon.png')} />
+                            <Text style={{ marginTop: 10, color: '#999', fontSize: 14 }}>QQ登录</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={{ alignItems: 'center' }}
+                            onPress={this.wexinLogin}>
+                            <Image style={{ width: 40, height: 40 }} source={require('#/login/weixin_icon.png')} />
+                            <Text style={{ marginTop: 10, color: '#999', fontSize: 14 }}>微信登录</Text>
+                        </TouchableOpacity>
+                    </View>
+
+                    {/* 底部图片 */}
+                    <Image style={{ width: defaultStyle.device.width, height: 44 }} source={require('#/login/bottomImg.png')} />
+
+                    {/* 图形验证码 */}
+                    <CheckImgCode
+                        ref={modal => this.checkImgCode = modal}
+                        passCallback={this.imgCodePass}
+                    />
                 </View>
-
-
-                {/* 图形验证码 */}
-                <CheckImgCode
-                    ref={modal => this.checkImgCode = modal}
-                    passCallback={this.imgCodePass}
-                />
 
             </ScrollView>
         );

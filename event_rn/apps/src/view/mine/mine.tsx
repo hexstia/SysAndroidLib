@@ -73,26 +73,35 @@ export default class Mine extends BaseNavNavgator {
 
     }
     render() {
-        let bgHeight = defaultStyle.device.width * 173 / 360
+
         let { userInfo } = this.state;
         return (
             <View style={{ flex: 1 }}>
                 {/* 顶部 */}
-                <ImageBackground style={{ height: bgHeight, justifyContent: 'space-between' }} source={require('#/mine/topBGImg.png')}>
+                <ImageBackground style={{ height: 210, width: defaultStyle.device.width }} source={require('#/mine/topBGImg.png')}>
                     <ImageBtn style={{ alignSelf: 'flex-end', marginTop: 14 + defaultStyle.safeArea.navMarginTop, marginRight: 14 }}
                         source={require('#/mine/messageIcon.png')}
                         imgWidth={32}
                         imgHeight={32}
                         onPress={() => this.navigate('MessageList', { title: '消息列表' })} />
                     {/* 头像 */}
-                    <TouchableOpacity style={{ width: 82, height: 82, marginBottom: -17, alignSelf: 'center' }}
+                    <TouchableOpacity style={{ width: 82, height: 82, marginTop: 12, alignSelf: 'center' }}
                         onPress={this.uploadUserImg}>
-                        <Image style={{ width: 82, height: 82, borderRadius: 41, alignSelf: 'center' }} source={userInfo ? { uri: userInfo.userImg } : require('#/mine/defaultHeaderIcon.png')} />
+                        <Image style={{ width: 82, height: 82, borderRadius: 41, alignSelf: 'center' }} source={(userInfo && userInfo.userImg && userInfo.userImg.length > 4) ? { uri: userInfo.userImg } : require('#/mine/defaultHeaderIcon.png')} />
                     </TouchableOpacity>
-                </ImageBackground>
 
-                {/* 手机号 */}
-                <Text style={{ color: '#333', fontSize: 16, alignSelf: 'center', marginTop: 22 }}>{(configs.userInfo?.mobile || '').replaceStrIndex(3, '****')}</Text>
+                    {
+                        configs.token ? (
+                            <Text style={{ color: '#fff', fontSize: 16, alignSelf: 'center', marginTop: 12 }}>{(configs.userInfo?.mobile || '').replaceStrIndex(3, '****')}</Text>
+                        ) : (
+                                <TouchableOpacity style={{ marginTop: 5, paddingVertical: 2, paddingHorizontal: 18, alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderRadius: 4, borderWidth: 1, borderColor: '#fff' }}
+                                    onPress={this.gotoLogin}>
+                                    <Text style={{ color: '#fff', fontSize: 14 }}>登录</Text>
+                                </TouchableOpacity>
+                            )
+                    }
+
+                </ImageBackground>
 
                 {/* 按钮栏目 */}
                 <View style={{ backgroundColor: '#fff', marginTop: 10 }}>
@@ -141,6 +150,13 @@ export default class Mine extends BaseNavNavgator {
     logout = () => {
         logoutAndClear()
         msg.emit('logout', { message: '退出登录' })
+    }
+
+    /**
+    *  跳转登录页面
+    */
+    gotoLogin = () => {
+        msg.emit('changeRootRoute', { rootRoute: 'Login' })
     }
 
     /**

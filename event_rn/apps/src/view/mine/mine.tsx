@@ -65,13 +65,6 @@ export default class Mine extends BaseNavNavgator {
             text: '',
             nav: 'SysSetting',
             data: { title: '系统设置' }
-        },
-        {
-            icon: require('#/mine/aboutLanjiang.png'),
-            title: '关于蓝将',
-            text: '',
-            nav: 'BaseWebView',
-            data: { title: '关于蓝将', uri: 'http://91lanjiang.com/cloud/cloudPhone/book?type=aboutApp' }
         }
     ]
 

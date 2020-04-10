@@ -158,8 +158,8 @@ export default class DefaultSectionListView extends BaseComponent<Props> {
 
 
     render() {
-        
-        console.log('设置分组列表的数据源',this.state.dataSource);
+
+        console.log('设置分组列表的数据源', this.state.dataSource);
         return (
             <SectionList ref={lv => this.listView = lv}
                 initialNumToRender={this.props.initialNumToRender}
@@ -240,7 +240,7 @@ export default class DefaultSectionListView extends BaseComponent<Props> {
                 {
                     this.state.noMoreData && (
                         <View style={{ justifyContent: 'center', alignItems: 'center', paddingVertical: 10 }}>
-                            <Text style={{ color: '#666', fontSize: 14 }}>😭没有更多数据了...</Text>
+                            <Text style={{ color: '#666', fontSize: 14 }}>没有更多数据了...</Text>
                         </View>
                     )
                 }

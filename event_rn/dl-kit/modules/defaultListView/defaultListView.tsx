@@ -212,7 +212,7 @@ export default class DefaultListView extends BaseComponent<Props> {
                 {
                     this.state.noMoreData && (
                         <View style={{ justifyContent: 'center', alignItems: 'center', paddingVertical: 10 }}>
-                            <Text style={{ color: '#666', fontSize: 14 }}>😭没有更多数据了...</Text>
+                            <Text style={{ color: '#666', fontSize: 14 }}>没有更多数据了...</Text>
                         </View>
                     )
                 }

@@ -74,7 +74,8 @@ export default class Login extends BaseNavNavgator {
                                 secureTextEntry={true}
                                 autoCorrect={false}
                                 underlineColorAndroid="transparent"
-                                placeholder='请输入密码'
+                                placeholder='请输入密码（8-20位字母数字组合）'
+                                maxLength={20}
                                 placeholderTextColor='#aaa'
                                 value={password}
                                 onChangeText={text => this.setState({ password: text })}
@@ -254,6 +255,13 @@ export default class Login extends BaseNavNavgator {
 
             if (imgId.length == 0) {
                 tips.showTips('请先获取验证码')
+                return;
+            }
+        } else {
+            let passReg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,}$/;
+
+            if (!passReg.test(password)) {
+                tips.showTips('密码格式不正确请重新输入');
                 return;
             }
         }

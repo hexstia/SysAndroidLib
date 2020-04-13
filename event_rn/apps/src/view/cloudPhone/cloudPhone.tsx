@@ -625,7 +625,13 @@ export default class CloudPhone extends BaseNavNavgator {
     */
     enterCloudPhone = (phone: CloudPhoneModal) => {
         if (this.checkCloudPhone(phone)) {
-            enterCloudPhone(phone);
+            tips.showLoading('打开中')
+            enterCloudPhone(phone).then(() => {
+                tips.hideLoading()
+            }).catch(err => {
+                tips.hideLoading()
+                tips.showTips(err)
+            })
         }
     }
 

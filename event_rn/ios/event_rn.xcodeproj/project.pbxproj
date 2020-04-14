@@ -60,6 +60,8 @@
 		48DCC0FD227ED1450038C80C /* RSKImageCropper.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 48DCC0FB227ED1450038C80C /* RSKImageCropper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		48DCC0FF227ED1450038C80C /* QBImagePicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48DCC0FE227ED1450038C80C /* QBImagePicker.framework */; };
 		48DCC100227ED1460038C80C /* QBImagePicker.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 48DCC0FE227ED1450038C80C /* QBImagePicker.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		48EC174C244615FC00D2B374 /* LaunchImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 48EC174B244615FC00D2B374 /* LaunchImage.m */; };
+		48EC175024461BEE00D2B374 /* DrawCircleProgressButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 48EC174F24461BED00D2B374 /* DrawCircleProgressButton.m */; };
 		569EB965A9564F4696E685FC /* libimageCropPicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BC88F7120F24668A02CAE74 /* libimageCropPicker.a */; };
 		61EEE975970B4B96991DF2A1 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FA789BE79B85486BB03FA735 /* MaterialIcons.ttf */; };
 		660C32F011B842F4A48F92A5 /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1B4FF101178240DCAE2D6A53 /* FontAwesome5_Regular.ttf */; };
@@ -565,6 +567,10 @@
 		4877CD6B22603D3200D63344 /* iconfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = iconfont.ttf; sourceTree = "<group>"; };
 		48DCC0FB227ED1450038C80C /* RSKImageCropper.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RSKImageCropper.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		48DCC0FE227ED1450038C80C /* QBImagePicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = QBImagePicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		48EC174A244615FC00D2B374 /* LaunchImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = LaunchImage.h; path = event_rn/LaunchImage.h; sourceTree = "<group>"; };
+		48EC174B244615FC00D2B374 /* LaunchImage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = LaunchImage.m; path = event_rn/LaunchImage.m; sourceTree = "<group>"; };
+		48EC174E24461BED00D2B374 /* DrawCircleProgressButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawCircleProgressButton.h; sourceTree = "<group>"; };
+		48EC174F24461BED00D2B374 /* DrawCircleProgressButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DrawCircleProgressButton.m; sourceTree = "<group>"; };
 		5D28DB62CDC54D589D778769 /* libRNArenaPay.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNArenaPay.a; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		6BC88F7120F24668A02CAE74 /* libimageCropPicker.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libimageCropPicker.a; sourceTree = "<group>"; };
@@ -795,6 +801,7 @@
 		13B07FAE1A68108700A75B9A /* event_rn */ = {
 			isa = PBXGroup;
 			children = (
+				48EC174D24461BED00D2B374 /* WSDrawCircleProgress */,
 				482FDAF7242E0DF200E3A9ED /* NetSpeedCheck.h */,
 				482FDAF8242E0DF200E3A9ED /* NetSpeedCheck.m */,
 				4869B2462417FB4E003F1837 /* event_rn.entitlements */,
@@ -813,6 +820,8 @@
 				48016AB8242BA2CD0084224B /* ActionModal.h */,
 				48016AB9242BA2CD0084224B /* ActionModal.m */,
 				48016ABB242BA2EA0084224B /* ActionModal.xib */,
+				48EC174A244615FC00D2B374 /* LaunchImage.h */,
+				48EC174B244615FC00D2B374 /* LaunchImage.m */,
 			);
 			name = event_rn;
 			sourceTree = "<group>";
@@ -968,6 +977,16 @@
 				48D918512277011F00D8F940 /* libRCTVideo.a */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		48EC174D24461BED00D2B374 /* WSDrawCircleProgress */ = {
+			isa = PBXGroup;
+			children = (
+				48EC174E24461BED00D2B374 /* DrawCircleProgressButton.h */,
+				48EC174F24461BED00D2B374 /* DrawCircleProgressButton.m */,
+			);
+			name = WSDrawCircleProgress;
+			path = event_rn/WSDrawCircleProgress;
 			sourceTree = "<group>";
 		};
 		48EE37E022783C410031F4ED /* Products */ = {
@@ -1232,8 +1251,8 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = SFSFH6NHYB;
-						ProvisioningStyle = Manual;
+						DevelopmentTeam = 74PFUL8KG7;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.iCloud = {
 								enabled = 1;
@@ -1852,11 +1871,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				48EC174C244615FC00D2B374 /* LaunchImage.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				48016ABA242BA2CD0084224B /* ActionModal.m in Sources */,
 				482FDAF9242E0DF300E3A9ED /* NetSpeedCheck.m in Sources */,
 				48016A7D242902930084224B /* CloudPhoneModule.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				48EC175024461BEE00D2B374 /* DrawCircleProgressButton.m in Sources */,
 				48016AB72429174B0084224B /* MainViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2005,11 +2026,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = event_rn/event_rn.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = SFSFH6NHYB;
+				DEVELOPMENT_TEAM = 74PFUL8KG7;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2045,7 +2066,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.ruisasi.blueclient;
 				PRODUCT_NAME = event_rn;
-				PROVISIONING_PROFILE_SPECIFIER = dingleTestAll;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -2056,10 +2077,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = event_rn/event_rn.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = SFSFH6NHYB;
+				DEVELOPMENT_TEAM = 74PFUL8KG7;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2095,7 +2116,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.ruisasi.blueclient;
 				PRODUCT_NAME = event_rn;
-				PROVISIONING_PROFILE_SPECIFIER = dingleTestAll;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;

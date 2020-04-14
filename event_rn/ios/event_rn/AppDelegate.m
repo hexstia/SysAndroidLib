@@ -13,7 +13,7 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 #import "MainViewController.h"
-  
+#import "LaunchImage.h"
 
 @implementation AppDelegate
 
@@ -32,6 +32,7 @@
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
 
+  [[LaunchImage shareInstance] show];
   return YES;
 }
 
@@ -50,7 +51,7 @@
 -(BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
 {
   
-  NSString *optionKey = options[UIApplicationOpenURLOptionsSourceApplicationKey];
+//  NSString *optionKey = options[UIApplicationOpenURLOptionsSourceApplicationKey];
   NSString *absolute = url.absoluteString;
   
   //  支付宝支付

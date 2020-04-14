@@ -6,6 +6,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.WindowManager;
 
+/*
+* 启动页
+* 跳过按钮：https://www.ctolib.com/CountdownViewa.html
+* */
 public class Splash extends Activity {
 
     @Override

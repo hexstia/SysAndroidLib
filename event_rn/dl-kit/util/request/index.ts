@@ -61,7 +61,9 @@ export default class request {
 		Object.keys(params).forEach(key => {
 			if (params.hasOwnProperty(key)) {
 				let value = params[key];
-				result.push(key + '=' + encodeURIComponent(value));
+				if (value != undefined && value != null) {
+					result.push(key + '=' + encodeURIComponent(value));
+				}
 			}
 		});
 		return result;

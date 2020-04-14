@@ -29,13 +29,24 @@ export default class DeviceList extends BaseNavNavgator {
     loadData = (pageNum: number) => {
 
         if (pageNum == 0) {
-            request.post('/cloudPhone/phone/list', { page: 1, pageSize: 1000 }, false).then(result => {
+            let status: number | undefined = undefined;
+            switch (this.state.nowSelectTabIndex) {
+                case 1:
+                    status = 5
+                    break;
 
-                this.setState({ phoneList: result.list }, () => {
-                    this.setListViewData()
-                })
+                case 2:
+                    status = 10
+                    break;
+
+                case 3:
+                    status = 15
+                    break;
+            }
+
+            request.post('/cloudPhone/phone/list', { page: 1, pageSize: 1000, type: 1, status }, false).then(result => {
+                this.listView && this.listView.setData(result.list, 0);
             }).catch(err => {
-
                 this.listView && this.listView.setData(null, pageNum);
             })
         } else {
@@ -100,7 +111,7 @@ export default class DeviceList extends BaseNavNavgator {
         }
 
         return (
-            <View style={{ backgroundColor: '#fff', marginTop: 10, marginHorizontal: 15, borderRadius: 5, shadowColor: '#999', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.6 }}>
+            <View style={{ backgroundColor: '#fff', marginTop: 10, marginHorizontal: 15, borderRadius: 5, shadowColor: '#999', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.6 }} key={item.id}>
                 {/* 顶部文字 */}
                 <View style={{ flexDirection: 'row', marginTop: 10, marginRight: 8, marginLeft: 10 }}>
                     {/* 左侧 */}
@@ -147,7 +158,7 @@ export default class DeviceList extends BaseNavNavgator {
   */
     tabSelect = (index: number) => {
         this.setState({ nowSelectTabIndex: index }, () => {
-            this.setListViewData()
+            this.loadData(0)
         })
     }
 
@@ -158,35 +169,5 @@ export default class DeviceList extends BaseNavNavgator {
     addCloudPhoneClick = () => {
         this.navigate('PayCloudPhone', { title: '购买云手机' })
     }
-
-
-
-    /**
-    *  设置列表数据
-    */
-    setListViewData = () => {
-        let { nowSelectTabIndex, phoneList } = this.state;
-
-        switch (nowSelectTabIndex) {
-            case 0: //全部
-                this.listView && this.listView.setData(phoneList, 0);
-                break;
-
-            case 1: // 即将到期
-
-                this.listView && this.listView.setData(phoneList.filter(phone => phone.status == 5), 0);
-                break
-
-            case 2: // 已到期               
-                this.listView && this.listView.setData(phoneList.filter(phone => phone.status == 10), 0);
-                break
-
-            case 3: // 已销毁
-                this.listView && this.listView.setData(phoneList.filter(phone => phone.status == 15), 0);
-                break
-
-        }
-    }
-
 
 }

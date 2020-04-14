@@ -261,12 +261,12 @@ export default class Login extends BaseNavNavgator {
                 return;
             }
         } else {
-            let passReg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,}$/;
+            // let passReg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,}$/;
 
-            if (!passReg.test(password)) {
-                tips.showTips('密码格式不正确请重新输入');
-                return;
-            }
+            // if (!passReg.test(password)) {
+            //     tips.showTips('密码格式不正确请重新输入');
+            //     return;
+            // }
         }
 
         getTempToken((token, timestamp) => {

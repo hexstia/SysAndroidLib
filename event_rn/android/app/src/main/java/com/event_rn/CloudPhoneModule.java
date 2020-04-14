@@ -231,7 +231,6 @@ public class CloudPhoneModule extends ReactContextBaseJavaModule implements WebS
         }
         sdk = null;
         sendWebSocketEvent("webSocektOnClose", "404", "", "");
-
     }
 
     @Override

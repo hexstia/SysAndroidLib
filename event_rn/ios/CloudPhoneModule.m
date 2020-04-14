@@ -165,11 +165,10 @@ RCT_EXPORT_METHOD(getDevicePermise:(NSString *)deviceId success:(RCTPromiseResol
    }
    NSInteger i_deviceId = [deviceId integerValue];
    
-   [self.ljSDKUtil openVideoStreamWithDeviceId:i_deviceId];
-  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+  [self.ljSDKUtil openVideoStreamWithDeviceId:i_deviceId withSuccessOpenVideoStreamBlock:^{
     success(@"打开成功");
-  });
-   
+  }];
+  
 }
 
 

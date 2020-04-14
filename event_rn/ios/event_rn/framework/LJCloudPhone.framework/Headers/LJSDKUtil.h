@@ -10,6 +10,9 @@
 #import <UIKit/UIKit.h>
 
 
+typedef void(^OpenVideoStreamSuccessBlock)(void);
+
+
 @protocol LJSDKUtilDelegate <NSObject>
 
 
@@ -46,12 +49,15 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic,weak) id<LJSDKUtilDelegate> delegate;
 
+/** 视频流是否打开的状态:  0 未开启视频流,1 请求中,2 开启成功 */
+@property (nonatomic,assign) NSInteger videoStreamState;
+
 ///连接webSocket
 -(void)connectoWebSocketWithToken:(NSString *)token;
 /// 关闭webSocket连接
 -(void)disConnectoWebSocket;
 /// 打开视频流的请求
--(void)openVideoStreamWithDeviceId:(NSInteger)deviceId;
+-(void)openVideoStreamWithDeviceId:(NSInteger)deviceId withSuccessOpenVideoStreamBlock:(OpenVideoStreamSuccessBlock)sucCallBack;
 /// 关闭视频流的请求(会退出显示页面)
 -(void)closeVideoStreamWithDeviceId:(NSInteger)deviceId;
 /// 弹窗(增加一个View)

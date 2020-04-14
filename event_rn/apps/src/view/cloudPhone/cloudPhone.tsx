@@ -71,6 +71,7 @@ export default class CloudPhone extends BaseNavNavgator {
     uploadAppModal: UploadAppModal | null = null;
     cloudPhoneSettingModal: CloudPhoneSettingModal | null = null;
     tipModal: TipModal | null = null;
+    enterCloudPhoneLoading: boolean = false;
 
     constructor(props: any) {
         super(props)
@@ -624,13 +625,18 @@ export default class CloudPhone extends BaseNavNavgator {
     *  进入手机
     */
     enterCloudPhone = (phone: CloudPhoneModal) => {
-        if (this.checkCloudPhone(phone)) {
+        if (this.checkCloudPhone(phone) && !this.enterCloudPhoneLoading) {
+            this.enterCloudPhoneLoading = true
             tips.showLoading('打开中')
             enterCloudPhone(phone).then(() => {
                 tips.hideLoading()
+                this.enterCloudPhoneLoading = false
+
             }).catch(err => {
                 tips.hideLoading()
                 tips.showTips(err)
+                this.enterCloudPhoneLoading = false
+
             })
         }
     }

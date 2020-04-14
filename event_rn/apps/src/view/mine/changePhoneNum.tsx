@@ -98,13 +98,7 @@ export default class ChangePhoneNum extends BaseNavNavgator {
 
         if (isPhoneNum(mobile)) {
             // 验证一下新手机号是否被注册过
-            getTempToken((token, timestamp) => {
-                request.post('/tcssPlatform/user/mobile/check', { token, timestamp, mobile }, true).then(res => {
-                    this.checkImgCode && this.checkImgCode.show()
-                }).catch(err => {
-                    tips.showTips('该账号已经注册')
-                })
-            })
+            this.checkImgCode && this.checkImgCode.show()
         }
     }
 
@@ -172,10 +166,10 @@ export default class ChangePhoneNum extends BaseNavNavgator {
             return;
         }
 
-        let param = { mobile }
+        let param = { mobile, vcode }
         request.post('/tcssPlatform/user/info/updateMobile', param, true).then(result => {
-            tips.showTips('', 2000, () => {
-
+            tips.showTips('修改成功', 2000, () => {
+                this.goBack()
             })
         })
     }

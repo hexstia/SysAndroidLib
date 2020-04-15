@@ -1,4 +1,5 @@
 
+import dayjs from 'dayjs';
 import { BaseNavNavgator } from 'dl-kit';
 import { OrderInfo } from 'global';
 import React from 'react';
@@ -35,7 +36,7 @@ export default class OrderDetail extends BaseNavNavgator {
                     <View style={{ flexDirection: 'row' }}>
                         <View style={{ marginTop: 12, marginLeft: 15, flex: 1 }}>
                             <Text style={{ color: '#333', fontSize: 12 }}>订单号：{orderInfo.orderNumber}</Text>
-                            <Text style={{ color: '#333', fontSize: 12, marginTop: 6 }}>订单日期：{orderInfo.orderTime}</Text>
+                            <Text style={{ color: '#333', fontSize: 12, marginTop: 6 }}>订单日期：{dayjs(orderInfo.orderTime).format('YYYY-MM-DD HH:mm:ss')}</Text>
                         </View>
                         <Text style={{ color: orderFail ? '#FE5437' : '#666', fontSize: 14, marginTop: 15, marginRight: 14 }}>{getOrderStatusStr(orderInfo.orderStatus)}</Text>
                     </View>
@@ -45,7 +46,7 @@ export default class OrderDetail extends BaseNavNavgator {
                         {
                             proList.map(pro => {
                                 proNum = proNum + pro.num
-                                return <Text style={{ color: '#FE5437', fontSize: 12, lineHeight: 16 }}>设备号：{pro.deviceId}</Text>
+                                return <Text style={{ color: '#FE5437', fontSize: 12, lineHeight: 16 }}>设备号：{pro.deviceId || '暂无'}</Text>
                             })
                         }
                     </View>

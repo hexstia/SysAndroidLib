@@ -1,4 +1,5 @@
 
+import dayjs from 'dayjs';
 import { BaseNavNavgator, DefaultListView, Icon, ImageBtn, request } from 'dl-kit';
 import { OrderInfo } from 'global';
 import React from 'react';
@@ -30,7 +31,8 @@ export default class OrderList extends BaseNavNavgator {
         if (pageNum == 0) {
             request.post('/tcssPlatform/order/orderList', {}, false).then(result => {
 
-                this.setState({ orderList: result.orderList }, () => {
+
+                this.setState({ orderList: result }, () => {
                     this.setListViewData()
                 })
             }).catch(err => {
@@ -131,14 +133,14 @@ export default class OrderList extends BaseNavNavgator {
                 <View style={{ flexDirection: 'row' }}>
                     <View style={{ marginTop: 12, marginLeft: 15, flex: 1 }}>
                         <Text style={{ color: '#333', fontSize: 12 }}>订单号：{item.orderNumber}</Text>
-                        <Text style={{ color: '#333', fontSize: 12, marginTop: 6 }}>订单日期：{item.orderTime}</Text>
+                        <Text style={{ color: '#333', fontSize: 12, marginTop: 6 }}>订单日期：{dayjs(item.orderTime).format('YYYY-MM-DD HH:mm:ss')}</Text>
                     </View>
                     <Text style={{ color: orderFail ? '#FE5437' : '#666', fontSize: 14, marginTop: 15, marginRight: 14 }}>{getOrderStatusStr(item.orderStatus)}</Text>
                 </View>
 
                 {/* 商品信息 */}
                 <View style={{ marginLeft: 11, marginTop: 7, borderRadius: 2, borderWidth: 1, alignSelf: 'flex-start', paddingHorizontal: 8, paddingVertical: 4, borderColor: '#F2D7A0', backgroundColor: '#FEFCEE', justifyContent: 'center', alignItems: 'center' }}>
-                    <Text style={{ color: '#B3944C', fontSize: 13, lineHeight: 15 }}>{pro.proName}</Text>
+                    <Text style={{ color: '#B3944C', fontSize: 13, lineHeight: 15 }}>套餐类型：{pro.proName}</Text>
                 </View>
 
                 {/* 支付金额  */}

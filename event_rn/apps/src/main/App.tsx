@@ -88,7 +88,6 @@ class App extends Component<Props, {}> {
   }
 
 
-
   //如果有更新的提示
   syncImmediate() {
     CodePush.sync({

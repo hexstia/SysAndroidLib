@@ -1,9 +1,9 @@
 
-import { BaseNavNavgator, request, tips } from 'dl-kit';
+import { BaseNavNavgator, msg, request, tips } from 'dl-kit';
 import React from 'react';
 import { Image, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import CheckImgCode from '../../module/checkImgCode';
-import { getTempToken, isPhoneNum } from '../../module/publicFunc';
+import { getTempToken, isPhoneNum, saveLoginInfo } from '../../module/publicFunc';
 
 interface State {
   mobile: string,
@@ -36,6 +36,7 @@ export default class BindMobile extends BaseNavNavgator {
   constructor(props: any) {
     super(props)
   }
+
   render() {
     let { mobile, vcode, password, passwordAgain, minutes } = this.state
     return (
@@ -231,7 +232,8 @@ export default class BindMobile extends BaseNavNavgator {
 
       request.post('/tcssPlatform/user/register', param, true).then(result => {
         tips.showTips('注册成功', 2000, () => {
-          this.goBack();
+          saveLoginInfo(result)
+          msg.emit('changeRootRoute', { rootRoute: 'TabNavigator' })
         })
       })
     })

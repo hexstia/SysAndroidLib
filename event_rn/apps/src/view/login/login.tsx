@@ -327,10 +327,13 @@ export default class Login extends BaseNavNavgator {
         getTempToken((token, timestamp) => {
 
             let param = { token, timestamp, mobile: phone, password, from: 1, vcode: verCode, loginType: 2, appId, code, openId }
-            request.post('/tcssPlatform/user/loginApp', param, true).then(result => {
+            tips.showLoading()
+            request.post('/tcssPlatform/user/loginApp', param, false).then(result => {
+                tips.hideLoading()
                 saveLoginInfo(result)
                 msg.emit('changeRootRoute', { rootRoute: 'TabNavigator' })
             }).catch(err => {
+                tips.hideLoading()
                 this.navigate('BindMobile', { title: '绑定手机', appId, code, openId })
                 tips.showTips('请绑定账号');
             })

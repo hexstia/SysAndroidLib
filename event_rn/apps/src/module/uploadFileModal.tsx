@@ -3,8 +3,7 @@
 import { BaseComponent, configs, ImageBtn, imagePicker, tips } from 'dl-kit';
 import { CloudPhoneModal } from 'global';
 import React from 'react';
-import { Image, Modal, Text, View } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { Image, Modal, ScrollView, Text, View } from 'react-native';
 import { getFileType } from './publicFunc';
 var RNFS = require('react-native-fs');
 
@@ -37,6 +36,8 @@ export default class UploadFileModal extends BaseComponent<Props> {
   // 刷新上传进度的次数  我决定只有25%的进度需要刷新
   updateTime: number = 0;
 
+  scrollview: ScrollView | null = null;
+
   render() {
     let { visible, uploadTasks } = this.state
     let itemWidth = 90
@@ -59,7 +60,7 @@ export default class UploadFileModal extends BaseComponent<Props> {
 
             {/* 文件上传 */}
             <View style={{ marginBottom: 10, alignSelf: 'stretch', height: fileViewHeight }}>
-              <ScrollView>
+              <ScrollView ref={sv => this.scrollview = sv}>
                 <View style={{ flexDirection: 'row', flexWrap: 'wrap', }}>
                   {
                     uploadTasks.map(task => {
@@ -112,6 +113,7 @@ export default class UploadFileModal extends BaseComponent<Props> {
         setTimeout(() => {
           this.setState({ visible: true })
           this.uploadFiles([img.path])
+          this.scrollview && this.scrollview.scrollToEnd({ animated: true })
         }, 300 * index);
       })
       // let paths = imgs.map(i => i.path)
@@ -147,7 +149,7 @@ export default class UploadFileModal extends BaseComponent<Props> {
     // 开始上传
     var uploadBegin = (response: { jobId: number }) => {
       var jobId = response.jobId;
-      console.log('开始上传' + jobId);
+
       let task: UploadTask = {
         status: 'upload',
         progress: 0,
@@ -160,14 +162,11 @@ export default class UploadFileModal extends BaseComponent<Props> {
     var uploadProgress = (response: { jobId: number, totalBytesExpectedToSend: number, totalBytesSent: number }) => {
 
       this.updateTime = this.updateTime + 1
-      if (this.updateTime % 4 != 1) {
+      if (this.updateTime % this.state.uploadTasks.length != 1) {
         return;
       }
 
       var percentage = Math.floor((response.totalBytesSent / response.totalBytesExpectedToSend) * 100);
-
-      console.log('上传进度：' + response.jobId + '==》' + percentage);
-
       let newTasks = [...this.state.uploadTasks].map(task => {
         if (task.jobId == response.jobId) {
           return { ...task, progress: percentage }
@@ -195,22 +194,25 @@ export default class UploadFileModal extends BaseComponent<Props> {
       progress: uploadProgress
     }).promise.then((response: { jobId: number, statusCode: number, headers: Headers, body: string }) => {
       console.log('上传结果', response);
-      let body = JSON.parse(response.body);
-      let success = response.statusCode == 200 && body.status == 200
+      try {
+        let body = JSON.parse(response.body);
+        let success = response.statusCode == 200 && body.status == 200
 
-      let newTasks = [...this.state.uploadTasks].map(task => {
-        if (task.jobId == response.jobId) {
-          return { ...task, status: success ? 'success' : 'faild', statusTextColor: success ? '#18A918' : '#FE5437' }
-        }
-        return task;
-      })
-      this.setState({ uploadTasks: newTasks })
-    }).catch((err: any) => {
-      if (err.description === "cancelled") {
-        // cancelled by user
+        let newTasks = [...this.state.uploadTasks].map(task => {
+          if (task.jobId == response.jobId) {
+            return { ...task, status: success ? 'success' : 'faild', statusTextColor: success ? '#18A918' : '#FE5437', progress: 100 }
+          }
+          return task;
+        })
+        this.setState({ uploadTasks: newTasks })
+      } catch (error) {
+
       }
+
+    }).catch((err: any) => {
+
       tips.showTips(`上传失败！`)
-      console.log(err);
+      console.log('上传失败！', err);
     });
   }
 

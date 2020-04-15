@@ -1,5 +1,5 @@
 
-import { BaseNavNavgator, configs, DefaultListView, defaultStyle, ImageBtn, request, tips } from 'dl-kit';
+import { BaseNavNavgator, configs, DefaultListView, defaultStyle, ImageBtn, msg, request, tips } from 'dl-kit';
 import { Banner, CloudPhoneModal } from 'global';
 import React from 'react';
 import { Image, ImageBackground, Platform, Text, TouchableOpacity, View } from 'react-native';
@@ -79,6 +79,11 @@ export default class CloudPhone extends BaseNavNavgator {
             this.loadData()
             this.addEventListener()
         }
+
+        // 更新云手机信息
+        msg.on('updateCloudPhone', () => {
+            this.loadData()
+        })
     }
 
     /**

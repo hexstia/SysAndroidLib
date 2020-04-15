@@ -149,7 +149,7 @@ export default class Mine extends BaseNavNavgator {
     */
     logout = () => {
         logoutAndClear()
-        msg.emit('logout', { message: '退出登录' })
+        msg.emit('changeRootRoute', { rootRoute: 'Login' })
     }
 
     /**

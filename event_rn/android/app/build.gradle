@@ -180,7 +180,7 @@ dependencies {
     implementation 'io.netty:netty-all:4.1.39.Final'
     implementation 'com.lanjiang:ad_app_client_sdk:5.0.8-SNAPSHOT'
 
-    compile 'cn.lemon:countdownview:0.2.0'
+//    implementation 'cn.lemon:countdownview:0.2.0'
 
 }
 

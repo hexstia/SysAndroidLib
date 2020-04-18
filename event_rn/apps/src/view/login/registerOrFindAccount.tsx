@@ -167,7 +167,7 @@ export default class RegisterOrFindAccount extends BaseNavNavgator {
 
         if (isPhoneNum(mobile)) {
             getTempToken((token, timestamp) => {
-                let param = { token, timestamp, mobile, type: 1, sendType: type == 'REGISTER' ? 1 : 2, from: 1 }
+                let param = { token, timestamp, mobile, type: 1, sendType: type == 'REGISTER' ? 1 : 1, from: 1 }
                 request.post('/tcssPlatform/vcode/send', param, true).then(result => {
                     console.log(result)
                     tips.showTips('验证码发送成功')

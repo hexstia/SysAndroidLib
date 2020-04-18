@@ -74,7 +74,7 @@ export default class QuestionList extends BaseNavNavgator {
                 </View>
 
                 <View style={{ flex: 1, alignItems: 'center' }}>
-                    <Text style={{ color: '#666', fontSize: 12, lineHeight: 15 }}>{item.content}</Text>
+                    <Text style={{ color: '#666', fontSize: 12, lineHeight: 15 }}>{item.title}</Text>
                 </View>
 
                 <View style={{ width: 60, alignItems: 'center' }}>
@@ -99,9 +99,14 @@ export default class QuestionList extends BaseNavNavgator {
     *  添加问题
     */
     gotoAddQuestion = () => {
-        this.navigate('NewQuestion', { title: '新问题' })
+        this.navigate('NewQuestion', { title: '新问题', newQuestionAction: this.newQuestionAction })
     }
 
-
+    /**
+    *  添加新问题的回调
+    */
+    newQuestionAction = () => {
+        this.listView && this.listView.onRefresh()
+    }
 
 }

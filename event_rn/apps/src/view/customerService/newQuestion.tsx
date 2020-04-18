@@ -1,5 +1,5 @@
 
-import { BaseNavNavgator, Icon, ImageBtn, imagePicker, request, tips } from 'dl-kit';
+import { BaseNavNavgator, defaultStyle, Icon, ImageBtn, imagePicker, request, tips } from 'dl-kit';
 import React from 'react';
 import { Image, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
@@ -24,9 +24,9 @@ export default class NewQuestion extends BaseNavNavgator {
         let { title, content, imgPath } = this.state;
         return (
             <ScrollView style={{ flex: 1 }} keyboardDismissMode='on-drag'>
-                <View style={{ backgroundColor: '#fff' }}>
+                <View style={{ marginTop: 10, ...defaultStyle.device }}>
                     {/* 问题标题 */}
-                    <View style={{ height: 40, paddingHorizontal: 15 }}>
+                    <View style={{ height: 40, paddingHorizontal: 15, backgroundColor: '#fff' }}>
                         <TextInput
                             style={{ padding: 0, flex: 1, fontSize: 16 }}
                             autoCapitalize='none'
@@ -41,7 +41,7 @@ export default class NewQuestion extends BaseNavNavgator {
                     <View style={{ height: 0.5, backgroundColor: '#eee', marginHorizontal: 15 }} />
 
                     {/* 问题内容 */}
-                    <View style={{ paddingVertical: 10, paddingHorizontal: 15, height: 160 }}>
+                    <View style={{ paddingVertical: 10, paddingHorizontal: 15, height: 160, backgroundColor: '#fff' }}>
                         <TextInput
                             style={{ padding: 0, flex: 1, fontSize: 16, textAlignVertical: 'top' }}
                             autoCapitalize='none'
@@ -56,7 +56,7 @@ export default class NewQuestion extends BaseNavNavgator {
                     </View>
 
                     {/* 添加附件 */}
-                    <View style={{ flexDirection: 'row' }}>
+                    <View style={{ flexDirection: 'row', backgroundColor: '#fff', paddingBottom: 15 }}>
                         <Text style={{ color: '#ccc', fontSize: 14, marginLeft: 15 }}>添加附件</Text>
                         <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: '#eee', width: 100, height: 100, marginLeft: 15 }}
                             onPress={this.selectImageAction}>
@@ -101,6 +101,7 @@ export default class NewQuestion extends BaseNavNavgator {
         })
     }
 
+
     /**
     *  提交事件
     */
@@ -111,10 +112,21 @@ export default class NewQuestion extends BaseNavNavgator {
         if (imgPath) {
             param.imgPath = imgPath
         }
+
+        if (title.length == 0) {
+            tips.showTips('问题标题不能为空')
+            return
+        }
+
+        if (content.length == 0) {
+            tips.showTips('问题内容不能为空')
+            return
+        }
+
         request.post('/tcssPlatform/user/addConsultation', param, true).then(result => {
-            tips.showTips('新问题提交成功', 2000, () => {
-                this.goBack()
-            })
+            this.data.newQuestionAction && this.data.newQuestionAction()
+            this.goBack()
+            tips.showTips('新问题提交成功')
         })
     }
 }

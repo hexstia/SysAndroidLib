@@ -1,6 +1,6 @@
 
 import dayjs from 'dayjs';
-import { BaseNavNavgator } from 'dl-kit';
+import { BaseNavNavgator, request } from 'dl-kit';
 import { Question } from 'global';
 import React from 'react';
 import { Image, Text, View } from 'react-native';
@@ -20,6 +20,9 @@ export default class QuestionDetail extends BaseNavNavgator {
     constructor(props: any) {
         super(props)
         this.setTitle('详情')
+        request.post('/tcssPlatform/user/detailConsultation', { id: this.data.question.id }, true).then(result => {
+            this.setState({ question: result })
+        })
     }
 
     render() {
@@ -28,7 +31,7 @@ export default class QuestionDetail extends BaseNavNavgator {
             <View style={{ flex: 1 }}>
                 <View style={{ marginTop: 10, marginHorizontal: 15, borderRadius: 5, backgroundColor: '#fff', shadowColor: '#999', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.6 }}>
                     {/* 问题部分 */}
-                    <View style={{ marginTop: 10, marginHorizontal: 10, backgroundColor: '#F0F0F0', paddingHorizontal: 8, paddingTop: 8 ,marginBottom:10}}>
+                    <View style={{ marginTop: 10, marginHorizontal: 10, backgroundColor: '#F0F0F0', paddingHorizontal: 8, paddingTop: 8, marginBottom: 10 }}>
                         {/* 标题 */}
                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                             <Text style={{ color: '#000', fontSize: 16, fontWeight: '900' }}>{question.title}</Text>
@@ -46,7 +49,7 @@ export default class QuestionDetail extends BaseNavNavgator {
                     </View>
 
                     {/* 回答 */}
-                    <View style={{ marginBottom: 10, marginHorizontal: 10, backgroundColor: '#eee', paddingHorizontal: 8, paddingTop: 8 ,paddingBottom:8 }}>
+                    <View style={{ marginBottom: 10, marginHorizontal: 10, backgroundColor: '#eee', paddingHorizontal: 8, paddingTop: 8, paddingBottom: 8 }}>
                         <Text style={{ color: '#666', fontSize: 13, lineHeight: 16 }}>{question.replyContent || '暂无回答'}</Text>
                     </View>
                 </View>

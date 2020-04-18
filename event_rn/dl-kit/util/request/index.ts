@@ -88,6 +88,8 @@ export default class request {
 		});
 	};
 
+	static requestUrlArr: string[] = []
+
 	/**
 	*  http请求参以及响应处理
 	uri:接口
@@ -98,9 +100,19 @@ export default class request {
 	*/
 	static requestTask(url: string, method: 'POST' | 'GET', params: Param = {}, loding: boolean = false, rreprocessing: boolean = true) {
 
+		if (loding) {
+			if (this.requestUrlArr.indexOf(url) != -1) {
+				return Promise.reject({ message: '请不要频繁触发' });
+			} else {
+				this.requestUrlArr.push(url);
+			}
+		}
+
+
 		/* 处理url */
+		let finalUrl = url;
 		if (url.substring(0, 4) != "http") {
-			url = Config.apiHost + url
+			finalUrl = Config.apiHost + url
 		}
 
 		/* 没有token 就给加一个 */
@@ -109,7 +121,7 @@ export default class request {
 		}
 
 		if (method == 'GET') {
-			url = url + '?' + this.getParamsArray(params).join('&');
+			finalUrl = finalUrl + '?' + this.getParamsArray(params).join('&');
 		}
 
 		var requestData = {
@@ -132,18 +144,23 @@ export default class request {
 		// }
 
 		return new Promise<any>((resolve, reject) => {
-			this.http(url, requestData).then(
+			this.http(finalUrl, requestData).then(
 				(res: any) => {
 
 					let response = res as Response
 					// 测试环境打印访问结果
 					if (__DEV__) {
-						console.log('访问接口:' + method + '==>' + url)
+						console.log('访问接口:' + method + '==>' + finalUrl)
 						console.log('访问参数:', params)
 						console.log('响应数据', response)
 					}
 					if (loding) {
 						tips.hideLoading()
+						// 移除url缓存
+						let index = this.requestUrlArr.indexOf(url)
+						if (index != -1) {
+							this.requestUrlArr.splice(index, 1)
+						}
 					}
 
 					if (rreprocessing) {
@@ -156,7 +173,7 @@ export default class request {
 							// token过时 刷新一下
 							let refreshPromise = refreshToken().then(res => {
 								params.token = res.token
-								return this.post(url, params, loding)
+								return this.post(finalUrl, params, loding)
 							})
 							resolve(refreshPromise)
 
@@ -186,9 +203,14 @@ export default class request {
 					}
 					if (loding) { //  关闭转圈
 						tips.hideLoading()
-
 						// 网络错误 提示，并回调
 						tips.showTips('网络差，请稍后再试。');
+
+						// 移除url缓存
+						let index = this.requestUrlArr.indexOf(url)
+						if (index != -1) {
+							this.requestUrlArr.splice(index, 1)
+						}
 					}
 					reject({ message: '网络差，请稍后再试。' });
 				}

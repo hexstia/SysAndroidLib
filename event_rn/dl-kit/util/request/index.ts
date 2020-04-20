@@ -111,12 +111,12 @@ export default class request {
 
 		/* 处理url */
 		let finalUrl = url;
-		if (url.substring(0, 4) != "http") {
-			finalUrl = Config.apiHost + url
+		if (finalUrl.substring(0, 4) != "http") {
+			finalUrl = Config.apiHost + finalUrl
 		}
 
 		/* 没有token 就给加一个 */
-		if (!params.token) {
+		if (!params.token && Config.token) {
 			params.token = Config.token || ''
 		}
 
@@ -137,11 +137,6 @@ export default class request {
 		if (loding) {
 			tips.showLoading()
 		}
-
-		// if (__DEV__) {
-		// 	console.log('访问接口:' + method + '==>' + url)
-		// 	console.log('访问参数:', params)
-		// }
 
 		return new Promise<any>((resolve, reject) => {
 			this.http(finalUrl, requestData).then(
@@ -183,7 +178,7 @@ export default class request {
 							msg.emit('logout', { code: 40002, message: '身份信息过期，请重新登录' })
 						} else if (response.status == 400001005) {
 							// 该请求未通过身份认证
-							msg.emit('logout', { code: 40002, message: '账号未登录，无法获取' })
+							msg.emit('logout', { code: 40002, message: '' })
 
 						} else { // 其他错误
 							if (loding) {

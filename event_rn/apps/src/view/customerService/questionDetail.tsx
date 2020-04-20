@@ -42,7 +42,7 @@ export default class QuestionDetail extends BaseNavNavgator {
 
                         {/* 图片 */}
                         {
-                            question.userImg ? (
+                            question.imgPath ? (
                                 <Image style={{ width: 100, height: 100, marginBottom: 12, backgroundColor: '#eee' }} source={{ uri: question.userImg }} />
                             ) : null
                         }

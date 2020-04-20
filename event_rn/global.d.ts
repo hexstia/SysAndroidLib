@@ -312,6 +312,10 @@ interface Question {
     endTime: number
     id: number
     /**
+    *  图片
+    */
+    imgPath: string
+    /**
     *  回答内容
     */
     replyContent: string

@@ -103,7 +103,7 @@ export default class OrderList extends BaseNavNavgator {
                 break
 
             case 2: // 支付失败
-                let errOrderList = orderList.filter(order => order.orderStatus == 0)
+                let errOrderList = orderList.filter(order => order.orderStatus == 15 || order.orderStatus == 10 || order.orderStatus == 0)
                 this.listView && this.listView.setData(errOrderList, 0);
                 break
 

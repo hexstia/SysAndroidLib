@@ -90,6 +90,8 @@
     //用来展示图片内容
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:window.bounds];
   imageView.image = [UIImage imageNamed:@"launchImg"];
+  imageView.contentMode = UIViewContentModeScaleAspectFill;
+  imageView.clipsToBounds = YES;
     
     //增加点击事件 点击图片的时候可以实现自己想要的逻辑
     UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(letGo)];

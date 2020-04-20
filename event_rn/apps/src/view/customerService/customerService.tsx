@@ -34,12 +34,12 @@ export default class CustomerService extends BaseNavNavgator {
             url: 'http://91lanjiang.com/cloud/cloudPhone/book?type=question3'
         },
         {
-            title: '常见综合问题',
-            url: 'http://91lanjiang.com/cloud/cloudPhone/book?type=FQA'
-        },
-        {
             title: '应用在云手机运行是否安全？',
             url: 'http://91lanjiang.com/cloud/cloudPhone/book?type=question5'
+        },
+        {
+            title: '常见综合问题',
+            url: 'http://91lanjiang.com/cloud/cloudPhone/book?type=FQA'
         },
         // {
         //     title: '关于蓝将',

@@ -62,7 +62,7 @@ export default class MessageList extends BaseNavNavgator {
           <Text style={{ color: '#333', fontSize: 15, marginLeft: 5, lineHeight: 18, flex: 1 }} numberOfLines={1}>{item.title}</Text>
           <Text style={{ color: '#999', fontSize: 13, marginRight: 10, marginLeft: 10 }} numberOfLines={1}>{createTime}</Text>
         </View>
-        <Text style={{ color: '#999', fontSize: 13, marginLeft: 37, marginTop: 10, marginBottom: 22 }}>{item.appStatusStr}</Text>
+        {/* <Text style={{ color: '#999', fontSize: 13, marginLeft: 37, marginTop: 10, marginBottom: 22 }}>{item.appStatusStr}</Text> */}
       </View>
     )
   }

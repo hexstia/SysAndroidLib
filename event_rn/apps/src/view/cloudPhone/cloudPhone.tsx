@@ -1,5 +1,5 @@
 
-import { BaseNavNavgator, configs, DefaultListView, defaultStyle, ImageBtn, msg, request, tips } from 'dl-kit';
+import { BaseNavNavgator, configs, DefaultListView, defaultStyle, ImageBtn, request, tips } from 'dl-kit';
 import { Banner, CloudPhoneModal } from 'global';
 import React from 'react';
 import { Image, ImageBackground, Platform, Text, TouchableOpacity, View } from 'react-native';
@@ -72,6 +72,7 @@ export default class CloudPhone extends BaseNavNavgator {
     cloudPhoneSettingModal: CloudPhoneSettingModal | null = null;
     tipModal: TipModal | null = null;
     enterCloudPhoneLoading: boolean = false;
+    phoneListChange: boolean = false;
 
     constructor(props: any) {
         super(props)
@@ -79,11 +80,7 @@ export default class CloudPhone extends BaseNavNavgator {
             this.loadData()
             this.addEventListener()
         }
-
-        // 更新云手机信息
-        msg.on('updateCloudPhone', () => {
-            this.loadData()
-        })
+        this.loadBanner()
     }
 
     /**
@@ -93,12 +90,16 @@ export default class CloudPhone extends BaseNavNavgator {
         let param = { page: 1, pageSize: 1000 }
         // 获取云手机列表
         request.post('/cloudPhone/phone/list', param, true).then(result => {
-            console.log('获取云手机列表', result)
             this.setState({ phoneList: result.list }, this.getAllScreenshot)
         }).catch(err => {
             console.log('获取云手机列表', err)
         })
+    }
 
+    /**
+    *  获取banner广告
+    */
+    loadBanner = () => {
         // 获取云手机的banner图
         request.post('/tcssPlatform/user/queryAdBanner', { type: Platform.OS == 'ios' ? 2 : 1, proType: 1 }, true).then(result => {
             this.setState({ bannerDatas: result.list })
@@ -512,7 +513,7 @@ export default class CloudPhone extends BaseNavNavgator {
     *  添加云手机
     */
     addCloudPhoneClick = () => {
-        this.navigate('PayCloudPhone', { title: '购买云手机' })
+        this.navigate('PayCloudPhone', { title: '购买云手机', payCallback: this.loadData })
     }
 
     /**
@@ -625,7 +626,7 @@ export default class CloudPhone extends BaseNavNavgator {
     *  续费按钮点击事件
     */
     renewBtnClick = (cloudPhone: CloudPhoneModal) => {
-        this.navigate('PayCloudPhone', { cloudPhone, title: '续费' })
+        this.navigate('PayCloudPhone', { cloudPhone, title: '续费', payCallback: this.loadData })
     }
 
     /**

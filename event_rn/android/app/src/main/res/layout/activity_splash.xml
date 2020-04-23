@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@mipmap/launcher">
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@mipmap/launcher"
+        android:scaleType="centerCrop"/>
 
     <com.event_rn.CountdownView
         android:id="@+id/countdown"
@@ -12,7 +16,7 @@
         android:layout_height="36dp"
         android:layout_marginTop="12dp"
         android:layout_marginRight="12dp"
-        android:layout_gravity="right"
+        android:layout_alignParentRight="true"
         app:text="跳过"
         app:text_color="@android:color/white"
         app:text_size="12dp"
@@ -22,4 +26,4 @@
         app:progress_width="1dp"
         app:progress_hint_color="#94595b59"/>
 
-</LinearLayout>
+</RelativeLayout>

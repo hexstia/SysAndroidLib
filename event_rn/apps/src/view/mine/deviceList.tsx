@@ -147,7 +147,7 @@ export default class DeviceList extends BaseNavNavgator {
     */
     xufeiBtnClick = (cloudPhone: CloudPhoneModal) => {
         if (cloudPhone.status != 15) {
-            this.navigate('PayCloudPhone', { cloudPhone, title: '续费' })
+            this.navigate('PayCloudPhone', { cloudPhone, title: '续费', payCallback: this.loadData.bind(this, 0) })
         }
     }
 
@@ -167,7 +167,7 @@ export default class DeviceList extends BaseNavNavgator {
   *  添加云手机
   */
     addCloudPhoneClick = () => {
-        this.navigate('PayCloudPhone', { title: '购买云手机' })
+        this.navigate('PayCloudPhone', { title: '购买云手机', payCallback: this.loadData.bind(this, 0) })
     }
 
 }

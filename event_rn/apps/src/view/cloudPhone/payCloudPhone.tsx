@@ -216,6 +216,7 @@ export default class PayCloudPhone extends BaseNavNavgator {
     }
 
     RNArenaPay.wechatPay(payData).then((data: any) => {
+      this.data.payCallback && this.data.payCallback()
       this.replace('PayResult', { title: '支付结果', orderPay })
     }, (error: any) => {
       this.replace('PayResult', { title: '支付结果' })
@@ -231,6 +232,7 @@ export default class PayCloudPhone extends BaseNavNavgator {
 
     // 支付宝支付
     RNArenaPay.aliPay({ payInfo: outCodeUrl }).then((data: any) => {
+      this.data.payCallback && this.data.payCallback()
       this.replace('PayResult', { title: '支付结果', orderPay })
     }, (error: any) => {
       this.replace('PayResult', { title: '支付结果' })

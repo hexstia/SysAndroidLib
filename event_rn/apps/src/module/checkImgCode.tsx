@@ -78,7 +78,6 @@ export default class CheckImgCode extends BaseComponent<Props> {
                                 <TextInput
                                     style={{ padding: 0, flex: 1, fontSize: 14 }}
                                     autoCapitalize='none'
-                                    secureTextEntry={true}
                                     autoCorrect={false}
                                     underlineColorAndroid="transparent"
                                     placeholder='输入图片中的字符'

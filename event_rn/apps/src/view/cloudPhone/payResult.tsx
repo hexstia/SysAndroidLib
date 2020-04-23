@@ -1,5 +1,5 @@
 
-import { BaseNavNavgator, ImageBtn, msg } from 'dl-kit';
+import { BaseNavNavgator, ImageBtn } from 'dl-kit';
 import { OrderPay } from 'global';
 import React from 'react';
 import { Image, Text, View } from 'react-native';
@@ -18,10 +18,6 @@ export default class PayResult extends BaseNavNavgator {
   constructor(props: any) {
     super(props)
     this.setTitle('支付结果')
-
-    setTimeout(() => {
-      msg.emit('updateCloudPhone')
-    }, 1000);
   }
   render() {
     let orderPay: OrderPay = this.data.orderPay;

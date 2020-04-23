@@ -32,7 +32,7 @@ export default class OrderList extends BaseNavNavgator {
             request.post('/tcssPlatform/order/orderList', {}, false).then(result => {
 
 
-                this.setState({ orderList: result }, () => {
+                this.setState({ orderList: result.orderList }, () => {
                     this.setListViewData()
                 })
             }).catch(err => {

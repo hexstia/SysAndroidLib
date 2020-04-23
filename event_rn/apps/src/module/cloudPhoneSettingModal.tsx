@@ -77,7 +77,7 @@ export default class CloudPhoneSettingModal extends BaseComponent<Props> {
               {
                 this.itemDatas.map(item => {
                   return (
-                    <View style={{ width: itemWidth, alignItems: 'center' }}>
+                    <View style={{ width: itemWidth, alignItems: 'center' }} key={item.title}>
                       <TouchableOpacity style={{ alignItems: 'center' }} onPress={this.itemClick.bind(this, item)}>
                         <Image style={{ marginTop: 18, width: 26, height: 26 }} resizeMode='contain' source={item.image} />
                         <Text style={{ color: '#999', fontSize: 12, marginTop: 8 }} onPress={this.itemClick.bind(this, item)} >{item.title}</Text>

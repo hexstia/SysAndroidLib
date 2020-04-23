@@ -79,7 +79,7 @@ export default class Mine extends BaseNavNavgator {
             <View style={{ flex: 1 }}>
                 {/* 顶部 */}
                 <ImageBackground style={{ height: 210, width: defaultStyle.device.width }} source={require('#/mine/topBGImg.png')}>
-                    <ImageBtn style={{ alignSelf: 'flex-end', marginTop: 14 + defaultStyle.safeArea.navMarginTop, marginRight: 14 }}
+                    <ImageBtn style={{ alignSelf: 'flex-end', marginTop: 10 + defaultStyle.safeArea.navMarginTop, marginRight: 14 }}
                         source={require('#/mine/messageIcon.png')}
                         imgWidth={32}
                         imgHeight={32}
@@ -109,7 +109,8 @@ export default class Mine extends BaseNavNavgator {
                         this.itemDatas.map(item => {
                             return (
                                 <TouchableOpacity style={{ height: 45, flexDirection: 'row', alignItems: 'center', borderBottomColor: '#eee', borderBottomWidth: 1 }}
-                                    onPress={this.itemClick.bind(this, item)}>
+                                    onPress={this.itemClick.bind(this, item)}
+                                    key={item.title}>
                                     <Image style={{ width: 18, height: 18, marginLeft: 20 }} source={item.icon} />
                                     <Text style={{ color: '#333', fontSize: 15, marginLeft: 10, flex: 1 }}>{item.title}</Text>
                                     <Text style={{ color: '#666', fontSize: 15, marginLeft: 10 }}>{item.text}</Text>

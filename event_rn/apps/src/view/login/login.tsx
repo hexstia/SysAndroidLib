@@ -189,7 +189,7 @@ export default class Login extends BaseNavNavgator {
         if (isPhoneNum(mobile)) {
             getTempToken((token, timestamp) => {
                 let param = { token, timestamp, mobile, type: 1, sendType: 5, from: 1 }
-                request.post('/tcssPlatform/vcode/send', param, true).then(result => {
+                request.post('/tcssPlatform/vcode/send', param, false).then(result => {
                     console.log(result)
                     tips.showTips('验证码发送成功')
                     this.setState({
@@ -251,15 +251,18 @@ export default class Login extends BaseNavNavgator {
 
         // 验证码登录要检查验证码是否有输入
         if (loginType == 'verCode') {
-            if (verCode.length == 0) {
-                tips.showTips('请输入验证码')
-                return;
-            }
 
             if (imgId.length == 0) {
                 tips.showTips('请先获取验证码')
                 return;
             }
+
+            if (verCode.length == 0) {
+                tips.showTips('请输入验证码')
+                return;
+            }
+
+
         } else {
             // let passReg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,}$/;
 

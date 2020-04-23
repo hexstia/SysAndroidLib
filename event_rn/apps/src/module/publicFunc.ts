@@ -80,7 +80,7 @@ let refreshToken = () => {
             saveLoginInfo(response.data);
             resolve(response.data)
           } else {
-            msg.emit('logout', { code: 40001, message: '刷新token失败，请重新登录' });
+            msg.emit('logout', { code: 40001, message: response.message });
             reject({ message: '刷新token失败，请重新登录' })
           }
 
@@ -92,8 +92,8 @@ let refreshToken = () => {
 
     } else {
 
-      reject({ message: '身份信息缺失，请重新登录' });
-      msg.emit('logout', { code: 40001, message: '身份信息缺失，请重新登录' });
+      reject({ message: '账号未登录，无法获取' });
+      msg.emit('logout', { code: 40001, message: '账号未登录，无法获取' });
 
     }
 

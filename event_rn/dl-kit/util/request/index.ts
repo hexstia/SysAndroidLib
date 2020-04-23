@@ -175,10 +175,10 @@ export default class request {
 						} else if (response.status == 40002) {
 
 							reject('token 失效');
-							msg.emit('logout', { code: 40002, message: '身份信息过期，请重新登录' })
+							msg.emit('logout', { code: 40002, message: response.message })
 						} else if (response.status == 400001005) {
 							// 该请求未通过身份认证
-							msg.emit('logout', { code: 40002, message: '' })
+							msg.emit('logout', { code: 40002, message: response.message })
 
 						} else { // 其他错误
 							if (loding) {

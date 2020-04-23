@@ -113,7 +113,7 @@ export default class ChangePhoneNum extends BaseNavNavgator {
         if (isPhoneNum(mobile)) {
             getTempToken((token, timestamp) => {
                 let param = { token, timestamp, mobile, type: 1, sendType: 4, from: 1 }
-                request.post('/tcssPlatform/vcode/send', param, true).then(result => {
+                request.post('/tcssPlatform/vcode/send', param, false).then(result => {
                     console.log(result)
                     tips.showTips('验证码发送成功')
                     this.setState({
@@ -156,15 +156,17 @@ export default class ChangePhoneNum extends BaseNavNavgator {
             return;
         }
 
+        if (imgId.length == 0) {
+            tips.showTips('请先获取验证码')
+            return;
+        }
+
         if (vcode.length == 0) {
             tips.showTips('请输入验证码')
             return;
         }
 
-        if (imgId.length == 0) {
-            tips.showTips('请先获取验证码')
-            return;
-        }
+
 
         let param = { mobile, vcode }
         request.post('/tcssPlatform/user/info/updateMobile', param, true).then(result => {

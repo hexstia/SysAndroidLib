@@ -131,7 +131,7 @@ export default class request {
 				'Content-Type': method == 'GET' ? 'application/x-www-form-urlencoded;charset=UTF-8' : 'application/x-www-form-urlencoded;charset=UTF-8',
 				Authorization: Config.token || ''
 			},
-			body: method != 'GET' && this.getParamsArray(params).join('&'),
+			body: method == 'GET' ? this.getParamsArray(params).join('&') : this.getParamsArray(params).join('&'),
 		};
 
 		if (loding) {

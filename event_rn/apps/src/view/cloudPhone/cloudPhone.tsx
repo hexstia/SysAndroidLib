@@ -111,9 +111,11 @@ export default class CloudPhone extends BaseNavNavgator {
     getAllScreenshot = () => {
         checkSocketConnect().then(v => {
             this.state.phoneList.map((p, index) => {
-                setTimeout(() => {
-                    this.getScreenshot(p);
-                }, index * 1000);
+                if (p.status != 10 && p.status != 15 && p.status != 20) {
+                    setTimeout(() => {
+                        this.getScreenshot(p);
+                    }, index * 1000);
+                }
             })
 
         }).catch((err: { code: string }) => {

@@ -18,7 +18,10 @@ export default class PayResult extends BaseNavNavgator {
   constructor(props: any) {
     super(props)
     this.setTitle('支付结果')
-    msg.emit('updateCloudPhone')
+
+    setTimeout(() => {
+      msg.emit('updateCloudPhone')
+    }, 1000);
   }
   render() {
     let orderPay: OrderPay = this.data.orderPay;

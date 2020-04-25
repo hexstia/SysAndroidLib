@@ -39,7 +39,7 @@ export default class PayCloudPhone extends BaseNavNavgator {
   loadData = () => {
     this.setState({ refreshing: true });
 
-    request.post('/tcssPlatform/product/proList', {}, false).then(res => {
+    request.post('/tcssPlatform/product/proList', { typeId: 1 }, false).then(res => {
       this.setState({ proList: res.list, refreshing: false, nowSelectIndex: undefined })
     }).catch(err => {
       this.setState({ refreshing: false })

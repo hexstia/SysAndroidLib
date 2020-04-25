@@ -6,7 +6,8 @@ import { Image, ImageBackground, ImageSourcePropType, Text, TouchableOpacity, Vi
 import { checkAuthor, logoutAndClear, saveUserInfo } from '../../module/publicFunc';
 
 interface State {
-    userInfo?: UserModel
+    userInfo?: UserModel,
+    messageCount: number,
 }
 
 interface Item {
@@ -25,7 +26,8 @@ export default class Mine extends BaseNavNavgator {
     static navigationOptions = { header: null }
 
     state: State = {
-        userInfo: configs.userInfo
+        userInfo: configs.userInfo,
+        messageCount: 0,
     }
 
     itemDatas: Item[] = [
@@ -70,17 +72,23 @@ export default class Mine extends BaseNavNavgator {
 
     constructor(props: any) {
         super(props)
-
     }
+
+    viewDidFocus() {
+        request.post('/tcssPlatform/user/noticeCount', {}, false).then(result => {
+            this.setState({ messageCount: result.messageSum })
+        })
+    }
+
     render() {
 
-        let { userInfo } = this.state;
+        let { userInfo, messageCount } = this.state;
         return (
             <View style={{ flex: 1 }}>
                 {/* 顶部 */}
                 <ImageBackground style={{ height: 210, width: defaultStyle.device.width }} source={require('#/mine/topBGImg.png')}>
                     <ImageBtn style={{ alignSelf: 'flex-end', marginTop: 10 + defaultStyle.safeArea.navMarginTop, marginRight: 14 }}
-                        source={require('#/mine/messageIcon.png')}
+                        source={messageCount > 0 ? require('#/mine/messageIcon.png') : require('#/mine/messageIcon_nor.png')}
                         imgWidth={32}
                         imgHeight={32}
                         onPress={() => this.navigate('MessageList', { title: '消息列表' })} />

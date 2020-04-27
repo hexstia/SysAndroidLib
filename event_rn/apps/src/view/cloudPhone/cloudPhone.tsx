@@ -5,7 +5,7 @@ import React from 'react';
 import { Image, ImageBackground, Platform, Text, TouchableOpacity, View } from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import Swiper from 'react-native-swiper';
-import { addCloudPhoneEventListener, addSocketEventListener, checkSocketConnect, enterCloudPhone, sendWebsocketData } from '../../module/CloudPhoneModule';
+import { addCloudPhoneEventListener, addSocketEventListener, checkSocketConnect, closeCloudPhone, enterCloudPhone, sendWebsocketData, startWebsocketConnection } from '../../module/CloudPhoneModule';
 import CloudPhoneSettingModal from '../../module/cloudPhoneSettingModal';
 import EditPhoneNameModal from '../../module/editPhoneNameModal';
 import TipModal from '../../module/tipModal';
@@ -247,10 +247,9 @@ export default class CloudPhone extends BaseNavNavgator {
 
             console.log('收到socket消息', socketMessage);
             try {
-                let messageData = JSON.parse(socketMessage.message);
                 switch (eventName) {
                     case 'webSocektMessage':
-
+                        let messageData = JSON.parse(socketMessage.message);
                         if (messageData.method == 'rebootReceive') {
                             // 重启成功 和 重置成功都是返回这个 一起处理
                             let newRSIds = reStartPhoneIds.filter(id => id != messageData.data.deviceId)
@@ -262,10 +261,29 @@ export default class CloudPhone extends BaseNavNavgator {
                             let newScreenShotSet = { ...screenShotSet }
                             newScreenShotSet[messageData.data.deviceId] = 'data:image/png;base64,' + messageData.data.content
                             this.setState({ screenShotSet: newScreenShotSet })
+                        } else if (messageData.method == 'takeUpNotify') {
+                            // 设备被占用
+                            closeCloudPhone()
+                            tips.showTips('该账号已被其他端登陆')
                         }
 
                         break
+
+                    case 'webSocektOnClose':
+                        console.log('sss');
+                        setTimeout(() => {
+                            console.log('开启socket');
+                            startWebsocketConnection()
+                        }, 1000);
+                        break;
+
+                    case 'webSocektOnError':
+                        setTimeout(() => {
+                            startWebsocketConnection()
+                        }, 1000);
+                        break;
                 }
+
             } catch (error) {
                 console.log('socket消息解析失败', socketMessage);
             }

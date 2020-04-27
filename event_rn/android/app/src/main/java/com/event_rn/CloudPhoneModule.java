@@ -1,6 +1,7 @@
 package com.event_rn;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.util.Log;
@@ -176,6 +177,21 @@ public class CloudPhoneModule extends ReactContextBaseJavaModule implements WebS
             editor.commit();
         }
     }
+
+    /*
+    * 关闭云手机
+    * */
+    @ReactMethod
+    public void closeCloudPhone(){
+
+        //1. 发送广播
+        Intent intent = new Intent("PhoneState");
+        intent.putExtra("nState", "关闭云手机");
+        reactContext.sendBroadcast(intent);
+    }
+
+
+
 
     /*
      * 发送云手机消息

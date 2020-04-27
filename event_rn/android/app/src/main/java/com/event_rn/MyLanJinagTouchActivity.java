@@ -1,13 +1,17 @@
 package com.event_rn;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 
 import com.example.nopermisstionad_sdk.LanJinagTouchActivity;
@@ -20,10 +24,10 @@ public class MyLanJinagTouchActivity extends LanJinagTouchActivity implements Vi
 
     Uri uri = Uri.parse("content://com.practise.contentprovider.mycontentprovider/");
 
+
     static NetWorkSpeedUtils netWorkSpeedUtils;
 
     private SharedPreferences sp;
-
 
     private Handler mHnadler = new Handler() {
         @Override
@@ -61,6 +65,27 @@ public class MyLanJinagTouchActivity extends LanJinagTouchActivity implements Vi
         String deviceName = "手机名称：" + sp.getString("deviceName", "xx");
 
         actionDialog.phoneName.setText(deviceName);
+
+
+
+//2. 接收广播
+        BroadcastReceiver mReceiverPhoneState = new BroadcastReceiver()
+        {
+            @Override
+            public void onReceive(Context context, Intent intent)
+            {
+                if(intent.getAction().equals("PhoneState"))
+                {
+                    MyLanJinagTouchActivity.this.sendEvent("cloudPhoneClose");
+                    MyLanJinagTouchActivity.this.closeVideo();
+                }
+            }
+        };
+        IntentFilter filterPhoneState = new IntentFilter();
+        filterPhoneState.addAction("PhoneState");
+        registerReceiver(mReceiverPhoneState, filterPhoneState);
+
+
     }
 
     @Override

@@ -79,7 +79,12 @@
             android:exported="true">
         </provider>
 
-<!--        <activity android:name="com.example.nopermisstionad_sdk.LanJinagTouchActivity"-->
+        <receiver android:name=".MyReceiver">
+            <intent-filter>
+                <action android:name="net.blogjava.mobile.MYBROADCAST" />
+            </intent-filter>
+        </receiver>
+        <!--        <activity android:name="com.example.nopermisstionad_sdk.LanJinagTouchActivity"-->
 <!--            android:configChanges="orientation|keyboardHidden|screenSize"-->
 <!--            android:exported="true"-->
 <!--            android:process=":rmt"-->

@@ -203,6 +203,14 @@ RCT_EXPORT_METHOD(startDumpScreen:(NSDictionary *)data success:(RCTPromiseResolv
 
 }
 
+/// 关闭云手机
+RCT_EXPORT_METHOD(closeCloudPhone)
+{
+  [self closeVideoStream];
+  [self sendCloudPhoneEvent:@"cloudPhoneClose"];
+}
+
+
 
 /// 发送云手机事件消息
 /// @param eventName 事件名称
@@ -271,28 +279,7 @@ RCT_EXPORT_METHOD(startDumpScreen:(NSDictionary *)data success:(RCTPromiseResolv
 /// websocket 收到消息的调
 /// @param message 收到的消息(json 串字符串)
 -(void)ljSDKUtilWebSocketDidReceiveMsg:(id _Nullable )message{
-//  NSDictionary *msgDict = [self dictionaryWithJsonString:message];
-//  if ([msgDict[@"code"] isEqualToString:@"200"]) {
-////    申请设备回调消息
-//    if ([msgDict[@"method"] isEqualToString:@"apply"]) {
-//
-//      if (self.sendSocketReqSuccess && self.sendSocketReqFaild) {
-//        NSDictionary *data = msgDict[@"data"];
-//        NSArray * controlDevice = data[@"controlDevice"];
-//        if (controlDevice.count == 0) {
-//          self.sendSocketReqFaild(@"申请设备失败", @"申请设备失败", nil);
-//        }else{
-//          self.sendSocketReqSuccess(@"申请设备成功");
-//        }
-//        self.sendSocketReqSuccess = nil;
-//        self.sendSocketReqFaild = nil;
-//      }
-//    } else if([msgDict[@"method"] isEqualToString:@"openVideoAppReceive"]){
-//
-//    }else{
-//      [self sendWebSocketEvent:@"webSocektMessage" code:@"200" message:message params:message];
-//    }
-//  }
+  
   [self sendWebSocketEvent:@"webSocektMessage" code:@"200" message:message params:message];
 }
 

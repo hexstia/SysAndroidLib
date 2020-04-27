@@ -93,6 +93,13 @@ export function enterCloudPhone(phone: CloudPhoneModal) {
     })
 }
 
+/**
+*  关闭云手机
+*/
+export function closeCloudPhone() {
+    CloudPhoneModule.closeCloudPhone();
+}
+
 
 export function sendWebsocketData(data: string) {
 

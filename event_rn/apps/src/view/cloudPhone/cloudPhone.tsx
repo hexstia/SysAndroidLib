@@ -256,6 +256,10 @@ export default class CloudPhone extends BaseNavNavgator {
                             let newRNIds = renewPhoneIds.filter(id => id != messageData.data.deviceId)
 
                             this.setState({ reStartPhoneIds: newRSIds, renewPhoneIds: newRNIds })
+
+                            phoneList.forEach(p => {
+                                this.getScreenshot(p);
+                            })
                         } else if (messageData.method == 'screenShot') {
 
                             let newScreenShotSet = { ...screenShotSet }
@@ -270,7 +274,6 @@ export default class CloudPhone extends BaseNavNavgator {
                         break
 
                     case 'webSocektOnClose':
-                        console.log('sss');
                         setTimeout(() => {
                             console.log('开启socket');
                             startWebsocketConnection()
@@ -601,7 +604,7 @@ export default class CloudPhone extends BaseNavNavgator {
                     if (Platform.OS == 'ios') {
                         this.uploadAppModal && this.uploadAppModal.uploadApp(cloudPhone);
                     } else {
-                        DocumentPicker.pick({ type: Platform.OS == 'ios' ? 'public.item' : DocumentPicker.types.allFiles }).then(res => {
+                        DocumentPicker.pick({ type: DocumentPicker.types.allFiles }).then(res => {
                             console.log('选择文件', res);
 
                             request.upload('/cloudPhone/phone/installApk', { paths: [res.uri], deviceIds: cloudPhone.deviceId + '', selectAll: 2, searchGroupId: '', status: '' }, true).then(res => {

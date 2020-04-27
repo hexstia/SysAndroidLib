@@ -3,7 +3,7 @@ import { BaseNavNavgator, request, tips } from 'dl-kit';
 import React from 'react';
 import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import CheckImgCode from '../../module/checkImgCode';
-import { getTempToken, isPhoneNum } from '../../module/publicFunc';
+import { getTempToken, isPhoneNum, saveUserInfo } from '../../module/publicFunc';
 
 interface State {
     mobile: string,
@@ -97,7 +97,7 @@ export default class ChangePhoneNum extends BaseNavNavgator {
         let mobile = this.state.mobile
 
         if (isPhoneNum(mobile)) {
-            // 验证一下新手机号是否被注册过
+
             this.checkImgCode && this.checkImgCode.show()
         }
     }
@@ -166,10 +166,9 @@ export default class ChangePhoneNum extends BaseNavNavgator {
             return;
         }
 
-
-
         let param = { mobile, vcode }
         request.post('/tcssPlatform/user/info/updateMobile', param, true).then(result => {
+            saveUserInfo(result.userInfo)
             tips.showTips('修改成功', 2000, () => {
                 this.goBack()
             })

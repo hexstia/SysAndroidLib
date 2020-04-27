@@ -264,6 +264,12 @@ export default class Login extends BaseNavNavgator {
 
 
         } else {
+
+            if (password.length == 0) {
+                tips.showTips('请输入密码')
+                return;
+            }
+
             // let passReg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,}$/;
 
             // if (!passReg.test(password)) {

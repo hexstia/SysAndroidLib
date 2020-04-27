@@ -78,6 +78,8 @@ export default class Mine extends BaseNavNavgator {
         request.post('/tcssPlatform/user/noticeCount', {}, false).then(result => {
             this.setState({ messageCount: result.messageSum })
         })
+
+        this.setState({ userInfo: configs.userInfo })
     }
 
     render() {

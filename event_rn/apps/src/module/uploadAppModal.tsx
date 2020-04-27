@@ -154,16 +154,16 @@ export default class UploadAppModal extends BaseComponent<Props> {
 
       Upload.addListener('progress', uploadId, (data: any) => {
         this.setState({ uploadTask: { ...this.state.uploadTask, progress: data.progress.toFixed(1) } })
-        console.log(`Progress: ${data.progress}%`)
+        // console.log(`Progress: ${data.progress}%`)
       })
       Upload.addListener('error', uploadId, (data: any) => {
         this.setState({ uploadTask: { ...this.state.uploadTask, status: 'faild', statusTextColor: '#FE5437' } }, this.closeDealy)
-        console.log(`Error: ${data.error}%`)
+        // console.log(`Error: ${data.error}%`)
       })
 
       Upload.addListener('completed', uploadId, (data: any) => {
         this.setState({ uploadTask: { ...this.state.uploadTask, status: 'success', statusTextColor: '#18A918' } }, this.closeDealy)
-        console.log('Completed!')
+        // console.log('Completed!')
       })
     }).catch((err: any) => {
       this.setState({ uploadTask: { ...this.state.uploadTask, status: 'faild', statusTextColor: '#FE5437' } }, this.closeDealy)

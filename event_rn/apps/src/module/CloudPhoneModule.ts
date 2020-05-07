@@ -57,12 +57,6 @@ export function startWebsocketConnection() {
     } else {
         return Promise.reject('缺少token信息，不能启动socket链接')
     }
-
-    // // 先关闭websocket通信
-    // return CloudPhoneModule.shutdownWebsocketConnect().then((v: string) => {
-    //     // 再启动websocket线程
-    //     return CloudPhoneModule.startWebsocketConnection({ token: configs.token }) as Promise<any>
-    // })
 }
 
 /**

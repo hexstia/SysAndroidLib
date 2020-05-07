@@ -106,7 +106,13 @@ export default class BindAccount extends BaseNavNavgator {
                 request.post('/tcssPlatform/user/mobile/check', { token, timestamp, mobile }, true).then(res => {
                     tips.showTips('该账号未注册');
                 }).catch(err => {
-                    this.checkImgCode && this.checkImgCode.show()
+                    // 验证这个找回是否已经绑定过微信 、 QQ。返回200表示成功可继续绑定，已绑定返回错误信息
+                    request.post('/tcssPlatform/user/checkOtherUser', { token, mobile, platform: this.data.openId ? 2 : 1 }).then(res => {
+                        this.checkImgCode && this.checkImgCode.show()
+                    }).catch(err => {
+                        let tipText = `此账号已绑定${this.data.openId ? 'QQ' : '微信'}`
+                        tips.showTips(tipText);
+                    })
                 })
             })
         }

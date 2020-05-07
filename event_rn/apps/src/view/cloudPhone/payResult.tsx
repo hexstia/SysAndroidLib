@@ -19,6 +19,7 @@ export default class PayResult extends BaseNavNavgator {
     super(props)
     this.setTitle('支付结果')
   }
+
   render() {
     let orderPay: OrderPay = this.data.orderPay;
 

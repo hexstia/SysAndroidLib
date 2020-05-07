@@ -332,6 +332,23 @@ export default class Login extends BaseNavNavgator {
     */
     authLogin = (appId: string, code: string, openId?: string) => {
 
+        // 如果是验证码登录，要验证一下手机号是否注册过
+        // getTempToken((token, timestamp) => {
+
+        //     // 验证这个找回是否已经绑定过微信 、 QQ。返回200表示成功可继续绑定，已绑定返回错误信息
+        //     request.post('/tcssPlatform/user/checkOtherUser', { token, timestamp, mobile: 18911755005, platform: openId ? 2 : 1 }).then(res => {
+        //         this.checkImgCode && this.checkImgCode.show()
+        //         console.log('未绑定，可以绑定 哈哈')
+        //     }).catch(err => {
+        //         // let tipText = `此账号已绑定${openId ? 'QQ' : '微信'}`
+        //         // tips.showTips(tipText);
+        //     })
+
+        // })
+
+        // return;
+
+
         let { phone, password, verCode } = this.state;
         getTempToken((token, timestamp) => {
 

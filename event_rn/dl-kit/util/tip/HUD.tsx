@@ -47,7 +47,7 @@ export function showHUDLoading(text?: string, style?: TextStyle, timeout?: numbe
 				]}>
 				<Animated.Image
 					style={styles.iconStyle}
-					source={{ uri: 'https://bm-oss.oss-cn-hangzhou.aliyuncs.com/arena/arenaprod/loading.png' }}
+					source={require('#/other/loading.png')}
 				/>
 				{text && (
 					<Text style={[{ color: '#fff', fontSize: 12 }, style]} allowFontScaling={false}>

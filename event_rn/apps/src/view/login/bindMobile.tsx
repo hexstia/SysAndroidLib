@@ -139,7 +139,8 @@ export default class BindMobile extends BaseNavNavgator {
 
       // 如果是绑定手机号，要验证一下手机号是否注册过
       getTempToken((token, timestamp) => {
-        request.post('/tcssPlatform/user/mobile/check', { token, timestamp, mobile }, true).then(res => {
+
+        request.post('/tcssPlatform/user/mobile/check', { token, timestamp, mobile }, false).then(res => {
           this.checkImgCode && this.checkImgCode.show()
         }).catch(err => {
           tips.showTips('该账号已注册，请选择绑定已有账号')

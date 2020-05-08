@@ -10,6 +10,7 @@ import { hidenHUDLoading, showHUDLoading } from './HUD';
 //     BOTTOM: -20,
 //     CENTER: 0
 // };
+let nowToast: any = null
 
 const tips = {
 
@@ -18,7 +19,9 @@ const tips = {
 			return;
 		}
 
-		Toast.show(msg, {
+		Toast.hide(nowToast)
+
+		nowToast = Toast.show(msg, {
 			duration: duration, // toast显示时长
 			position: position, // toast位置
 			shadow: true, // toast是否出现阴影

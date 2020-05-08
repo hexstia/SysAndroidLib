@@ -100,7 +100,9 @@ export function closeCloudPhone() {
     CloudPhoneModule.closeCloudPhone();
 }
 
-
+/**
+*  发送socket消息
+*/
 export function sendWebsocketData(data: string) {
 
     return new Promise((resolve, reject) => {

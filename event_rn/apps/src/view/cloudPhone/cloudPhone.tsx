@@ -663,7 +663,6 @@ export default class CloudPhone extends BaseNavNavgator {
 
             }).catch(err => {
                 tips.hideLoading()
-                tips.showTips(err)
                 this.enterCloudPhoneLoading = false
 
             })
@@ -698,7 +697,6 @@ export default class CloudPhone extends BaseNavNavgator {
                 console.log(result)
             }).catch(err => {
                 console.log(err)
-                tips.showTips(err.message)
             })
         })
     }

@@ -1,5 +1,5 @@
 
-import { BaseNavNavgator, configs, DefaultListView, defaultStyle, ImageBtn, request, tips } from 'dl-kit';
+import { BaseNavNavgator, configs, DefaultListView, defaultStyle, ImageBtn, msg, request, tips } from 'dl-kit';
 import { Banner, CloudPhoneModal } from 'global';
 import React from 'react';
 import { Image, ImageBackground, Platform, Text, TouchableOpacity, View } from 'react-native';
@@ -72,7 +72,7 @@ export default class CloudPhone extends BaseNavNavgator {
     cloudPhoneSettingModal: CloudPhoneSettingModal | null = null;
     tipModal: TipModal | null = null;
     enterCloudPhoneLoading: boolean = false;
-    phoneListChange: boolean = false;
+
 
     constructor(props: any) {
         super(props)
@@ -81,6 +81,10 @@ export default class CloudPhone extends BaseNavNavgator {
             this.addEventListener()
         }
         this.loadBanner()
+
+        msg.on('phoneListChange', () => {
+            this.loadData()
+        })
     }
 
     /**

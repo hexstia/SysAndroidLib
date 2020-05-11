@@ -248,7 +248,7 @@ export default class RegisterOrFindAccount extends BaseNavNavgator {
                 })
             } else {
                 let param = { token, newPassword: password, imgId, checkcode, vcode, mobile, timestamp }
-                request.post('/tcssPlatform/user/register', param, true).then(result => {
+                request.post('/tcssPlatform/user/forgetPassword', param, true).then(result => {
                     tips.showTips('密码重置成功！', 2000, () => {
                         this.goBack()
                     })

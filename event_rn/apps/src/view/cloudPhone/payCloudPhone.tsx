@@ -1,5 +1,5 @@
 
-import { BaseNavNavgator, DefaultListView, ImageBtn, request, tips } from 'dl-kit';
+import { BaseNavNavgator, DefaultListView, ImageBtn, msg, request, tips } from 'dl-kit';
 import { CloudPhoneModal, OrderPay, Product } from 'global';
 import React from 'react';
 import { Image, ImageBackground, RefreshControl, ScrollView, Text, TouchableOpacity, View } from 'react-native';
@@ -245,6 +245,7 @@ export default class PayCloudPhone extends BaseNavNavgator {
   */
   payCallback = () => {
     setTimeout(() => {
+      msg.emit('phoneListChange')
       this.data.payCallback && this.data.payCallback()
     }, 1000);
   }

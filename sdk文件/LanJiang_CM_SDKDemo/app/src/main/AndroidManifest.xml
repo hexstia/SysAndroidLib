@@ -12,6 +12,7 @@
         android:hardwareAccelerated="true"
         android:networkSecurityConfig="@xml/network_security"
         android:theme="@style/AppTheme">
+
         <activity android:name=".testtwoAct"
             android:exported="true"
             android:process=":act"

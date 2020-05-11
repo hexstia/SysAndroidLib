@@ -99,8 +99,8 @@ export default class UploadAppModal extends BaseComponent<Props> {
       console.log('选择文件', res); // res.uri
 
       this.setState({ visible: true })
-      // this.uploadFiles([res.uri])
-      this.uploadFile(res.uri)
+      this.uploadFiles([res.uri])
+      // this.uploadFile(res.uri)
     }).catch((err: any) => {
       if (DocumentPicker.isCancel(err)) {
         // User cancelled the picker, exit any dialogs or menus and move on
@@ -166,7 +166,7 @@ export default class UploadAppModal extends BaseComponent<Props> {
         // console.log('Completed!')
       })
     }).catch((err: any) => {
-      this.setState({ uploadTask: { ...this.state.uploadTask, status: 'faild', statusTextColor: '#FE5437' } }, this.closeDealy)
+      this.setState({ uploadTask: { progress: 0, uploadId: '0', status: 'faild', statusTextColor: '#FE5437' } }, this.closeDealy)
     })
   }
 
@@ -203,7 +203,7 @@ export default class UploadAppModal extends BaseComponent<Props> {
       let task: UploadTask = {
         status: 'upload',
         progress: 0,
-        jobId,
+        uploadId: jobId + '',
         statusTextColor: '#6498FF'
       }
       this.setState({ uploadTask: task })
@@ -230,7 +230,6 @@ export default class UploadAppModal extends BaseComponent<Props> {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
-        'content-type': 'application/octet-stream',
       },
       fields: {
         token: configs.token,

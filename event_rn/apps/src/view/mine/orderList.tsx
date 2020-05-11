@@ -1,6 +1,6 @@
 
 import dayjs from 'dayjs';
-import { BaseNavNavgator, DefaultListView, Icon, ImageBtn, request } from 'dl-kit';
+import { BaseNavNavgator, DefaultListView, Icon, ImageBtn, msg, request } from 'dl-kit';
 import { OrderInfo } from 'global';
 import React from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
@@ -21,6 +21,9 @@ export default class OrderList extends BaseNavNavgator {
 
     constructor(props: any) {
         super(props)
+        msg.on('phoneListChange', () => {
+            this.loadData(0)
+        })
     }
 
     listView: DefaultListView | null = null;

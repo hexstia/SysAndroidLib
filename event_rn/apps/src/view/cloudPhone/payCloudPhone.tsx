@@ -246,7 +246,6 @@ export default class PayCloudPhone extends BaseNavNavgator {
   payCallback = () => {
     setTimeout(() => {
       msg.emit('phoneListChange')
-      this.data.payCallback && this.data.payCallback()
     }, 1000);
   }
 

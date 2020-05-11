@@ -538,7 +538,7 @@ export default class CloudPhone extends BaseNavNavgator {
     *  添加云手机
     */
     addCloudPhoneClick = () => {
-        this.navigate('PayCloudPhone', { title: '购买云手机', payCallback: this.loadData })
+        this.navigate('PayCloudPhone', { title: '购买云手机' })
     }
 
     /**
@@ -605,6 +605,8 @@ export default class CloudPhone extends BaseNavNavgator {
                     break;
 
                 case 'upApp':
+                    // this.uploadAppModal && this.uploadAppModal.uploadApp(cloudPhone);
+                    // return;
                     if (Platform.OS == 'ios') {
                         this.uploadAppModal && this.uploadAppModal.uploadApp(cloudPhone);
                     } else {
@@ -651,7 +653,7 @@ export default class CloudPhone extends BaseNavNavgator {
     *  续费按钮点击事件
     */
     renewBtnClick = (cloudPhone: CloudPhoneModal) => {
-        this.navigate('PayCloudPhone', { cloudPhone, title: '续费', payCallback: this.loadData })
+        this.navigate('PayCloudPhone', { cloudPhone, title: '续费' })
     }
 
     /**

@@ -1,5 +1,5 @@
 
-import { BaseNavNavgator, DefaultListView, ImageBtn, request } from 'dl-kit';
+import { BaseNavNavgator, DefaultListView, ImageBtn, msg, request } from 'dl-kit';
 import { CloudPhoneModal } from 'global';
 import React from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
@@ -20,7 +20,9 @@ export default class DeviceList extends BaseNavNavgator {
     }
     constructor(props: any) {
         super(props)
-
+        msg.on('phoneListChange', () => {
+            this.loadData(0)
+        })
     }
 
     listView: DefaultListView | null = null;
@@ -147,7 +149,7 @@ export default class DeviceList extends BaseNavNavgator {
     */
     xufeiBtnClick = (cloudPhone: CloudPhoneModal) => {
         if (cloudPhone.status != 15) {
-            this.navigate('PayCloudPhone', { cloudPhone, title: '续费', payCallback: this.loadData.bind(this, 0) })
+            this.navigate('PayCloudPhone', { cloudPhone, title: '续费' })
         }
     }
 
@@ -167,7 +169,7 @@ export default class DeviceList extends BaseNavNavgator {
   *  添加云手机
   */
     addCloudPhoneClick = () => {
-        this.navigate('PayCloudPhone', { title: '购买云手机', payCallback: this.loadData.bind(this, 0) })
+        this.navigate('PayCloudPhone', { title: '购买云手机' })
     }
 
 }

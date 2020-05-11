@@ -20,9 +20,9 @@ public class ActActivity extends LanJiangBaseActivity {
          * 设置预加载页面的布局，需要自己创建一个布局.xml文件；例如R.layout.test_pre_act
          * 注意 如果不使用自定义预加载页面，则不需要设置setContentView
          */
-//        setContentView(R.layout.activity_act);
+        setContentView(R.layout.activity_act);
         setfloatView(R.drawable.float_btn);
-        //setfloatMessageView(R.layout.float_message,R.id.tv_update1,R.id.tv_download1,R.id.tv_time1,R.id.tv_title1,R.id.btn_exit1,R.id.btn_download1,R.id.btn_back1);
+        //setfloatMessasgeView(R.layout.float_message,R.id.tv_update1,R.id.tv_download1,R.id.tv_time1,R.id.tv_title1,R.id.btn_exit1,R.id.btn_download1,R.id.btn_back1);
         Bundle bundle =  getIntent().getExtras();
         super.setCloudDesktopConfig(bundle.getString("action"), SdkMain.getInstance().getBunldData(bundle));
         super.onCreate(savedInstanceState);

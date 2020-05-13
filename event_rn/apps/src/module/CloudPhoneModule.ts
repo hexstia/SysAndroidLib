@@ -17,7 +17,6 @@ let globalSocketEventCallback: SocketEventCallback | null = null
 *  监听云手机事件
 */
 eventEmitter.addListener('cloudPhoneEvent', (phone) => {
-    // console.log('监听云手机事件', phone)
     globalPhoneEventCallback && globalPhoneEventCallback(phone.eventName, phone)
 })
 
@@ -25,7 +24,6 @@ eventEmitter.addListener('cloudPhoneEvent', (phone) => {
 *  监听Socket事件
 */
 eventEmitter.addListener('webSocketEvent', (event) => {
-    // console.log('监听Socket事件', phone)
     globalSocketEventCallback && globalSocketEventCallback(event.eventName, event)
 })
 
@@ -79,16 +77,16 @@ export function enterCloudPhone(phone: CloudPhoneModal) {
             CloudPhoneModule.startDumpScreen({ deviceName: phone.deviceName, deviceId: phone.deviceId, id: phone.id }).then(() => {
                 resolve()
             }).catch((err: { code: string }) => {
-                if (err.code == '未启动websocket线程') {
-                    CloudPhoneModule.startWebsocketConnection({ token: configs.token })
-                }
-                reject(err.code)
+                // if (err.code == '未启动websocket线程') {
+                //     CloudPhoneModule.startWebsocketConnection({ token: configs.token })
+                // }
+                reject(err)
             })
         }).catch((err: { code: string }) => {
-            if (err.code == '未启动websocket线程') {
-                CloudPhoneModule.startWebsocketConnection({ token: configs.token })
-            }
-            reject(err.code)
+            // if (err.code == '未启动websocket线程') {
+            //     CloudPhoneModule.startWebsocketConnection({ token: configs.token })
+            // }
+            reject(err)
         })
     })
 }
@@ -111,10 +109,10 @@ export function sendWebsocketData(data: string) {
         CloudPhoneModule.sendWebsocketData(data).then(() => {
             resolve()
         }).catch((err: { code: string }) => {
-            if (err.code == '未启动websocket线程') {
-                CloudPhoneModule.startWebsocketConnection({ token: configs.token })
-            }
-            reject(err.code)
+            // if (err.code == '未启动websocket线程') {
+            //     CloudPhoneModule.startWebsocketConnection({ token: configs.token })
+            // }
+            reject(err)
         })
     })
 }

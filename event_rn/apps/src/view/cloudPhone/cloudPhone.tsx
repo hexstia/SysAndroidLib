@@ -47,6 +47,10 @@ interface State {
     *  手机截图截集合
     */
     screenShotSet: any,
+    /**
+    *  是否在线
+    */
+    onLine: boolean
 }
 
 /**
@@ -63,7 +67,8 @@ export default class CloudPhone extends BaseNavNavgator {
         reStartPhoneIds: [],
         renewPhoneIds: [],
         bannerDatas: [],
-        screenShotSet: {}
+        screenShotSet: {},
+        onLine: true
     }
 
     editPhoneNameModal: EditPhoneNameModal | null = null;
@@ -94,7 +99,8 @@ export default class CloudPhone extends BaseNavNavgator {
         let param = { page: 1, pageSize: 1000 }
         // 获取云手机列表
         request.post('/cloudPhone/phone/list', param, true).then(result => {
-            this.setState({ phoneList: result.list }, this.getAllScreenshot)
+            console.log('获取云手机列表', result)
+            this.setState({ phoneList: result.list, onLine: true }, this.getAllScreenshot)
         }).catch(err => {
             console.log('获取云手机列表', err)
         })
@@ -124,6 +130,7 @@ export default class CloudPhone extends BaseNavNavgator {
             })
 
         }).catch((err: { code: string }) => {
+            startWebsocketConnection()
             // socket未连接，等三秒再试试
             setTimeout(() => {
                 this.getAllScreenshot()
@@ -247,7 +254,7 @@ export default class CloudPhone extends BaseNavNavgator {
 
 
         addSocketEventListener((eventName, socketMessage) => {
-            let { phoneList, reStartPhoneIds, renewPhoneIds, screenShotSet } = this.state
+            let { phoneList, reStartPhoneIds, renewPhoneIds, screenShotSet, onLine } = this.state
 
             console.log('收到socket消息', socketMessage);
             try {
@@ -260,7 +267,6 @@ export default class CloudPhone extends BaseNavNavgator {
                             let newRNIds = renewPhoneIds.filter(id => id != messageData.data.deviceId)
 
                             this.setState({ reStartPhoneIds: newRSIds, renewPhoneIds: newRNIds })
-
                             phoneList.forEach(p => {
                                 this.getScreenshot(p);
                             })
@@ -272,21 +278,30 @@ export default class CloudPhone extends BaseNavNavgator {
                         } else if (messageData.method == 'takeUpNotify') {
                             // 设备被占用
                             closeCloudPhone()
-                            tips.showTips('该账号已被其他端登陆')
+                            tips.showTips('该账号已在其他端登陆！')
+                            this.setState({ onLine: false })
+                        } else if (messageData.method == 'installApkReceive') {
+                            // 设备被占用
+                            tips.showTips('安装成功！')
                         }
 
                         break
 
                     case 'webSocektOnClose':
                         setTimeout(() => {
-                            console.log('开启socket');
-                            startWebsocketConnection()
+                            console.log('socket 链接断开');
+                            if (onLine) {
+                                startWebsocketConnection()
+                            }
                         }, 1000);
                         break;
 
                     case 'webSocektOnError':
                         setTimeout(() => {
-                            startWebsocketConnection()
+                            console.log('socket 链接报错');
+                            if (onLine) {
+                                startWebsocketConnection()
+                            }
                         }, 1000);
                         break;
                 }
@@ -619,11 +634,6 @@ export default class CloudPhone extends BaseNavNavgator {
 
                         }).catch((err: any) => {
                             console.log('文件选择失败', err);
-                            if (DocumentPicker.isCancel(err)) {
-                                // User cancelled the picker, exit any dialogs or menus and move on
-                            } else {
-                                throw err;
-                            }
                         })
                     }
                     break;
@@ -662,14 +672,22 @@ export default class CloudPhone extends BaseNavNavgator {
     enterCloudPhone = (phone: CloudPhoneModal) => {
         if (this.checkCloudPhone(phone) && !this.enterCloudPhoneLoading) {
             this.enterCloudPhoneLoading = true
-            tips.showLoading('打开中')
+            tips.showLoading('打开中...')
             enterCloudPhone(phone).then(() => {
                 tips.hideLoading()
                 this.enterCloudPhoneLoading = false
 
             }).catch(err => {
+
                 tips.hideLoading()
                 this.enterCloudPhoneLoading = false
+
+                console.log('进入云手机失败', err)
+                if (this.state.onLine) {
+                    startWebsocketConnection()
+                } else {
+                    tips.showTips('当前账号已离线，请刷新')
+                }
 
             })
         }

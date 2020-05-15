@@ -20,6 +20,10 @@ export default class MessageList extends BaseNavNavgator {
 
   listView: DefaultListView | null = null;
 
+  viewDidFocus() {
+    this.loadData(0)
+  }
+
   loadData = (pageNum: number) => {
 
     request.post('/tcssPlatform/user/queryNotice', { page: pageNum + 1, proType: 1 }, false).then(result => {
@@ -69,6 +73,7 @@ export default class MessageList extends BaseNavNavgator {
 
   onPressItem = (item: Message, index: number) => {
     this.navigate('BaseWebView', { title: '详情', htmlStr: item.content })
+    request.post('/tcssPlatform/user/detailNotice', { id: item.id }, false);
   }
 
 

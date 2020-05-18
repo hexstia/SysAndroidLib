@@ -40,7 +40,8 @@ interface ConfigStyle {
 
 
 const Config: ConfigStyle = {
-  apiHost: 'http://test.91lanjiang.com/tcss-api',
+  // apiHost: 'http://test.91lanjiang.com/tcss-api',
+  apiHost: 'http://www.91lanjiang.com/tcss-api',
   wxAppKey: 'wx4da13368004666f5',
   QQAppKey: '101845112'
 };

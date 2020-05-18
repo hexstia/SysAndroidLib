@@ -671,18 +671,20 @@ export default class CloudPhone extends BaseNavNavgator {
     */
     enterCloudPhone = (phone: CloudPhoneModal) => {
         if (this.checkCloudPhone(phone) && !this.enterCloudPhoneLoading) {
+
             this.enterCloudPhoneLoading = true
             tips.showLoading('打开中...')
             enterCloudPhone(phone).then(() => {
-                tips.hideLoading()
-                this.enterCloudPhoneLoading = false
+                setTimeout(() => {
+                    tips.hideLoading()
+                    this.enterCloudPhoneLoading = false
+                }, 1000);
 
             }).catch(err => {
 
                 tips.hideLoading()
                 this.enterCloudPhoneLoading = false
 
-                console.log('进入云手机失败', err)
                 if (this.state.onLine) {
                     startWebsocketConnection()
                 } else {

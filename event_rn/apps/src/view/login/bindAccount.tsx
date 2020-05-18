@@ -103,11 +103,11 @@ export default class BindAccount extends BaseNavNavgator {
         if (isPhoneNum(mobile)) {
             // 如果是验证码登录，要验证一下手机号是否注册过
             getTempToken((token, timestamp) => {
-                request.post('/tcssPlatform/user/mobile/check', { token, timestamp, mobile }, true).then(res => {
+                request.post('/tcssPlatform/user/mobile/check', { token, timestamp, mobile }, false).then(res => {
                     tips.showTips('该账号未注册');
                 }).catch(err => {
                     // 验证这个找回是否已经绑定过微信 、 QQ。返回200表示成功可继续绑定，已绑定返回错误信息
-                    request.post('/tcssPlatform/user/checkOtherUser', { token, mobile, platform: this.data.openId ? 2 : 1 }).then(res => {
+                    request.post('/tcssPlatform/user/checkOtherUser', { token, mobile, platform: this.data.openId ? 2 : 1 }, false).then(res => {
                         this.checkImgCode && this.checkImgCode.show()
                     }).catch(err => {
                         let tipText = `此账号已绑定${this.data.openId ? 'QQ' : '微信'}`

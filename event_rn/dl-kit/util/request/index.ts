@@ -269,7 +269,7 @@ export default class request {
 			headers: {
 				Accept: 'application/json',
 				'Content-Type': 'Multipart/form-data',
-				Authorization: Config.token ? Config.token : ''
+				// Authorization: Config.token ? Config.token : ''
 			},
 			body: formData
 		}
@@ -290,6 +290,8 @@ export default class request {
 				(res: any) => {
 					let response = res as Response
 
+					// tips.showTips(JSON.stringify(response))
+					// return;
 					// 测试环境打印访问结果
 					if (__DEV__) {
 						console.log('访问接口:UPLOAD' + '==>' + url)
@@ -317,6 +319,9 @@ export default class request {
 						reject({ message: '网络差，请稍后再试。' })
 					}
 				}, (error: any) => {
+					// tips.showTips(JSON.stringify(error))
+					// return;
+
 					if (__DEV__) {
 						console.log(error);
 					}

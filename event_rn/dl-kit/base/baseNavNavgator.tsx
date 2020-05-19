@@ -73,6 +73,8 @@ export default class BaseNavNavgator extends BaseComponent<Props> {
 
   };
 
+  haveFocus: boolean = false;
+
   data: Data = {}
 
   listeners: NavigationEventSubscription[] = []
@@ -197,6 +199,7 @@ export default class BaseNavNavgator extends BaseComponent<Props> {
   *  即将获取焦点
   */
   viewWillFocus(payload: NavigationEventPayload) {
+    this.haveFocus = true;
   }
 
   /**
@@ -210,7 +213,7 @@ export default class BaseNavNavgator extends BaseComponent<Props> {
     *  即将失去焦点
     */
   viewWillBlur(payload: NavigationEventPayload) {
-
+    this.haveFocus = false;
   }
 
   /**

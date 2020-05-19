@@ -77,7 +77,8 @@ export default class CloudPhone extends BaseNavNavgator {
     cloudPhoneSettingModal: CloudPhoneSettingModal | null = null;
     tipModal: TipModal | null = null;
     enterCloudPhoneLoading: boolean = false;
-
+    // 是否需要刷新列表数据
+    needRefreshPhoneList: boolean = false;
 
     constructor(props: any) {
         super(props)
@@ -89,8 +90,20 @@ export default class CloudPhone extends BaseNavNavgator {
 
         msg.on('phoneListChange', () => {
             this.loadData()
+            // if (this.haveFocus) {
+            //     this.loadData()
+            // } else {
+            //     this.needRefreshPhoneList = true;
+            // }
         })
     }
+
+    // viewDidFocus() {
+    //     if (this.needRefreshPhoneList) {
+    //         this.loadData()
+    //         this.needRefreshPhoneList = false
+    //     }
+    // }
 
     /**
     *  获取云手机列表
@@ -140,7 +153,7 @@ export default class CloudPhone extends BaseNavNavgator {
 
     render() {
         let { showType, phoneIndex, phoneList } = this.state
-        let nowSelectPhone = phoneList[phoneIndex] || {}
+        let nowSelectPhone = phoneList[phoneIndex + 1] || {}
 
         return (
             <View style={{ flex: 1 }}>
@@ -161,7 +174,7 @@ export default class CloudPhone extends BaseNavNavgator {
 
                                 {/* 添加手机的时候，不显示设置按钮 */}
                                 {
-                                    (nowSelectPhone && nowSelectPhone.id && showType == 'viewType') ? (
+                                    (nowSelectPhone.id && showType == 'viewType') ? (
                                         <TouchableOpacity style={{ width: 30, height: 30, justifyContent: 'center', alignItems: 'center' }}
                                             onPress={() => this.cloudPhoneSettingModal?.showModal(nowSelectPhone)}>
                                             <Image style={{ width: 20, height: 20 }} resizeMode='contain' source={require('#/home/setting.png')} />
@@ -322,11 +335,11 @@ export default class CloudPhone extends BaseNavNavgator {
         let addImgWith = Math.floor(addImgHeight * (210 / 413))
 
         let phoneSwiperHeight = contentHeight - 97;
-        let phoneSwiperWidth = Math.floor(phoneSwiperHeight * (442 / 826))
+        let phoneSwiperWidth = Math.floor(phoneSwiperHeight * (420 / 826))
 
-        let phoneWidth = phoneSwiperWidth * 375 / 442
-        let phoneHeight = phoneSwiperHeight * 667 / 826
-        let phoneTop = phoneSwiperHeight * 80 / 826
+        let phoneWidth = phoneSwiperWidth * 375 / 420
+        let phoneHeight = phoneSwiperHeight * 668 / 826
+        let phoneTop = phoneSwiperHeight * 70 / 826
 
         let phoneItems = []
 
@@ -395,6 +408,20 @@ export default class CloudPhone extends BaseNavNavgator {
             )
         })
 
+        if (phoneList.length > 0) {
+            phoneItems.unshift(
+                <View style={{ alignItems: 'center', flex: 1 }} key='eee'>
+                    <TouchableOpacity style={{ marginVertical: 10, width: addImgWith, height: addImgHeight, alignSelf: 'center' }}
+                        activeOpacity={1}
+                        onPress={this.addCloudPhoneClick}>
+                        <Image style={{ alignSelf: 'stretch', width: addImgWith, height: addImgHeight }}
+                            resizeMode='contain'
+                            source={require('#/home/addCloudPhone.png')} />
+                    </TouchableOpacity>
+                </View>
+            )
+        }
+
         /* 最后的添加手机 */
         phoneItems.push(
             <View style={{ alignItems: 'center', flex: 1 }} key='asda'>
@@ -425,7 +452,8 @@ export default class CloudPhone extends BaseNavNavgator {
                                     <Swiper
                                         loop={false}
                                         showsPagination={false}
-                                        onIndexChanged={this.phoneIndexChanged}>
+                                        onIndexChanged={this.phoneIndexChanged}
+                                        index={1}>
                                         {/* 手机们 */}
                                         {
                                             phoneItems
@@ -627,8 +655,7 @@ export default class CloudPhone extends BaseNavNavgator {
                     } else {
                         DocumentPicker.pick({ type: DocumentPicker.types.allFiles }).then(res => {
                             console.log('选择文件', res);
-
-                            request.upload('/cloudPhone/phone/installApk', { paths: [res.uri], deviceIds: cloudPhone.deviceId + '', selectAll: 2, searchGroupId: '', status: '' }, true).then(res => {
+                            request.upload('/cloudPhone/phone/installApk', { paths: [res.uri], deviceIds: cloudPhone.deviceId + '', selectAll: '2', searchGroupId: '', status: '' }, true).then(res => {
                                 tips.showTips('上传成功!');
                             })
 

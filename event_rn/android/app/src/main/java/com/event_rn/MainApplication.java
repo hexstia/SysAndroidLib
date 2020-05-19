@@ -1,7 +1,7 @@
 package com.event_rn;
 
 import android.app.Application;
-
+import com.tencent.bugly.crashreport.CrashReport;
 import com.facebook.react.ReactApplication;
 import com.microsoft.codepush.react.CodePush;
 import com.vydia.RNUploader.UploaderReactPackage;
@@ -37,6 +37,10 @@ public class MainApplication extends Application implements ReactApplication {
     super.onCreate();
     System.out.println("初始化项目");
     SoLoader.init(this, /* native exopackage */ false);
+
+    /* 初始化bugly */
+    CrashReport.initCrashReport(getApplicationContext(), "0ad0e2d9dd", true);
+
   }
 
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {

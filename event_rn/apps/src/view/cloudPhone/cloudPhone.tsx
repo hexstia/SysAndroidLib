@@ -322,11 +322,11 @@ export default class CloudPhone extends BaseNavNavgator {
         let addImgWith = Math.floor(addImgHeight * (210 / 413))
 
         let phoneSwiperHeight = contentHeight - 97;
-        let phoneSwiperWidth = Math.floor(addImgHeight * (185 / 363))
+        let phoneSwiperWidth = Math.floor(phoneSwiperHeight * (442 / 826))
 
-        let phoneWidth = phoneSwiperWidth * 166 / 185
-        let phoneHeight = phoneSwiperHeight * 295 / 363
-        let phoneTop = phoneSwiperHeight * 29.5 / 363
+        let phoneWidth = phoneSwiperWidth * 375 / 442
+        let phoneHeight = phoneSwiperHeight * 667 / 826
+        let phoneTop = phoneSwiperHeight * 80 / 826
 
         let phoneItems = []
 

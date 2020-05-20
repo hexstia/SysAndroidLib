@@ -248,14 +248,10 @@ export default class request {
 		let formData = new FormData();
 		let paths: string[] = params.paths;
 		paths.forEach((path, index) => {
-			var arr = path.split('/');
-			let name = arr[arr.length - 1]
-			let type = getFileType(name);
-			let file = { uri: path, type, name };
+			let file = this.getFileData(path)
 			formData.append('file', file);
 		})
 
-		// formData.append('uploadType', 'moments')
 		formData.append('token', Config.token || '')
 
 		Object.keys(params).forEach(key => {
@@ -269,7 +265,7 @@ export default class request {
 			headers: {
 				Accept: 'application/json',
 				'Content-Type': 'Multipart/form-data',
-				// Authorization: Config.token ? Config.token : ''
+				Authorization: Config.token || ''
 			},
 			body: formData
 		}
@@ -289,9 +285,6 @@ export default class request {
 			this.http(url, requestData).then(
 				(res: any) => {
 					let response = res as Response
-
-					// tips.showTips(JSON.stringify(response))
-					// return;
 					// 测试环境打印访问结果
 					if (__DEV__) {
 						console.log('访问接口:UPLOAD' + '==>' + url)
@@ -319,8 +312,6 @@ export default class request {
 						reject({ message: '网络差，请稍后再试。' })
 					}
 				}, (error: any) => {
-					// tips.showTips(JSON.stringify(error))
-					// return;
 
 					if (__DEV__) {
 						console.log(error);
@@ -344,6 +335,31 @@ export default class request {
 			formData.append(key, data[key])
 		}
 		return formData;
+	}
+
+	static hasChina(str: string) {
+		if (/.*[\u4e00-\u9fa5]+.*$/.test(str)) {
+			return true
+		}
+		return false
+	}
+
+	/**
+	*  从路径中获取文件信息
+	*/
+	static getFileData(path: string) {
+
+		var arr = path.split('/');
+		let tempName = arr[arr.length - 1]
+		let type = getFileType(tempName);
+
+		if (this.hasChina(tempName)) {
+			tempName = tempName.replace(/[ ]/g, "");//去空格
+			tempName = tempName.replace(/[\u4e00-\u9fa5]/g, "");//去除中文
+		}
+		let file = { uri: path, type, name: tempName };
+
+		return file
 	}
 
 

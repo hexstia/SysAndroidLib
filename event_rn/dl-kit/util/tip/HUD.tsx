@@ -29,6 +29,11 @@ let _initializeRotationAnimation = () => {
 };
 
 /**
+*  定时器
+*/
+let timer: any | null = null
+
+/**
  * 弹出HUDLoading 挡住下面的控件交互
  * style : 文字样式
  */
@@ -58,19 +63,14 @@ export function showHUDLoading(text?: string, style?: TextStyle, timeout?: numbe
 		</View>
 	);
 
-	loadingView && loadingView.destroy()
-	loadingView = null;
-	loadingView = new RootSiblings(hud);
+	hidenHUDLoading()
 
+	loadingView = new RootSiblings(hud);
 	_initializeRotationAnimation();
 
 	let t = timeout || 5000;
-
-	setTimeout(() => {
-		if (loadingView) {
-			loadingView.destroy();
-			loadingView = null;
-		}
+	timer = setTimeout(() => {
+		hidenHUDLoading();
 	}, t);
 };
 
@@ -81,6 +81,10 @@ export function hidenHUDLoading() {
 	if (loadingView) {
 		loadingView.destroy();
 		loadingView = null;
+	}
+	if (timer) {
+		clearTimeout(timer)
+		timer = null
 	}
 };
 

@@ -115,7 +115,6 @@ export default class CloudPhone extends BaseNavNavgator {
             console.log('获取云手机列表', result)
             this.setState({ phoneList: result.list, onLine: true, phoneIndex: result.list.length > 0 ? 1 : 0 }, this.getAllScreenshot)
         }).catch(err => {
-            console.log('获取云手机列表', err)
         })
     }
 
@@ -702,11 +701,8 @@ export default class CloudPhone extends BaseNavNavgator {
             this.enterCloudPhoneLoading = true
             tips.showLoading('打开中...')
             enterCloudPhone(phone).then(() => {
-                setTimeout(() => {
-                    tips.hideLoading()
-                    this.enterCloudPhoneLoading = false
-                }, 1000);
-
+                tips.hideLoading()
+                this.enterCloudPhoneLoading = false
             }).catch(err => {
 
                 tips.hideLoading()
@@ -726,9 +722,7 @@ export default class CloudPhone extends BaseNavNavgator {
     *  banner 点击事件
     */
     bannerClick = (banner: Banner) => {
-
         this.navigate('BaseWebView', { title: banner.proTypeStr, uri: banner.skipUrl })
-
     }
 
     /**
@@ -745,7 +739,7 @@ export default class CloudPhone extends BaseNavNavgator {
             }
         }
         sendWebsocketData(JSON.stringify(messageData)).then(v => {
-            let param = { screenStatus: 2, height: 568, width: 320, deviceId: phone.deviceId }
+            let param = { screenStatus: 2, height: 668, width: 375, deviceId: phone.deviceId }
             request.post('/cloudPhone/phone/screenshotCloudphone', param, false).then(result => {
                 console.log(result)
             }).catch(err => {

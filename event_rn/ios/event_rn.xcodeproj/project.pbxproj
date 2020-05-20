@@ -93,6 +93,7 @@
 		8D03E35F240BC31800D05077 /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D03E35E240BC31800D05077 /* libiconv.tbd */; };
 		8D03E361240BC33300D05077 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D03E360240BC33300D05077 /* libsqlite3.tbd */; };
 		8D03E366240BC88D00D05077 /* TencentOpenAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D03E365240BC88D00D05077 /* TencentOpenAPI.framework */; };
+		8D841E072474D5E800DB9F77 /* Bugly.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D841DD02474D5E800DB9F77 /* Bugly.framework */; };
 		968F40267A874F2FBA9C5FF2 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DDE8FBAA992640AD8B0CB7AF /* FontAwesome.ttf */; };
 		9B243E9E75D54C678BDF4346 /* Roboto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F412B83BDB324EFBBF51E878 /* Roboto.ttf */; };
 		9D573ACC3BCF4818BC2EAAA1 /* libRNDocumentPicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BC8F75700244A88A698426A /* libRNDocumentPicker.a */; };
@@ -606,6 +607,7 @@
 		8D03E35E240BC31800D05077 /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
 		8D03E360240BC33300D05077 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		8D03E365240BC88D00D05077 /* TencentOpenAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TencentOpenAPI.framework; sourceTree = "<group>"; };
+		8D841DD02474D5E800DB9F77 /* Bugly.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bugly.framework; sourceTree = "<group>"; };
 		8FEE057B55B4409C9CF1952B /* RCTBEEPickerManager.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTBEEPickerManager.xcodeproj; path = "../node_modules/react-native-picker/ios/RCTBEEPickerManager.xcodeproj"; sourceTree = "<group>"; };
 		93630C8398DB4F409C211994 /* libRCTVideo.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTVideo.a; sourceTree = "<group>"; };
 		9EDA4D227E8C404F8AB1F469 /* RNDocumentPicker.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNDocumentPicker.xcodeproj; path = "../node_modules/react-native-document-picker/ios/RNDocumentPicker.xcodeproj"; sourceTree = "<group>"; };
@@ -642,21 +644,22 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8D03E2F7240BA4A100D05077 /* libc++.tbd in Frameworks */,
+				8D03E2F3240BA48800D05077 /* libz.tbd in Frameworks */,
+				8D03E2F9240BA4A800D05077 /* Security.framework in Frameworks */,
+				8D03E2F1240BA47C00D05077 /* SystemConfiguration.framework in Frameworks */,
 				48AEF400240D2702001F0A51 /* libRNArenaPay.a in Frameworks */,
 				8D03E2FB240BA4AF00D05077 /* CoreTelephony.framework in Frameworks */,
 				8D03E361240BC33300D05077 /* libsqlite3.tbd in Frameworks */,
 				8D03E303240BA4CA00D05077 /* CoreGraphics.framework in Frameworks */,
-				8D03E2F1240BA47C00D05077 /* SystemConfiguration.framework in Frameworks */,
 				8D03E366240BC88D00D05077 /* TencentOpenAPI.framework in Frameworks */,
 				8D03E35F240BC31800D05077 /* libiconv.tbd in Frameworks */,
-				8D03E2F9240BA4A800D05077 /* Security.framework in Frameworks */,
 				8D03E305240BA4D100D05077 /* CoreMotion.framework in Frameworks */,
 				8D03E301240BA4C400D05077 /* CoreText.framework in Frameworks */,
 				8D03E2FF240BA4BD00D05077 /* QuartzCore.framework in Frameworks */,
 				8D03E2FD240BA4B600D05077 /* CFNetwork.framework in Frameworks */,
-				8D03E2F7240BA4A100D05077 /* libc++.tbd in Frameworks */,
+				8D841E072474D5E800DB9F77 /* Bugly.framework in Frameworks */,
 				8D03E2F5240BA49400D05077 /* libsqlite3.0.tbd in Frameworks */,
-				8D03E2F3240BA48800D05077 /* libz.tbd in Frameworks */,
 				ED297163215061F000B7C4FE /* JavaScriptCore.framework in Frameworks */,
 				ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */,
 				11D1A2F320CAFA9E000508D9 /* libRCTAnimation.a in Frameworks */,
@@ -852,6 +855,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8D841DD02474D5E800DB9F77 /* Bugly.framework */,
 				48016AB324290BA10084224B /* CloudKit.framework */,
 				8D03E360240BC33300D05077 /* libsqlite3.tbd */,
 				8D03E35E240BC31800D05077 /* libiconv.tbd */,
@@ -2036,6 +2040,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/event_rn/framework",
 					"$(PROJECT_DIR)/event_rn",
+					"$(PROJECT_DIR)",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2086,6 +2091,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/event_rn/framework",
 					"$(PROJECT_DIR)/event_rn",
+					"$(PROJECT_DIR)",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",

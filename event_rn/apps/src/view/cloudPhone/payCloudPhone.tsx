@@ -175,7 +175,10 @@ export default class PayCloudPhone extends BaseNavNavgator {
       // 确认订单
       request.post('/tcssPlatform/order/confirmOrder', { productArr: JSON.stringify([proId]) }, true).then(res => {
         // 创建订单
-        let product = [{ proId: res.list[0].id, num: proNum }]
+        let product = []
+        for (let i = 0; i < proNum; i++) {
+          product.push({ proId: res.list[0].id, num: 1 })
+        }
         request.post('/tcssPlatform/order/createOrder', { productJson: JSON.stringify(product), orderType: 1 }, true).then(res => {
           this.orderPay(res.order.id)
         })

@@ -14,6 +14,8 @@
 #import <React/RCTRootView.h>
 #import "MainViewController.h"
 #import "LaunchImage.h"
+#import <Bugly/Bugly.h>
+
 
 @implementation AppDelegate
 
@@ -33,6 +35,9 @@
   [self.window makeKeyAndVisible];
 
   [[LaunchImage shareInstance] show];
+  
+  [Bugly startWithAppId:@"a9a199db76"];
+
   return YES;
 }
 

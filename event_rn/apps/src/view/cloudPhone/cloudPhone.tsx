@@ -113,7 +113,7 @@ export default class CloudPhone extends BaseNavNavgator {
         // 获取云手机列表
         request.post('/cloudPhone/phone/list', param, true).then(result => {
             console.log('获取云手机列表', result)
-            this.setState({ phoneList: result.list, onLine: true }, this.getAllScreenshot)
+            this.setState({ phoneList: result.list, onLine: true, phoneIndex: result.list.length > 0 ? 1 : 0 }, this.getAllScreenshot)
         }).catch(err => {
             console.log('获取云手机列表', err)
         })
@@ -153,7 +153,7 @@ export default class CloudPhone extends BaseNavNavgator {
 
     render() {
         let { showType, phoneIndex, phoneList } = this.state
-        let nowSelectPhone = phoneList[phoneIndex + 1] || {}
+        let nowSelectPhone = phoneList[phoneIndex - 1] || {}
 
         return (
             <View style={{ flex: 1 }}>

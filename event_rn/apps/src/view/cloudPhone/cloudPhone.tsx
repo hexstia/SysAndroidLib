@@ -83,37 +83,25 @@ export default class CloudPhone extends BaseNavNavgator {
     constructor(props: any) {
         super(props)
         if (configs.token) {
-            this.loadData()
+            this.loadData(true)
             this.addEventListener()
         }
         this.loadBanner()
 
         msg.on('phoneListChange', () => {
             this.loadData()
-            // if (this.haveFocus) {
-            //     this.loadData()
-            // } else {
-            //     this.needRefreshPhoneList = true;
-            // }
         })
     }
-
-    // viewDidFocus() {
-    //     if (this.needRefreshPhoneList) {
-    //         this.loadData()
-    //         this.needRefreshPhoneList = false
-    //     }
-    // }
 
     /**
     *  获取云手机列表
     */
-    loadData = () => {
+    loadData = (first: boolean = false) => {
         let param = { page: 1, pageSize: 1000 }
         // 获取云手机列表
         request.post('/cloudPhone/phone/list', param, true).then(result => {
             console.log('获取云手机列表', result)
-            this.setState({ phoneList: result.list, onLine: true, phoneIndex: result.list.length > 0 ? 1 : 0 }, this.getAllScreenshot)
+            this.setState({ phoneList: result.list, onLine: true, phoneIndex: first ? (result.list.length > 0 ? 1 : 0) : this.state.phoneIndex }, this.getAllScreenshot)
         }).catch(err => {
         })
     }
@@ -181,7 +169,7 @@ export default class CloudPhone extends BaseNavNavgator {
                                     ) : null
                                 }
                                 <TouchableOpacity style={{ width: 30, height: 30, marginLeft: 10, marginRight: 10, justifyContent: 'center', alignItems: 'center' }}
-                                    onPress={this.loadData}>
+                                    onPress={this.loadData.bind(this, false)}>
                                     <Image style={{ width: 20, height: 20 }} resizeMode='contain' source={require('#/home/refresh.png')} />
                                 </TouchableOpacity>
                             </View>

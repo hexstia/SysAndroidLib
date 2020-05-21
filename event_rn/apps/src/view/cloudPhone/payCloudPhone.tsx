@@ -1,5 +1,5 @@
 
-import { BaseNavNavgator, DefaultListView, ImageBtn, msg, request, tips } from 'dl-kit';
+import { BaseNavNavgator, DefaultListView, ImageBtn, request, tips } from 'dl-kit';
 import { CloudPhoneModal, OrderPay, Product } from 'global';
 import React from 'react';
 import { Image, ImageBackground, RefreshControl, ScrollView, Text, TouchableOpacity, View } from 'react-native';
@@ -219,7 +219,6 @@ export default class PayCloudPhone extends BaseNavNavgator {
     }
 
     RNArenaPay.wechatPay(payData).then((data: any) => {
-      this.payCallback()
       this.replace('PayResult', { title: '支付结果', orderPay })
     }, (error: any) => {
       this.replace('PayResult', { title: '支付结果' })
@@ -235,7 +234,6 @@ export default class PayCloudPhone extends BaseNavNavgator {
 
     // 支付宝支付
     RNArenaPay.aliPay({ payInfo: outCodeUrl }).then((data: any) => {
-      this.payCallback()
       this.replace('PayResult', { title: '支付结果', orderPay })
     }, (error: any) => {
       this.replace('PayResult', { title: '支付结果' })
@@ -243,13 +241,5 @@ export default class PayCloudPhone extends BaseNavNavgator {
   }
 
 
-  /**
-  *  支付成功的回调，该刷新刷新。
-  */
-  payCallback = () => {
-    setTimeout(() => {
-      msg.emit('phoneListChange')
-    }, 1000);
-  }
 
 }

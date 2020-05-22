@@ -177,7 +177,6 @@ export default class Mine extends BaseNavNavgator {
         if (checkAuthor()) {
             imagePicker({ cropping: true, width: 400, height: 400, multiple: false, mediaType: 'photo' }, (data: any) => {
 
-                console.log('图片选择', data)
                 request.upload('/tcssPlatform/user/info/uploadUserImg', { paths: [data.path] }, true).then(res => {
                     tips.showTips('上传成功!');
                     saveUserInfo(res.userInfo);

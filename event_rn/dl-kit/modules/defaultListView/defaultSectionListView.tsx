@@ -130,7 +130,7 @@ export default class DefaultSectionListView extends BaseComponent<Props> {
 
         if (this.props.useExternalSource) {
             let dataSource = nextProps.dataSource || { data: [], pageNum: 0 };
-            console.log('刷新数据源', nextProps.dataSource);
+
             if (dataSource.pageNum == 0) {
                 this.setState({
                     dataSource: dataSource.data || [],
@@ -140,7 +140,7 @@ export default class DefaultSectionListView extends BaseComponent<Props> {
                     emptyType: dataSource.data ? 'noData' : 'errorData',
                     loadMoring: dataSource.data ? false : true,
                 }, () => {
-                    console.log('刷新数据源之后', this.state);
+
                 });
             } else {
                 let isEqual = equal(dataSource.data, this.state.dataSource);
@@ -159,7 +159,6 @@ export default class DefaultSectionListView extends BaseComponent<Props> {
 
     render() {
 
-        console.log('设置分组列表的数据源', this.state.dataSource);
         return (
             <SectionList ref={lv => this.listView = lv}
                 initialNumToRender={this.props.initialNumToRender}
@@ -267,7 +266,7 @@ export default class DefaultSectionListView extends BaseComponent<Props> {
     *   下拉刷新数据
     */
     onRefresh = () => {
-        console.log('列表下拉刷新')
+
         this.setState({
             refreshing: true,
         }, () => {
@@ -297,8 +296,6 @@ export default class DefaultSectionListView extends BaseComponent<Props> {
         if (this.state.loadMoring) { return; }
         if (this.state.refreshing) { return; }
 
-        console.log('上拉加载')
-
         this.setState({
             loadMoring: true
         }, () => {
@@ -311,7 +308,6 @@ export default class DefaultSectionListView extends BaseComponent<Props> {
     *  设置数据 如实设置数据，没拿到数据就给[] ,网络访问错误就给null , 把请求数据的页码也要传回来。
     */
     setData = (data: any[] | null, pageNum: number) => {
-        console.log('列表设置数据', data, pageNum)
         if (pageNum == 0) {
             this.setState({
                 dataSource: data ? data : [],

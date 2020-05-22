@@ -26,11 +26,10 @@ String.prototype.isPicture = function () {
 }
 
 // 替换某位置上的字符串
-String.prototype.replaceStrIndex = function(index:number,changeStr:string){
-    if(this.length >= index + changeStr.length){
-        return this.substr(0, index) + changeStr+ this.substr(index + changeStr.length);
-    }else{
-        console.log('替换超过了字符串长度');
+String.prototype.replaceStrIndex = function (index: number, changeStr: string) {
+    if (this.length >= index + changeStr.length) {
+        return this.substr(0, index) + changeStr + this.substr(index + changeStr.length);
+    } else {
         return this;
     }
 }

@@ -2,7 +2,9 @@
  * Created by dingle on 2017/3/31.
  */
 import PropTypes from "prop-types";
-import React, { PureComponent } from "react";
+import React, {
+  PureComponent
+} from "react";
 import {
   InteractionManager,
   Platform,
@@ -37,7 +39,11 @@ class DLPicker extends PureComponent {
     InteractionManager.runAfterInteractions(() => {
       //先判断scrollView创建好了没，再去滚动，防止点击太快导致的bug
       this._scrollView &&
-        this._scrollView.scrollTo({ x: 0, y: contentOffsetY, animated: true });
+        this._scrollView.scrollTo({
+          x: 0,
+          y: contentOffsetY,
+          animated: true
+        });
     });
   }
 
@@ -49,51 +55,86 @@ class DLPicker extends PureComponent {
         let itemOpacity = 1 - dif * 0.2;
         let scale = 1 - dif * 0.1;
 
-        return (
-          <View
-            key={index}
-            style={[
+        return ( <
+          View key = {
+            index
+          }
+          style = {
+            [
               styles.itemStyle,
-              { height: this.props.itemHeight, opacity: itemOpacity }
-            ]}
-          >
-            <Text
-              style={[styles.itemLabelStyle, { transform: [{ scale: scale }] }]}
-              allowFontScaling={false}
-            >
-              {data.label || data}
-            </Text>
-          </View>
+              {
+                height: this.props.itemHeight,
+                opacity: itemOpacity
+              }
+            ]
+          } >
+          <
+          Text style = {
+            [styles.itemLabelStyle, {
+              transform: [{
+                scale: scale
+              }]
+            }]
+          }
+          allowFontScaling = {
+            false
+          } >
+          {
+            data.label || data
+          } <
+          /Text> <
+          /View>
         );
       })
     );
 
     items.push(this.loadHolderViews());
 
-    return (
-      <ScrollView
-        ref={scrollView => {
+    return ( <
+      ScrollView ref = {
+        scrollView => {
           this._scrollView = scrollView;
-        }}
-        onScroll={this._onScroll.bind(this)}
-        scrollEventThrottle={50}
-        showsVerticalScrollIndicator={false}
-        snapToInterval={this.props.itemHeight}
-        snapToAlignment={"center"}
-        onMomentumScrollEnd={this._onMomentumScrollEnd.bind(this)}
-        onScrollEndDrag={this._onScrollEndDrag.bind(this)}
-      >
-        {items}
-      </ScrollView>
+        }
+      }
+      onScroll = {
+        this._onScroll.bind(this)
+      }
+      scrollEventThrottle = {
+        50
+      }
+      showsVerticalScrollIndicator = {
+        false
+      }
+      snapToInterval = {
+        this.props.itemHeight
+      }
+      snapToAlignment = {
+        "center"
+      }
+      onMomentumScrollEnd = {
+        this._onMomentumScrollEnd.bind(this)
+      }
+      onScrollEndDrag = {
+        this._onScrollEndDrag.bind(this)
+      } >
+      {
+        items
+      } <
+      /ScrollView>
     );
   }
 
   loadHolderViews() {
     let views = [1, 2, 3].map((v, i) => {
-      return (
-        <View
-          key={i}
-          style={[styles.itemStyle, { height: this.props.itemHeight }]}
+      return ( <
+        View key = {
+          i
+        }
+        style = {
+          [styles.itemStyle, {
+            height: this.props.itemHeight
+          }]
+        }
         />
       );
     });
@@ -141,9 +182,7 @@ class DLPicker extends PureComponent {
         if (this.props.timeMode == "timePeriod") {
           this.props.onSelectedItem(itemData);
         } else {
-          if (__DEV__) {
-            console.log("异常");
-          }
+          if (__DEV__) {}
         }
       }
     }

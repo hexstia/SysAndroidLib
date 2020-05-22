@@ -169,7 +169,6 @@ export default class RegisterOrFindAccount extends BaseNavNavgator {
             getTempToken((token, timestamp) => {
                 let param = { token, timestamp, mobile, type: 1, sendType: type == 'REGISTER' ? 1 : 1, from: 1 }
                 request.post('/tcssPlatform/vcode/send', param, false).then(result => {
-                    console.log(result)
                     tips.showTips('验证码发送成功')
                     this.setState({
                         minutes: 60,

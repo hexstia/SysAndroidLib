@@ -34,10 +34,9 @@ export default class BaseWebView extends BaseNavNavgator {
       if (Platform.OS == 'android') {
         source.baseUrl = 's'
       }
-      
+
     }
 
-    console.log('网页数据源', source)
     return (
       <View style={{ flex: 1 }}>
         <WebView

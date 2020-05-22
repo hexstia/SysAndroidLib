@@ -83,25 +83,25 @@ export default class CloudPhone extends BaseNavNavgator {
     constructor(props: any) {
         super(props)
         if (configs.token) {
-            this.loadData(true)
+            this.loadData()
             this.addEventListener()
         }
         this.loadBanner()
 
-        msg.on('phoneListChange', (hasNewPhone: boolean) => {
-            this.loadData(hasNewPhone)
+        msg.on('phoneListChange', () => {
+            this.loadData()
         })
     }
 
     /**
     *  获取云手机列表
     */
-    loadData = (needToFirst: boolean = false) => {
+    loadData = () => {
         let param = { page: 1, pageSize: 1000 }
         // 获取云手机列表
         request.post('/cloudPhone/phone/list', param, true).then(result => {
 
-            this.setState({ phoneList: result.list, onLine: true, phoneIndex: needToFirst ? 1 : this.state.phoneIndex }, this.getAllScreenshot)
+            this.setState({ phoneList: result.list, onLine: true, phoneIndex: result.list.length > this.state.phoneList.length ? 1 : this.state.phoneIndex }, this.getAllScreenshot)
         })
     }
 
@@ -255,7 +255,7 @@ export default class CloudPhone extends BaseNavNavgator {
         addSocketEventListener((eventName, socketMessage) => {
             let { phoneList, reStartPhoneIds, renewPhoneIds, screenShotSet, onLine } = this.state
 
-            console.log('收到socket消息', socketMessage);
+            // console.log('收到socket消息', socketMessage);
             try {
                 switch (eventName) {
                     case 'webSocektMessage':
@@ -288,7 +288,7 @@ export default class CloudPhone extends BaseNavNavgator {
 
                     case 'webSocektOnClose':
                         setTimeout(() => {
-                            console.log('socket 链接断开');
+                            // console.log('socket 链接断开');
                             if (onLine) {
                                 startWebsocketConnection()
                             }
@@ -297,7 +297,7 @@ export default class CloudPhone extends BaseNavNavgator {
 
                     case 'webSocektOnError':
                         setTimeout(() => {
-                            console.log('socket 链接报错');
+                            // console.log('socket 链接报错');
                             if (onLine) {
                                 startWebsocketConnection()
                             }
@@ -306,7 +306,7 @@ export default class CloudPhone extends BaseNavNavgator {
                 }
 
             } catch (error) {
-                console.log('socket消息解析失败', socketMessage);
+                // console.log('socket消息解析失败', socketMessage);
             }
         })
     }
@@ -640,13 +640,13 @@ export default class CloudPhone extends BaseNavNavgator {
                         this.uploadAppModal && this.uploadAppModal.uploadApp(cloudPhone);
                     } else {
                         DocumentPicker.pick({ type: DocumentPicker.types.allFiles }).then(res => {
-                            console.log('选择文件', res);
+                            // console.log('选择文件', res);
                             request.upload('/cloudPhone/phone/installApk', { paths: [res.uri], deviceIds: cloudPhone.deviceId + '', selectAll: '2', searchGroupId: '', status: '' }, true).then(res => {
                                 tips.showTips('上传成功!');
                             })
 
                         }).catch((err: any) => {
-                            console.log('文件选择失败', err);
+                            // console.log('文件选择失败', err);
                         })
                     }
                     break;
@@ -728,9 +728,9 @@ export default class CloudPhone extends BaseNavNavgator {
         sendWebsocketData(JSON.stringify(messageData)).then(v => {
             let param = { screenStatus: 2, height: 668, width: 375, deviceId: phone.deviceId }
             request.post('/cloudPhone/phone/screenshotCloudphone', param, false).then(result => {
-                console.log(result)
+                // console.log(result)
             }).catch(err => {
-                console.log(err)
+                // console.log(err)
             })
         })
     }

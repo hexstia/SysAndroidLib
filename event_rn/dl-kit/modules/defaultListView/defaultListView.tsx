@@ -253,7 +253,6 @@ export default class DefaultListView extends BaseComponent<Props> {
     *   下拉刷新数据
     */
     onRefresh = () => {
-        console.log('列表下拉刷新')
         this.setState({
             refreshing: true,
         }, () => {
@@ -277,7 +276,6 @@ export default class DefaultListView extends BaseComponent<Props> {
         if (this.state.loadMoring) { return; }
         if (this.state.refreshing) { return; }
 
-        console.log('上拉加载')
         this.setState({
             loadMoring: true
         }, () => {
@@ -290,7 +288,7 @@ export default class DefaultListView extends BaseComponent<Props> {
     *  设置数据 如实设置数据，没拿到数据就给[] ,网络访问错误就给null , 把请求数据的页码也要传回来。
     */
     setData = (data: any[] | null, pageNum: number) => {
-        console.log('列表设置数据', data, pageNum)
+
         if (pageNum == 0) {
             this.setState({
                 dataSource: data ? data : [],

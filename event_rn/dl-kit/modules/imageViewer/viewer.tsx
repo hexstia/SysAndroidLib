@@ -135,7 +135,7 @@ export default class Viewer extends BaseComponent<ViewerProps> {
   *  显示图片
   */
   showImages = (imageUrls: IImageInfo[], index = 0) => {
-    console.log('imageUrls', imageUrls)
+
     this.setState({
       show: true,
       imageUrls,

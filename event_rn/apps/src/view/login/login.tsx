@@ -190,7 +190,7 @@ export default class Login extends BaseNavNavgator {
             getTempToken((token, timestamp) => {
                 let param = { token, timestamp, mobile, type: 1, sendType: 5, from: 1 }
                 request.post('/tcssPlatform/vcode/send', param, false).then(result => {
-                    console.log(result)
+                    // console.log(result)
                     tips.showTips('验证码发送成功')
                     this.setState({
                         minutes: 60,
@@ -301,10 +301,10 @@ export default class Login extends BaseNavNavgator {
     */
     qqLogin = () => {
         RNArenaPay.QQLogin().then((res: any) => {
-            console.log(res);
+            // console.log(res);
             this.authLogin(configs.QQAppKey, res.accessToken, res.openId)
         }, (error: any) => {
-            console.log(JSON.stringify(error));
+            // console.log(JSON.stringify(error));
             tips.showTips('QQ登录失败')
         })
 
@@ -317,13 +317,9 @@ export default class Login extends BaseNavNavgator {
 
         // 微信登录
         RNArenaPay.wechatLogin().then((data: any) => {
-            console.log('微信登录')
-            console.log(data.code);
             this.authLogin(configs.wxAppKey, data.code);
 
         }, (error: any) => {
-            console.log(JSON.stringify(error));
-            tips.showTips('微信登录失败')
         })
     }
 

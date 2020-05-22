@@ -65,9 +65,6 @@ Date.prototype.differTime = function () {//di作为一个变量传进来
 
 
 	return dayDiff + "天" + hours + "小时" + minutes + "分钟" + seconds + "秒"
-	// console.log(" 相差 "+dayDiff+"天 "+hours+"小时 "+minutes+" 分钟"+seconds+" 秒")
-	// console.log(dateDiff+"时间差的毫秒数",dayDiff+"计算出相差天数",leave1+"计算天数后剩余的毫秒数"
-	//     ,hours+"计算出小时数",minutes+"计算相差分钟数",seconds+"计算相差秒数");
 }
 
 let c = 0

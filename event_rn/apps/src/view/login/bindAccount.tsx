@@ -130,7 +130,7 @@ export default class BindAccount extends BaseNavNavgator {
             getTempToken((token, timestamp) => {
                 let param = { token, timestamp, mobile, type: 1, sendType: 1, from: 1, imgId: imageId }
                 request.post('/tcssPlatform/vcode/send', param, false).then(result => {
-                    console.log(result)
+                    // console.log(result)
                     tips.showTips('验证码发送成功')
                     this.setState({
                         minutes: 60,

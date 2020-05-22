@@ -193,13 +193,13 @@ export default class UploadAppModal extends BaseComponent<Props> {
       let fileData = { filepath: path.split('file://').join(''), filetype: type, name: 'file', filename };
       return fileData
     })
-    console.log('文件数组', fileDatas)
+    // console.log('文件数组', fileDatas)
 
 
     // 开始上传
     var uploadBegin = (response: { jobId: number }) => {
       var jobId = response.jobId;
-      console.log('开始上传' + jobId);
+      // console.log('开始上传' + jobId);
       let task: UploadTask = {
         status: 'upload',
         progress: 0,
@@ -211,17 +211,17 @@ export default class UploadAppModal extends BaseComponent<Props> {
 
     var uploadProgress = (response: { jobId: number, totalBytesExpectedToSend: number, totalBytesSent: number }) => {
       var percentage = Math.floor((response.totalBytesSent / response.totalBytesExpectedToSend) * 100);
-      console.log('上传进度：' + response.jobId + '==》' + percentage);
+      // console.log('上传进度：' + response.jobId + '==》' + percentage);
       this.setState({ uploadTask: { ...this.state.uploadTask, progress: percentage } })
     };
 
-    console.log('上传参数', {
-      token: configs.token,
-      deviceIds: cloudPhone!.deviceId + '',
-      selectAll: '2',
-      searchGroupId: '',
-      status: ''
-    });
+    // console.log('上传参数', {
+    //   token: configs.token,
+    //   deviceIds: cloudPhone!.deviceId + '',
+    //   selectAll: '2',
+    //   searchGroupId: '',
+    //   status: ''
+    // });
 
 
     RNFS.uploadFiles({
@@ -241,7 +241,7 @@ export default class UploadAppModal extends BaseComponent<Props> {
       begin: uploadBegin,
       progress: uploadProgress
     }).promise.then((response: { jobId: number, statusCode: number, headers: Headers, body: string }) => {
-      console.log('上传结果', response);
+      // console.log('上传结果', response);
       let body = JSON.parse(response.body);
       let success = response.statusCode == 200 && body.status == 200
 
@@ -250,7 +250,7 @@ export default class UploadAppModal extends BaseComponent<Props> {
       if (err.description === "cancelled") {
         // cancelled by user
       }
-      console.log('上传失败', err);
+      // console.log('上传失败', err);
 
       this.setState({ uploadTask: { ...this.state.uploadTask, status: 'faild', statusTextColor: '#FE5437' } })
     });

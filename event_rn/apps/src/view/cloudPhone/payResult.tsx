@@ -46,7 +46,7 @@ export default class PayResult extends BaseNavNavgator {
 
   back = () => {
     setTimeout(() => {
-      msg.emit('phoneListChange', { hasNewPhone: !this.data.cloudPhone })
+      msg.emit('phoneListChange')
     }, 500);
     this.goBack()
     return true

@@ -75,7 +75,7 @@ let refreshToken = () => {
       getTempToken((tempToken, timestamp) => {
         let refreshParam = { token: tempToken, timestamp: timestamp, refreshToken: configs.refreshToken }
         request.postDefault('/tcssPlatform/user/refreshToken', refreshParam, true).then(response => {
-          console.log('刷新token', response)
+
           if (response.status == 200) {
             saveLoginInfo(response.data);
             resolve(response.data)
@@ -149,16 +149,13 @@ let loadLoginInfoFromLocal = async (callBack: (success: boolean) => void) => {
       callBack(true)
 
       startWebsocket()
-      console.log('从本地获取了用户信息', userInfo);
-      console.log('本地token：', token);
-      console.log('本地刷新token：', refreshToken);
     } catch (error) {
       callBack(false)
     }
 
   } else {
     callBack(false)
-    console.log('本地没有存储登录信息');
+    // console.log('本地没有存储登录信息');
   }
 }
 

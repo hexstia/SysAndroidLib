@@ -63,7 +63,7 @@ export default class CloudPhone extends BaseNavNavgator {
         showType: 'viewType',
         phoneList: [],
         contentHeight: 400,
-        phoneIndex: 0,
+        phoneIndex: 1,
         reStartPhoneIds: [],
         renewPhoneIds: [],
         bannerDatas: [],
@@ -88,21 +88,20 @@ export default class CloudPhone extends BaseNavNavgator {
         }
         this.loadBanner()
 
-        msg.on('phoneListChange', () => {
-            this.loadData()
+        msg.on('phoneListChange', (hasNewPhone: boolean) => {
+            this.loadData(hasNewPhone)
         })
     }
 
     /**
     *  获取云手机列表
     */
-    loadData = (first: boolean = false) => {
+    loadData = (needToFirst: boolean = false) => {
         let param = { page: 1, pageSize: 1000 }
         // 获取云手机列表
         request.post('/cloudPhone/phone/list', param, true).then(result => {
-            console.log('获取云手机列表', result)
-            this.setState({ phoneList: result.list, onLine: true, phoneIndex: first ? (result.list.length > 0 ? 1 : 0) : this.state.phoneIndex }, this.getAllScreenshot)
-        }).catch(err => {
+
+            this.setState({ phoneList: result.list, onLine: true, phoneIndex: needToFirst ? 1 : this.state.phoneIndex }, this.getAllScreenshot)
         })
     }
 
@@ -317,7 +316,7 @@ export default class CloudPhone extends BaseNavNavgator {
     *  加载 视图内容
     */
     loadViewContent = () => {
-        let { phoneList, contentHeight, bannerDatas, reStartPhoneIds, renewPhoneIds, screenShotSet } = this.state
+        let { phoneList, contentHeight, bannerDatas, reStartPhoneIds, renewPhoneIds, screenShotSet, phoneIndex } = this.state
         let addImgHeight = contentHeight - 10 - 10
         let addImgWith = Math.floor(addImgHeight * (210 / 413))
 
@@ -440,7 +439,7 @@ export default class CloudPhone extends BaseNavNavgator {
                                         loop={false}
                                         showsPagination={false}
                                         onIndexChanged={this.phoneIndexChanged}
-                                        index={1}>
+                                        index={phoneIndex}>
                                         {/* 手机们 */}
                                         {
                                             phoneItems

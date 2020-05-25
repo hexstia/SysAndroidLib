@@ -51,6 +51,11 @@ interface State {
     *  是否在线
     */
     onLine: boolean
+
+    /**
+    *  初始phone index
+    */
+    initialIndex: number
 }
 
 /**
@@ -63,12 +68,13 @@ export default class CloudPhone extends BaseNavNavgator {
         showType: 'viewType',
         phoneList: [],
         contentHeight: 400,
-        phoneIndex: 1,
+        phoneIndex: 0,
         reStartPhoneIds: [],
         renewPhoneIds: [],
         bannerDatas: [],
         screenShotSet: {},
-        onLine: true
+        onLine: true,
+        initialIndex: 0
     }
 
     editPhoneNameModal: EditPhoneNameModal | null = null;
@@ -98,10 +104,14 @@ export default class CloudPhone extends BaseNavNavgator {
     */
     loadData = () => {
         let param = { page: 1, pageSize: 1000 }
+        this.setState({ initialIndex: 0 })
         // 获取云手机列表
         request.post('/cloudPhone/phone/list', param, true).then(result => {
-
-            this.setState({ phoneList: result.list, onLine: true, phoneIndex: result.list.length > this.state.phoneList.length ? 1 : this.state.phoneIndex }, this.getAllScreenshot)
+            let phoneData: any = {}
+            if (result.list.length > this.state.phoneList.length) {
+                phoneData.initialIndex = 1
+            }
+            this.setState({ phoneList: result.list, onLine: true, ...phoneData }, this.getAllScreenshot)
         })
     }
 
@@ -316,7 +326,7 @@ export default class CloudPhone extends BaseNavNavgator {
     *  加载 视图内容
     */
     loadViewContent = () => {
-        let { phoneList, contentHeight, bannerDatas, reStartPhoneIds, renewPhoneIds, screenShotSet, phoneIndex } = this.state
+        let { phoneList, contentHeight, bannerDatas, reStartPhoneIds, renewPhoneIds, screenShotSet, initialIndex } = this.state
         let addImgHeight = contentHeight - 10 - 10
         let addImgWith = Math.floor(addImgHeight * (210 / 413))
 
@@ -439,7 +449,7 @@ export default class CloudPhone extends BaseNavNavgator {
                                         loop={false}
                                         showsPagination={false}
                                         onIndexChanged={this.phoneIndexChanged}
-                                        index={phoneIndex}>
+                                        index={initialIndex}>
                                         {/* 手机们 */}
                                         {
                                             phoneItems

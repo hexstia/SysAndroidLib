@@ -247,6 +247,4 @@ export default class PayCloudPhone extends BaseNavNavgator {
     this.replace('PayResult', { title: '支付结果', cloudPhone: this.state.cloudPhone, orderPay })
   }
 
-
-
 }

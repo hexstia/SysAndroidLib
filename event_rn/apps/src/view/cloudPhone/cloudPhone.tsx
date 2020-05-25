@@ -91,12 +91,12 @@ export default class CloudPhone extends BaseNavNavgator {
         if (configs.token) {
             this.loadData()
             this.addEventListener()
+            msg.on('phoneListChange', () => {
+                this.loadData()
+            })
         }
-        this.loadBanner()
 
-        msg.on('phoneListChange', () => {
-            this.loadData()
-        })
+        this.loadBanner()
     }
 
     /**
@@ -104,14 +104,15 @@ export default class CloudPhone extends BaseNavNavgator {
     */
     loadData = () => {
         let param = { page: 1, pageSize: 1000 }
-        this.setState({ initialIndex: 0 })
         // 获取云手机列表
         request.post('/cloudPhone/phone/list', param, true).then(result => {
-            let phoneData: any = {}
             if (result.list.length > this.state.phoneList.length) {
-                phoneData.initialIndex = 1
+                this.setState({ initialIndex: 0 }, () => {
+                    this.setState({ phoneList: result.list, onLine: true, initialIndex: 1, phoneIndex: 1 }, this.getAllScreenshot)
+                })
+            } else {
+                this.setState({ phoneList: result.list, onLine: true }, this.getAllScreenshot)
             }
-            this.setState({ phoneList: result.list, onLine: true, ...phoneData }, this.getAllScreenshot)
         })
     }
 

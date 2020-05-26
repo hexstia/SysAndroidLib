@@ -143,8 +143,6 @@ export default class UploadFileModal extends BaseComponent<Props> {
       let fileData = { filepath: path.split('file://').join(''), filetype: type, name, filename };
       return fileData
     })
-    // console.log('文件数组', fileDatas)
-
 
     // 开始上传
     var uploadBegin = (response: { jobId: number }) => {
@@ -193,7 +191,7 @@ export default class UploadFileModal extends BaseComponent<Props> {
       begin: uploadBegin,
       progress: uploadProgress
     }).promise.then((response: { jobId: number, statusCode: number, headers: Headers, body: string }) => {
-      // console.log('上传结果', response);
+      console.log('上传结果', response);
       try {
         let body = JSON.parse(response.body);
         let success = response.statusCode == 200 && body.status == 200

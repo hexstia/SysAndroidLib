@@ -17,7 +17,6 @@ import CodePush from "react-native-code-push"; // 引入code-push
 import { loadLoginInfoFromLocal } from '../module/publicFunc';
 import routes from './router';
 
-
 let codePushOptions = {
   //设置检查更新的频率
   //ON_APP_RESUME APP恢复到前台的时候

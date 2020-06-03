@@ -93,7 +93,6 @@ export default class CloudPhone extends BaseNavNavgator {
             this.addEventListener()
             msg.on('phoneListChange', this.loadData)
         }
-
         this.loadBanner()
     }
 

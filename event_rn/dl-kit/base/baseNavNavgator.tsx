@@ -47,9 +47,7 @@ export default class BaseNavNavgator extends BaseComponent<Props> {
   static navigationOptions: Function | Object = (nav: any) => {
 
     let navigation: Navigation = nav.navigation
-
     let params = navigation.state.params || {}
-
     let rightView = navigation.getParam('headerRight')
     let leftView = navigation.getParam('headerLeft')
     let title = navigation.getParam('title')
@@ -57,7 +55,6 @@ export default class BaseNavNavgator extends BaseComponent<Props> {
     let headerTitle = navigation.getParam('headerTitle');
 
     return {
-
       headerStyle: {
         backgroundColor: '#fff',
         shadowOpacity: 0,
@@ -74,9 +71,7 @@ export default class BaseNavNavgator extends BaseComponent<Props> {
   };
 
   haveFocus: boolean = false;
-
   data: Data = {}
-
   listeners: NavigationEventSubscription[] = []
 
   constructor(props: Props) {
@@ -99,11 +94,6 @@ export default class BaseNavNavgator extends BaseComponent<Props> {
       tips.showTips('此页面不在导航栈内！，请检查！')
     }
   }
-
-  componentDidMount() {
-
-  }
-
 
   componentWillUnmount() {
     // 移除监听

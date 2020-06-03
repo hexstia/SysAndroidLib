@@ -1,5 +1,5 @@
 
-import { BaseNavNavgator } from 'dl-kit';
+import { BaseNavNavgator, defaultStyle } from 'dl-kit';
 import React from 'react';
 import { Switch, Text, TouchableOpacity, View } from 'react-native';
 
@@ -38,8 +38,24 @@ export default class SysSetting extends BaseNavNavgator {
                         <Text style={{ color: '#999', fontSize: 15, marginRight: 18 }}></Text>
                     </TouchableOpacity>
                 </View>
+                <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+                    <View style={{ marginBottom: 34, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                        <Text style={{ color: defaultStyle.color.mainColor }}
+                            onPress={this.openWebview.bind(this, '服务协议', 'http://www.91lanjiang.com/cloud/cloudPhone/book?type=service_agreement')}>《服务协议》</Text>
+                        <View style={{ height: 15, width: 1, backgroundColor: defaultStyle.color.mainColor, marginHorizontal: 10 }} />
+                        <Text style={{ color: defaultStyle.color.mainColor }}
+                            onPress={this.openWebview.bind(this, '隐私政策', 'http://www.91lanjiang.com/cloud/cloudPhone/book?type=privacy_policy')}>《隐私政策》</Text>
+                    </View>
+                </View>
             </View>
         );
+    }
+
+    /**
+  *  打开一个webview
+  */
+    openWebview = (title: string, uri: string) => {
+        this.navigate('BaseWebView', { title, uri })
     }
 
     aboutLanjiang = () => {

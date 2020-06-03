@@ -3,6 +3,7 @@ import { BaseNavNavgator, configs, defaultStyle, msg, request, tips } from 'dl-k
 import React from 'react';
 import { Image, ImageBackground, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import RNArenaPay from 'react-native-arena-pay';
+import AgreementModal from '../../module/agreementModal';
 import CheckImgCode from '../../module/checkImgCode';
 import { getTempToken, isPhoneNum, saveLoginInfo } from '../../module/publicFunc';
 
@@ -152,9 +153,16 @@ export default class Login extends BaseNavNavgator {
                         passCallback={this.imgCodePass}
                     />
                 </View>
-
+                <AgreementModal openWebview={this.openWebview} />
             </ScrollView>
         );
+    }
+
+    /**
+    *  打开webview
+    */
+    openWebview = (title: string, uri: string) => {
+        this.navigate('BaseWebView', { title, uri })
     }
 
     /**
@@ -269,13 +277,6 @@ export default class Login extends BaseNavNavgator {
                 tips.showTips('请输入密码')
                 return;
             }
-
-            // let passReg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,}$/;
-
-            // if (!passReg.test(password)) {
-            //     tips.showTips('密码格式不正确请重新输入');
-            //     return;
-            // }
         }
 
         getTempToken((token, timestamp) => {
@@ -318,7 +319,6 @@ export default class Login extends BaseNavNavgator {
         // 微信登录
         RNArenaPay.wechatLogin().then((data: any) => {
             this.authLogin(configs.wxAppKey, data.code);
-
         }, (error: any) => {
         })
     }
@@ -327,23 +327,6 @@ export default class Login extends BaseNavNavgator {
     *  第三方登录
     */
     authLogin = (appId: string, code: string, openId?: string) => {
-
-        // 如果是验证码登录，要验证一下手机号是否注册过
-        // getTempToken((token, timestamp) => {
-
-        //     // 验证这个找回是否已经绑定过微信 、 QQ。返回200表示成功可继续绑定，已绑定返回错误信息
-        //     request.post('/tcssPlatform/user/checkOtherUser', { token, timestamp, mobile: 18911755005, platform: openId ? 2 : 1 }).then(res => {
-        //         this.checkImgCode && this.checkImgCode.show()
-        //         console.log('未绑定，可以绑定 哈哈')
-        //     }).catch(err => {
-        //         // let tipText = `此账号已绑定${openId ? 'QQ' : '微信'}`
-        //         // tips.showTips(tipText);
-        //     })
-
-        // })
-
-        // return;
-
 
         let { phone, password, verCode } = this.state;
         getTempToken((token, timestamp) => {

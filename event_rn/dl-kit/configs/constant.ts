@@ -5,10 +5,11 @@
 */
 
 const constact = {
-    locationSaveKey:{
-        userInfo:'userInfo',
-        refreshToken:'refreshToken',
-        token:'token'
+    locationSaveKey: {
+        userInfo: 'userInfo',
+        refreshToken: 'refreshToken',
+        token: 'token',
+        showAgreementModal: 'showAgreementModal'
     }
 };
 

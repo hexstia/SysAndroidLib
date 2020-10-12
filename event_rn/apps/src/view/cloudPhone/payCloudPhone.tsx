@@ -1,6 +1,6 @@
 
-import { BaseNavNavgator, DefaultListView, ImageBtn, request, tips } from 'dl-kit';
-import { CloudPhoneModal, OrderPay, Product } from 'global';
+import { BaseNavNavgator, DefaultListView, ImageBtn, request, tips, Icon } from 'dl-kit';
+import { CloudPhoneModal, OrderPay, Product, Discount } from 'global';
 import React from 'react';
 import { Image, ImageBackground, RefreshControl, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import RNArenaPay from 'react-native-arena-pay';
@@ -8,6 +8,7 @@ import RNArenaPay from 'react-native-arena-pay';
 
 interface State {
   cloudPhone?: CloudPhoneModal,
+  discount?: Discount,
   refreshing: boolean,
   watchMore: boolean,
   nowSelectIndex?: number,
@@ -22,6 +23,7 @@ interface State {
 export default class PayCloudPhone extends BaseNavNavgator {
   state: State = {
     cloudPhone: this.data.cloudPhone,
+    discount: this.data.discount, //优惠券
     refreshing: true,
     watchMore: false,
     proList: [],
@@ -48,10 +50,21 @@ export default class PayCloudPhone extends BaseNavNavgator {
   }
 
   render() {
-    let { refreshing, proList, watchMore, nowSelectIndex, payType, proNum } = this.state;
+    let { refreshing, proList, watchMore, nowSelectIndex, payType, proNum, discount } = this.state;
     let vipText = '云手机授权，云端运行，三端互通设备\n升级，安卓系统'
     let proDatas = watchMore ? proList : proList.slice(0, 5)
     let weixinPay = payType == 'weixin';
+
+    let finalPrice = 0, finalDiscount = 0;//最终总价，最终优惠金额
+    if( nowSelectIndex != undefined ){
+      finalPrice = proList[nowSelectIndex].proPrice * proNum
+    }
+    if( discount != undefined ){
+      finalDiscount = discount.amount;
+    }
+
+    finalPrice -= finalDiscount;
+
 
 
     return (
@@ -106,6 +119,14 @@ export default class PayCloudPhone extends BaseNavNavgator {
               </View>
             )
           }
+          {/* 优惠券 */}
+            <TouchableOpacity style={{ height: 40, flexDirection: 'row', alignItems: 'center', borderBottomColor: '#eee', borderBottomWidth: 1 }}
+                              onPress={() => this.navigate('DiscountList',{title: "选择优惠券", chooseCallback:(discount) => {this.setState({discount:discount})}})}>
+              <Text style={{ color: '#333', fontSize: 15, marginLeft: 25 }}>优惠券</Text>
+              <Text style={{ color: '#FE5437', fontSize: 14, flex:1, textAlign: 'right'}}>{discount.amount ? `-${discount.amount}` : ''}</Text>
+              <Icon style={{ color: '#666', fontSize: 12, marginLeft: 3, marginRight: 20 }} iconCode={0xe649} />
+            </TouchableOpacity>
+
           <TouchableOpacity style={{ height: 40, flexDirection: 'row', alignItems: 'center' }}
             onPress={() => this.setState({ payType: 'weixin' })}>
             <Image style={{ width: 26, height: 26, marginLeft: 25 }} resizeMode='contain' source={require('#/home/weixinBtn.png')} />
@@ -122,7 +143,7 @@ export default class PayCloudPhone extends BaseNavNavgator {
 
         {/* 底部支付部分 */}
         <View style={{ height: 60, backgroundColor: '#fff', marginTop: 2, flexDirection: 'row', alignItems: 'center' }}>
-          <Text style={{ color: '#666', fontSize: 14, marginLeft: 20, flex: 1 }}>总价：<Text style={{ color: '#FE5437', fontSize: 18 }}>{nowSelectIndex == undefined ? '0' : proList[nowSelectIndex].proPrice * proNum}元</Text></Text>
+          <Text style={{ color: '#666', fontSize: 14, marginLeft: 20, flex: 1 }}>总价：<Text style={{ color: '#FE5437', fontSize: 18 }}>{finalPrice}元</Text></Text>
           <ImageBtn style={{ marginRight: 12 }} imgWidth={106} imgHeight={46} source={require('#/home/payBtn.png')} onPress={this.payBtnClick} />
         </View>
       </View>

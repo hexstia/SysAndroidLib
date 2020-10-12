@@ -412,6 +412,22 @@ export interface OrderPay {
     updateTime: string
 }
 
+/**
+ * 优惠券信息
+ */
+export interface Discount {
+    id: number,
+    discountStatus: number,
+    amount: number,
+    lowerLimit: number,
+    name: string,
+    describe: string,
+    startTime: string,
+    endTime: string,
+    receiveTime: string,
+    useTime: string,
+}
+
 
 /**
  * 云手机事件名称

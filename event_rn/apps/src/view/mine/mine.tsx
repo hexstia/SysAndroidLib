@@ -67,6 +67,13 @@ export default class Mine extends BaseNavNavgator {
             text: '',
             nav: 'SysSetting',
             data: { title: '系统设置' }
+        },
+        {
+            icon: require('#/mine/settingIcon.png'),
+                title: '优惠券',
+            text: '',
+            nav: 'DiscountList',
+            data: { title: '优惠券' }
         }
     ]
 

@@ -221,6 +221,32 @@ let getOrderStatusStr = (orderStatu: number) => {
 }
 
 /**
+ *  获取优惠券状态文字
+ */
+let getDiscountStatusStr = (discountStatus: number) => {
+  // '10 下单 15支付中 20 支付完成 30 订单完成',
+  switch (discountStatus) {
+    case 0:
+      return '已过期'
+      break;
+
+    case 10:
+      return '已作废'
+      break;
+
+    case 15:
+      return '未使用'
+      break;
+
+    case 20:
+      return '已使用'
+      break;
+
+  }
+
+}
+
+/**
 *  检查用户是否有操作权限，
   用户哪些需要操作权限的地方，拦截用
 */
@@ -234,5 +260,5 @@ let checkAuthor = () => {
 }
 
 
-export { getTempToken, isPhoneNum, saveLoginInfo, loadLoginInfoFromLocal, logoutAndClear, refreshToken, getOrderStatusStr, getFileType, saveUserInfo, checkAuthor };
+export { getTempToken, isPhoneNum, saveLoginInfo, loadLoginInfoFromLocal, logoutAndClear, refreshToken, getOrderStatusStr, getDiscountStatusStr, getFileType, saveUserInfo, checkAuthor };
 

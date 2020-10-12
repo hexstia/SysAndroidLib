@@ -73,6 +73,10 @@ import OrderList from '../view/mine/orderList';
 *  系统设置
 */
 import SysSetting from '../view/mine/sysSetting';
+/**
+ * 优惠券列表
+ */
+import DiscountList from '../view/mine/discountList';
 
 
 
@@ -123,5 +127,6 @@ export default {
   NewQuestion: { screen: NewQuestion },
   QuestionDetail: { screen: QuestionDetail },
   BindMobile: { screen: BindMobile },
+  DiscountList: { screen: DiscountList}
 
 }

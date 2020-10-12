@@ -42,7 +42,7 @@ public class CloudPhoneModule extends ReactContextBaseJavaModule implements WebS
 
 
     public CloudPhoneModule(@Nonnull ReactApplicationContext context) {
-        super(reactContext);
+        super(context);
         reactContext = context;
         instance = this;
         sp = context.getSharedPreferences("data", Context.MODE_PRIVATE);

@@ -115,7 +115,7 @@ export default class ConvertDiscount extends BaseComponent<Props> {
         let { code } = this.state;
 
         //TODO:  这里需要掉兑换的接口
-        request.post('/tcssPlatform/user/checkcode', {code:code}, false).then(result => {
+        request.post('/client/coupon/exchangeCode', {code:code}, false).then(result => {
 
             // 兑换成功，立即回调
             this.setState({ visible: false, code: '' }, () => {

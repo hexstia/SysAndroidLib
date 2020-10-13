@@ -1,7 +1,7 @@
 
 import dayjs from 'dayjs';
 import { BaseNavNavgator, DefaultListView, Icon, msg, request } from 'dl-kit';
-import { Discount } from 'global';
+import { Discount, Product } from 'global';
 import React from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
 import { getDiscountStatusStr } from '../../module/publicFunc';
@@ -10,7 +10,8 @@ import ConvertDiscount from '../../module/convertDiscount';
 interface State {
     nowSelectTabIndex: number,
     discountList: Discount[],
-    chooseCallback: (discount:Discount)=>{}
+    chooseCallback?: (discount:Discount)=>{},
+    product?: Product
 }
 /**
  *  优惠券列表
@@ -19,6 +20,7 @@ export default class DiscountList extends BaseNavNavgator {
     state: State = {
         nowSelectTabIndex: 0,
         discountList: [],
+        product: this.data.product,
         chooseCallback: this.data.chooseCallback
     };
 
@@ -26,9 +28,9 @@ export default class DiscountList extends BaseNavNavgator {
 
     constructor(props: any) {
         super(props)
-        msg.on('phoneListChange', () => {
-            this.loadData(0)
-        })
+        // msg.on('phoneListChange', () => {
+        //     this.loadData(0)
+        // });
         this.setRight(
             <TouchableOpacity style={{marginRight: 16, width: 40, height: 25, justifyContent:'center', alignItems:'center'}}
                               onPress={this.convert.bind(this)}>
@@ -41,6 +43,9 @@ export default class DiscountList extends BaseNavNavgator {
     tabTexts = ['全部', '未使用', '已使用']
 
     loadData = (pageNum: number) => {
+
+        // TODO:  这里接口需要改变，然后如果是从订单页面跳过来，需要拿product去筛选可使用的优惠券
+        console.log("产品 == ",this.state.product);
 
         if (pageNum == 0) {
             request.post('/tcssPlatform/order/orderList', {}, false).then(result => {
@@ -170,8 +175,7 @@ export default class DiscountList extends BaseNavNavgator {
         let canUse = item.discountStatus === 15;
 
         return (
-            <View style={{ backgroundColor: '#fff', marginTop: 10, borderRadius: 5, flexDirection: 'row', height:100, marginHorizontal:15, overflow:'hidden' }}
-                  key={item.id}>
+            <View style={{ backgroundColor: '#fff', marginTop: 10, borderRadius: 5, flexDirection: 'row', height:100, marginHorizontal:15, overflow:'hidden' }}>
 
                 <View style={{ backgroundColor: canUse ? '#6498FF' : '#fff', width:95, justifyContent:'center', alignItems:'center'}}>
                     <Text style={{ color: canUse ? '#fff' : '#999', fontSize: 18, fontWeight: 'bold'}}>￥<Text style={{ fontSize: 26}}>{item.amount}</Text></Text>

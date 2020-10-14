@@ -39,6 +39,8 @@ export default class PayCloudPhone extends BaseNavNavgator {
 
   listView: DefaultListView | null = null;
   convertDiscount: ConvertDiscount | null = null;
+  payMoney: number = 0; //最终支付总金额
+  payType: string = 'weixin'; //最终支付方式
 
   loadData = () => {
     this.setState({ refreshing: true });
@@ -66,21 +68,28 @@ export default class PayCloudPhone extends BaseNavNavgator {
     }
 
     // 计算使用优惠券之后的总价
-    if( discount != undefined ){
-      if(finalPrice >= discount.lowerLimit) {
-        finalDiscount = discount.amount;
+    if( discount != undefined && nowSelectIndex != undefined && discount.proTypeId == proList[nowSelectIndex].typeId ){
+      if(discount.couponType == 2){ //如果是满减
+        if(finalPrice >= discount.couponMinAmount) {
+          finalDiscount = discount.couponValue;
+        }
+      }else {
+        finalDiscount = discount.couponValue;
       }
     }
     finalPrice -= finalDiscount;
+    this.payMoney = finalPrice;
     if( finalPrice < 0 ){
       finalPrice = 0;
     }
+
 
 
     // 当总金额为0时，只能使用余额支付
     if (finalPrice == 0 && nowSelectIndex != undefined) {
       finalPayType = 'yue';
     }
+    this.payType = finalPayType;
 
 
 
@@ -232,12 +241,14 @@ export default class PayCloudPhone extends BaseNavNavgator {
    * 优惠券点击
    */
   discountPress = () => {
-    let { nowSelectIndex, proList } = this.state;
-    this.navigate(
+    let { nowSelectIndex, proList, proNum } = this.state;
+    let param_product = proList[nowSelectIndex];
+    param_product.orderNum = proNum;
+    this.push(
         'DiscountList',
         {
           title: "选择优惠券",
-          product: proList[nowSelectIndex],
+          product: param_product,
           chooseCallback:(discount) => {
             this.setState({ discount: discount})
           }
@@ -249,18 +260,19 @@ export default class PayCloudPhone extends BaseNavNavgator {
   *  支付按钮点击事件
   */
   payBtnClick = () => {
-    let { cloudPhone, proList, nowSelectIndex, proNum } = this.state;
+    let { cloudPhone, proList, nowSelectIndex, proNum, discount } = this.state;
     if (nowSelectIndex == undefined) {
       tips.showTips('请选择商品')
       return;
     }
-    let proId = proList[nowSelectIndex].id
+    let proId = proList[nowSelectIndex].id;
+
 
     if (cloudPhone) {
       // 续费
       let relationId = cloudPhone.id
       let product = [{ proId, relationId }]
-      request.post('/tcssPlatform/order/renewCreateOrder', { productJson: JSON.stringify(product) }, true).then(res => {
+      request.post('/tcssPlatform/order/renewCreateOrder', { productJson: JSON.stringify(product), couponId: discount ? discount.id : null, payMoney:this.payMoney }, true).then(res => {
         this.orderPay(res.order.id);
       })
     } else {
@@ -271,7 +283,7 @@ export default class PayCloudPhone extends BaseNavNavgator {
         for (let i = 0; i < proNum; i++) {
           product.push({ proId: res.list[0].id, num: 1 })
         }
-        request.post('/tcssPlatform/order/createOrder', { productJson: JSON.stringify(product), orderType: 1 }, true).then(res => {
+        request.post('/tcssPlatform/order/createOrder', { productJson: JSON.stringify(product), orderType: 1, couponId: discount ? discount.id : null, payMoney:this.payMoney }, true).then(res => {
           this.orderPay(res.order.id)
         })
       })
@@ -282,26 +294,24 @@ export default class PayCloudPhone extends BaseNavNavgator {
   *  发起支付
   */
   orderPay = (orderId: string) => {
-    let { payType } = this.state;
 
     let paramPayType = 1;
-    if ( payType == 'weixin' ){
+    if ( this.payType == 'weixin' ){
       paramPayType = 1;
-    }else if ( payType == 'zhifubao'){
+    }else if ( this.payType == 'zhifubao'){
       paramPayType = 2;
-    }else if ( payType == 'yue'){
+    }else if ( this.payType == 'yue'){
       paramPayType = 3;
     }
 
-    // TODO:  这里不知道接口参数是否要改变
     request.post('/tcssPlatform/pay/orderPay', { orderId, payType: paramPayType, payMethod: 2 }, true).then(res => {
 
-      if (payType == 'weixin') {
+      if (this.payType == 'weixin') {
         this.wexinPay(res.orderPay)
-      } else if (payType == 'zhifubao') {
+      } else if (this.payType == 'zhifubao') {
         this.aliPay(res.orderPay)
-      } else if ( payType == 'yue') {
-        // TODO: 这里还不确定要干嘛
+      } else if ( this.payType == 'yue') {
+        this.navToPayResult(res.orderPay)
       }
     })
   }

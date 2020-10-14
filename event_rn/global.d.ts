@@ -138,7 +138,7 @@ export interface Product {
     *  id
     */
     id: number,
-    orderNum: string,
+    orderNum: number,
     parentId: number,
     proCode: number,
     /**
@@ -417,15 +417,18 @@ export interface OrderPay {
  */
 export interface Discount {
     id: number,
-    discountStatus: number,
-    amount: number,
-    lowerLimit: number,
-    name: string,
-    describe: string,
-    startTime: string,
-    endTime: string,
-    receiveTime: string,
-    useTime: string,
+    //useStatus: number, //优惠券使用状态 1:未领取 2 领取了 3 使用了 4 禁用
+    charUseStatus: string, //优惠券使用状态 1:未领取 2 领取了 3 使用了 4 禁用  5 过期
+    couponValue: number, //优惠券抵扣金额
+    couponMinAmount: number, //使用优惠券最低金额
+    couponName: string, //优惠券名称
+    couponType: number, //优惠券类型 1: 直减券 2: 满减券
+    couponDesc: string, //优惠券使用规则
+    startTime: string, //开始时间
+    expireTime: string, //过期时间
+    getTime: string, //领券时间
+    useTime: string, //使用时间
+    proTypeId: number //商品分类ID
 }
 
 

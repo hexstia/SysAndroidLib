@@ -40,40 +40,15 @@ export default class DiscountList extends BaseNavNavgator {
     }
 
     listView: DefaultListView | null = null;
-    tabTexts = ['全部', '未使用', '已使用']
+    tabTexts = ['未使用', '已使用', '已过期/失效']
 
     loadData = (pageNum: number) => {
 
-        // TODO:  这里接口需要改变，然后如果是从订单页面跳过来，需要拿product去筛选可使用的优惠券
-        console.log("产品 == ",this.state.product);
+        console.log("商品 == ",this.state.product);
 
         if (pageNum == 0) {
-            request.post('/tcssPlatform/order/orderList', {}, false).then(result => {
-
-                let discountList = [{
-                    id:1,
-                    discountStatus:15,
-                    amount:3,
-                    lowerLimit: 50,
-                    name:"云手机新人优惠体验",
-                    describe:"仅可购买云手机",
-                    startTime:new Date(),
-                    endTime:new Date(),
-                    receiveTime:new Date(),
-                    useTime:new Date(),
-                },{
-                    id:2,
-                    discountStatus:20,
-                    amount:10,
-                    lowerLimit: 50,
-                    name:"这里是优惠券的名字",
-                    describe:"仅可购买云手机",
-                    startTime:new Date(),
-                    endTime:new Date(),
-                    receiveTime:new Date(),
-                    useTime:new Date(),
-                }];
-                this.setState({ discountList: discountList }, () => {
+            request.post('/client/coupon/list', {}, false).then(result => {
+                this.setState({ discountList: result.list }, () => {
                     this.setListViewData()
                 })
             }).catch(err => {
@@ -137,22 +112,28 @@ export default class DiscountList extends BaseNavNavgator {
      *  设置列表数据
      */
     setListViewData = () => {
-        let { nowSelectTabIndex, discountList } = this.state;
+        let { nowSelectTabIndex, discountList, product } = this.state;
 
         switch (nowSelectTabIndex) {
-            case 0: //全部
-                this.listView && this.listView.setData(discountList, 0);
+            case 0: // 未使用
+                let allOrderList = [];
+                if( product != undefined ){ //如果携带有商品，则可使用的要加上商品类型进行过滤
+                    allOrderList = discountList.filter(order => (order.charUseStatus == '2' && order.proTypeId == product.typeId ));
+                }else {
+                    allOrderList = discountList.filter(order => (order.charUseStatus == '2' ));
+                }
+                this.listView && this.listView.setData(allOrderList, 0);
                 break;
 
-            case 1: // 未使用
-                let successOrderList = discountList.filter(order => (order.discountStatus == 15 ))
+            case 1: // 已使用
+                let successOrderList = discountList.filter(order => (order.charUseStatus == '3' ))
                 this.listView && this.listView.setData(successOrderList, 0);
-                break
+                break;
 
-            case 2: // 已使用
-                let errOrderList = discountList.filter(order => order.discountStatus == 20)
+            case 2: // 已过期/失效
+                let errOrderList = discountList.filter(order => order.charUseStatus == '4' || order.charUseStatus == '5')
                 this.listView && this.listView.setData(errOrderList, 0);
-                break
+                break;
 
         }
     };
@@ -171,15 +152,26 @@ export default class DiscountList extends BaseNavNavgator {
     };
 
     renderItem = (item: Discount, index: number) => {
-
-        let canUse = item.discountStatus === 15;
+        let { product } = this.state;
+        let canUse = false;
+        if(item.charUseStatus == '2'){
+            if(item.couponType == 1){
+                canUse = true
+            }else {
+                if( product != undefined ) {
+                    canUse = product.proPrice * product.orderNum >= item.couponMinAmount;
+                }else {
+                    canUse = true;
+                }
+            }
+        }
 
         return (
             <View style={{ backgroundColor: '#fff', marginTop: 10, borderRadius: 5, flexDirection: 'row', height:100, marginHorizontal:15, overflow:'hidden' }}>
 
                 <View style={{ backgroundColor: canUse ? '#6498FF' : '#fff', width:95, justifyContent:'center', alignItems:'center'}}>
-                    <Text style={{ color: canUse ? '#fff' : '#999', fontSize: 18, fontWeight: 'bold'}}>￥<Text style={{ fontSize: 26}}>{item.amount}</Text></Text>
-                    <Text style={{ color: canUse ? '#fff' : '#999', fontSize: 9, marginTop:3}}>满{item.lowerLimit}可使用</Text>
+                    <Text style={{ color: canUse ? '#fff' : '#999', fontSize: 18, fontWeight: 'bold'}}>￥<Text style={{ fontSize: 26}}>{item.couponValue}</Text></Text>
+                    {item.couponType == 2 && <Text style={{ color: canUse ? '#fff' : '#999', fontSize: 9, marginTop:3}}>满{item.couponMinAmount}可使用</Text>}
                     {
                         canUse &&
                         <View style={{ marginTop: 3, backgroundColor:'#fff', height:15, paddingHorizontal:6, paddingVertical:2, borderRadius:4}}>
@@ -190,18 +182,17 @@ export default class DiscountList extends BaseNavNavgator {
 
                 <View style={{ flex: 1, padding:10}}>
                     {/* 优惠券信息 */}
-
                     <View style={{ flex: 1 }}>
-                        <Text style={{ color: canUse ? '#333' : '#999', fontSize: 14 }}>{item.name}</Text>
-                        <Text style={{ color: canUse ? '#333' : '#999', fontSize: 9, marginTop: 4 }}>{dayjs(item.startTime).format('YYYY-MM-DD')} - {dayjs(item.endTime).format('YYYY-MM-DD')}</Text>
-                        <Text style={{ color: canUse ? '#333' : '#999', fontSize: 9, marginTop: 4}}>{item.describe}</Text>
+                        <Text style={{ color: canUse ? '#333' : '#999', fontSize: 14 }}>{item.couponName}</Text>
+                        <Text style={{ color: canUse ? '#333' : '#999', fontSize: 9, marginTop: 4 }}>{dayjs(item.startTime).format('YYYY-MM-DD')} - {dayjs(item.expireTime).format('YYYY-MM-DD')}</Text>
+                        <Text style={{ color: canUse ? '#333' : '#999', fontSize: 9, marginTop: 4}}>{item.couponDesc}</Text>
                     </View>
 
 
                     {/* 使用情况 */}
                     <View style={{marginTop: 10}}>
-                        <Text style={{ color: canUse ? '#666' : '#999', fontSize: 9 }}>领用时间：{dayjs(item.receiveTime).format('YYYY-MM-DD HH:mm:ss')}</Text>
-                        { canUse == false && <Text style={{ color: '#999', fontSize: 9, marginTop: 2 }}>使用时间：{dayjs(item.useTime).format('YYYY-MM-DD HH:mm:ss')}</Text>}
+                        <Text style={{ color: canUse ? '#666' : '#999', fontSize: 9 }}>领用时间：{dayjs(item.getTime).format('YYYY-MM-DD HH:mm:ss')}</Text>
+                        { canUse == false && item.useTime && <Text style={{ color: '#999', fontSize: 9, marginTop: 2 }}>使用时间：{dayjs(item.useTime).format('YYYY-MM-DD HH:mm:ss')}</Text>}
                     </View>
                 </View>
 
@@ -212,8 +203,19 @@ export default class DiscountList extends BaseNavNavgator {
 
 
     onPressItem = (item: Discount, index: number) => {
-        // 未使用的优惠券点击后，跳转到下单页
-        if( item.discountStatus == 15 ){
+
+        // 只有可以使用的优惠券允许点击并跳转
+        let { product } = this.state;
+        let canUse = false;
+        if( item.couponType == 1){
+            canUse = item.charUseStatus == '2';
+        }else {
+            if( product != undefined ) {
+                canUse = item.couponValue >= product.proPrice * product.orderNum;
+            }
+        }
+
+        if( canUse ){
             this.state.chooseCallback && this.state.chooseCallback(item);
             this.navigate('PayCloudPhone',{discount:item});
         }

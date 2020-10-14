@@ -53,8 +53,8 @@ export default class ConvertDiscount extends BaseComponent<Props> {
                         </View>
 
                         {/* 输入部分 */}
-                        <View style={{ flexDirection: 'row', marginVertical:10 }}>
-                            <View style={{ height: 50, flex: 1, marginHorizontal:15, backgroundColor: '#F5F5F5', paddingHorizontal: 10 }}>
+                        <View style={{ marginVertical:10 }}>
+                            <View style={{ height: 50, marginHorizontal:15, backgroundColor: '#F5F5F5', paddingHorizontal: 10 }}>
                                 <TextInput
                                     style={{ padding: 0, flex: 1, fontSize: 14 }}
                                     autoCapitalize='none'
@@ -66,6 +66,8 @@ export default class ConvertDiscount extends BaseComponent<Props> {
                                     onChangeText={text => this.setState({ code: text })}
                                 />
                             </View>
+                            {/* 文字提示 */}
+                            <Text style={{ marginHorizontal:15, color: '#f00', fontSize: 14, marginTop: 8 }}>{tipText}</Text>
                         </View>
 
                         {/* 取消确定按钮 */}
@@ -81,8 +83,6 @@ export default class ConvertDiscount extends BaseComponent<Props> {
                         </View>
                     </View>
 
-                    {/* 文字提示 */}
-                    <Text style={{ color: '#f00', fontSize: 14, marginTop: 20 }}>{tipText}</Text>
                 </View>
             </Modal>
         );
@@ -123,8 +123,7 @@ export default class ConvertDiscount extends BaseComponent<Props> {
             })
 
         }).catch(err => {
-            this.setState({ tipText: '兑换失败' })
-            this.setState({ tipText: '验证码不正确' })
+            this.setState({ tipText: err.message });
             setTimeout(() => {
                 this.setState({ tipText: '' })
             }, 2000);

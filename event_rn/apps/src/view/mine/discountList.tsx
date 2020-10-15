@@ -27,12 +27,9 @@ export default class DiscountList extends BaseNavNavgator {
 
     constructor(props: any) {
         super(props)
-        // msg.on('phoneListChange', () => {
-        //     this.loadData(0)
-        // });
         this.setRight(
             <TouchableOpacity style={{marginRight: 16, width: 40, height: 25, justifyContent:'center', alignItems:'center'}}
-                              onPress={this.convert.bind(this)}>
+                onPress={this.convert.bind(this)}>
                 <Text style={{fontSize: 16, color:'#333'}}>兑换</Text>
             </TouchableOpacity>
         )
@@ -71,9 +68,9 @@ export default class DiscountList extends BaseNavNavgator {
                         this.tabTexts.map((t, index) => {
                             let select = nowSelectTabIndex == index;
                             return (
-                                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} key={index}>
                                     <TouchableOpacity style={{ backgroundColor: select ? '#6498FF' : '#fff', borderRadius: 3, paddingHorizontal: 15, paddingVertical: 4, justifyContent: 'center', alignItems: 'center' }}
-                                                      onPress={this.tabSelect.bind(this, index)}>
+                                        onPress={this.tabSelect.bind(this, index)}>
                                         <Text style={{ color: select ? '#fff' : '#333', fontSize: 15, lineHeight: 17 }}>{t}</Text>
                                     </TouchableOpacity>
                                 </View>
@@ -166,7 +163,7 @@ export default class DiscountList extends BaseNavNavgator {
         }
 
         return (
-            <View style={{ backgroundColor: '#fff', marginTop: 10, borderRadius: 5, flexDirection: 'row', height:100, marginHorizontal:15, overflow:'hidden' }}>
+            <View style={{ backgroundColor: '#fff', marginTop: 10, borderRadius: 5, flexDirection: 'row', height:100, marginHorizontal:15, overflow:'hidden' }} key={index}>
 
                 <View style={{ backgroundColor: canUse ? '#6498FF' : '#fff', width:95, justifyContent:'center', alignItems:'center'}}>
                     <Text style={{ color: canUse ? '#fff' : '#999', fontSize: 18, fontWeight: 'bold'}}>￥<Text style={{ fontSize: 26}}>{item.couponValue}</Text></Text>

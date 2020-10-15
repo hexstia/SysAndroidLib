@@ -56,6 +56,8 @@ class App extends Component<Props, {}> {
       }
     }))
 
+    console.disableYellowBox = true
+
     // 登出事件监听
     msg.on('logout', (e: any) => {
       this.setState({ rootRoute: 'Login' }, () => {

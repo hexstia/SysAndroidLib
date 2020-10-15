@@ -91,7 +91,10 @@ export default class CloudPhone extends BaseNavNavgator {
         if (configs.token) {
             this.loadData()
             this.addEventListener()
-            msg.on('phoneListChange', this.loadData)
+            msg.on('phoneListChange', ()=>{
+                this.loadData();
+                setTimeout(this.loadData, 1500);
+            })
         }
         this.loadBanner()
     }

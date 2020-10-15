@@ -1,10 +1,9 @@
 
 import dayjs from 'dayjs';
-import { BaseNavNavgator, DefaultListView, Icon, msg, request } from 'dl-kit';
+import { BaseNavNavgator, DefaultListView, request } from 'dl-kit';
 import { Discount, Product } from 'global';
 import React from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
-import { getDiscountStatusStr } from '../../module/publicFunc';
 import ConvertDiscount from '../../module/convertDiscount';
 
 interface State {
@@ -117,8 +116,8 @@ export default class DiscountList extends BaseNavNavgator {
         switch (nowSelectTabIndex) {
             case 0: // 未使用
                 let allOrderList = [];
-                if( product != undefined ){ //如果携带有商品，则可使用的要加上商品类型进行过滤
-                    allOrderList = discountList.filter(order => (order.charUseStatus == '2' && order.proTypeId == product.typeId ));
+                if(!! product ){ //如果携带有商品，则可使用的要加上商品类型进行过滤
+                    allOrderList = discountList.filter(order => (order.charUseStatus == '2' && order.proTypeId == product?.typeId ));
                 }else {
                     allOrderList = discountList.filter(order => (order.charUseStatus == '2' ));
                 }

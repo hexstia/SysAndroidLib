@@ -174,7 +174,7 @@ export default class DefaultListView extends BaseComponent<Props> {
                 columnWrapperStyle={this.props.columnWrapperStyle}
                 renderItem={this.renderItem}
                 data={this.state.dataSource}
-                      keyExtractor={this.props.keyExtractor ? this.props.keyExtractor : (item, index) => index.toString()}
+                keyExtractor={this.props.keyExtractor ? this.props.keyExtractor : (item, index) => index.toString()}
                 ItemSeparatorComponent={this.ItemSeparatorComponent}
                 ListEmptyComponent={this.props.listEmptyComponent ? this.props.listEmptyComponent(this.state.emptyType) : <ListEmptyView emptyType={this.state.emptyType} reloadDataAction={this.onRefresh} />}
                 ListHeaderComponent={this.props.listHeaderComponent && this.props.listHeaderComponent(this.state.dataSource)}

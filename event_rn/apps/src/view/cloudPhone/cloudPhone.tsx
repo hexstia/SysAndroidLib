@@ -134,22 +134,26 @@ export default class CloudPhone extends BaseNavNavgator {
     *  获取所有手机的截图
     */
     getAllScreenshot = () => {
-        checkSocketConnect().then(v => {
-            this.state.phoneList.map((p, index) => {
-                if (p.status != 10 && p.status != 15 && p.status != 20) {
-                    setTimeout(() => {
-                        this.getScreenshot(p);
-                    }, index * 1000);
-                }
-            })
 
-        }).catch((err: { code: string }) => {
-            startWebsocketConnection()
-            // socket未连接，等三秒再试试
-            setTimeout(() => {
-                this.getAllScreenshot()
-            }, 3000);
-        })
+        // 有云手机的情况下,查看手机截图
+        if(this.state.phoneList && this.state.phoneList.length > 0){
+            checkSocketConnect().then(v => {
+                this.state.phoneList.map((p, index) => {
+                    if (p.status != 10 && p.status != 15 && p.status != 20) {
+                        setTimeout(() => {
+                            this.getScreenshot(p);
+                        }, index * 1000);
+                    }
+                })
+    
+            }).catch((err: { code: string }) => {
+                startWebsocketConnection()
+                // socket未连接，等三秒再试试
+                setTimeout(() => {
+                    this.getAllScreenshot()
+                }, 3000);
+            })
+        }
     }
 
     render() {
@@ -270,7 +274,7 @@ export default class CloudPhone extends BaseNavNavgator {
         addSocketEventListener((eventName, socketMessage) => {
             let { phoneList, reStartPhoneIds, renewPhoneIds, screenShotSet, onLine } = this.state
 
-            // console.log('收到socket消息', socketMessage);
+            console.log('收到socket消息', socketMessage);
             try {
                 switch (eventName) {
                     case 'webSocektMessage':
@@ -654,7 +658,8 @@ export default class CloudPhone extends BaseNavNavgator {
                     if (Platform.OS == 'ios') {
                         this.uploadAppModal && this.uploadAppModal.uploadApp(cloudPhone);
                     } else {
-                        DocumentPicker.pick({ type: DocumentPicker.types.allFiles }).then(res => {
+                        let type = Platform.OS == 'android' ? 'application/*' : '*'
+                        DocumentPicker.pick({ type: [type] }).then(res => {
                             // console.log('选择文件', res);
                             request.upload('/cloudPhone/phone/installApk', { paths: [res.uri], deviceIds: cloudPhone.deviceId + '', selectAll: '2', searchGroupId: '', status: '' }, true).then(res => {
                                 tips.showTips('上传成功!');

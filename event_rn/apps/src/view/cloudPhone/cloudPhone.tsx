@@ -658,15 +658,15 @@ export default class CloudPhone extends BaseNavNavgator {
                     if (Platform.OS == 'ios') {
                         this.uploadAppModal && this.uploadAppModal.uploadApp(cloudPhone);
                     } else {
-                        let type = Platform.OS == 'android' ? 'application/*' : '*'
+                        let type = Platform.OS == 'android' ? 'application/*' : 'public.data'
                         DocumentPicker.pick({ type: [type] }).then(res => {
-                            // console.log('选择文件', res);
+
                             request.upload('/cloudPhone/phone/installApk', { paths: [res.uri], deviceIds: cloudPhone.deviceId + '', selectAll: '2', searchGroupId: '', status: '' }, true).then(res => {
                                 tips.showTips('上传成功!');
                             })
 
                         }).catch((err: any) => {
-                            // console.log('文件选择失败', err);
+                            console.log('文件选择失败', err);
                         })
                     }
                     break;

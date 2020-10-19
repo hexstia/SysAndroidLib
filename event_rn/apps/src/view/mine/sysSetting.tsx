@@ -35,7 +35,7 @@ export default class SysSetting extends BaseNavNavgator {
                     <TouchableOpacity style={{ height: 45, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderTopColor: '#eee', borderTopWidth: 1 }}
                         onPress={this.aboutLanjiang}>
                         <Text style={{ color: '#333', fontSize: 15, marginLeft: 18 }}>关于蓝将</Text>
-                        <Text style={{ color: '#999', fontSize: 15, marginRight: 18 }}></Text>
+                        <Text style={{ color: '#999', fontSize: 15, marginRight: 18 }}>http://91lanjiang.com</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={{ flex: 1, justifyContent: 'flex-end' }}>

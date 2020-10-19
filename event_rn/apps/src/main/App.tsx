@@ -13,23 +13,7 @@ import { TRouterName } from 'global';
 import React, { Component } from 'react';
 import { Alert, Linking, Platform, View } from 'react-native';
 import RNArenaPay from 'react-native-arena-pay';
-import {
-  CheckResult, checkUpdate,
-
-
-
-
-  downloadAndInstallApk, downloadUpdate, ExpiredResult, isFirstTime,
-  isRolledBack,
-
-
-
-
-
-
-  markSuccess, switchVersion,
-  switchVersionLater, UpdateAvailableResult
-} from 'react-native-update';
+import { CheckResult, checkUpdate, downloadAndInstallApk, downloadUpdate, ExpiredResult, isFirstTime, isRolledBack, markSuccess, switchVersion, switchVersionLater, UpdateAvailableResult } from 'react-native-update';
 import { loadLoginInfoFromLocal } from '../module/publicFunc';
 import routes from './router';
 
@@ -159,9 +143,9 @@ class App extends Component<Props, {}> {
         },
       ]);
     } else if (info.upToDate) {
-      Alert.alert('提示', '您的应用版本已是最新.');
+      // Alert.alert('提示', '您的应用版本已是最新.');
     } else {
-      Alert.alert('提示', '检查到新的版本' + info.name + ',是否下载?\n' + info.description, [
+      Alert.alert('提示', '检查到新的版本' + info.name + ',是否更新?\n' + info.description, [
         {
           text: '是',
           onPress: () => {
@@ -202,7 +186,7 @@ class App extends Component<Props, {}> {
           },
         ]);
       }else{
-        console.log('下载失败')
+        Alert.alert('下载失败');
       }
 
     } catch (err) {

@@ -1,6 +1,6 @@
 
-import { BaseNavNavgator, DefaultListView, ImageBtn, request, tips, Icon } from 'dl-kit';
-import { CloudPhoneModal, OrderPay, Product, Discount } from 'global';
+import { BaseNavNavgator, DefaultListView, Icon, ImageBtn, request, tips } from 'dl-kit';
+import { CloudPhoneModal, Discount, OrderPay, Product } from 'global';
 import React from 'react';
 import { Image, ImageBackground, RefreshControl, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import RNArenaPay from 'react-native-arena-pay';
@@ -152,7 +152,7 @@ export default class PayCloudPhone extends BaseNavNavgator {
                               onPress={this.discountPress}>
               <Text style={{ color: '#333', fontSize: 15, marginLeft: 25 }}>优惠券</Text>
               <View style={{ flex: 1 , flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end'}}>
-                <TouchableOpacity style={{ width: 50, height: 25, backgroundColor: '#6498FF', borderRadius: 4, alignItems: 'center', justifyContent: 'center'}} onPress={()=>{ this.convertDiscount.show() }}>
+                <TouchableOpacity style={{ width: 50, height: 25, backgroundColor: '#6498FF', borderRadius: 4, alignItems: 'center', justifyContent: 'center'}} onPress={()=>{ this.convertDiscount?.show() }}>
                   <Text style={{ fontSize: 13, color: '#fff'}}>兑换</Text>
                 </TouchableOpacity>
                 <Text style={{ marginLeft: 6, color: '#FE5437', fontSize: 14}}>{finalDiscount > 0 ? `-${finalDiscount}` : ''}</Text>
@@ -179,10 +179,10 @@ export default class PayCloudPhone extends BaseNavNavgator {
                 style={{ height: 40, flexDirection: 'row', alignItems: 'center', borderTopColor: '#eee', borderTopWidth: 1 }}
                 onPress={() => this.setState({ payType: 'zhifubao' })}>
               <Image style={{ width: 26, height: 26, marginLeft: 25 }} resizeMode='contain'
-                     source={require('#/home/zfbBtn.png')}/>
+                source={require('#/home/zfbBtn.png')}/>
               <Text style={{ color: '#999', fontSize: 15, marginLeft: 7, flex: 1 }}>支付宝支付</Text>
               <Image style={{ width: 21, height: 21, marginRight: 20 }}
-                     source={finalPayType == 'zhifubao' ? require('#/home/selectBtn.png') : require('#/home/normalBtn.png')}/>
+                source={finalPayType == 'zhifubao' ? require('#/home/selectBtn.png') : require('#/home/normalBtn.png')}/>
             </TouchableOpacity>
           }
 
@@ -190,7 +190,7 @@ export default class PayCloudPhone extends BaseNavNavgator {
             finalPayType == 'yue' &&
             <TouchableOpacity style={{ height: 40, flexDirection: 'row', alignItems: 'center', borderTopColor: '#eee', borderTopWidth: 1 }}
                               onPress={() => this.setState({ payType: 'yue' })}>
-              <Image style={{ width: 26, height: 26, marginLeft: 25 }} resizeMode='contain' source={require('#/home/zfbBtn.png')} />
+              <Image style={{ width: 26, height: 26, marginLeft: 25 }} resizeMode='contain' source={require('#/mine/ye.jpg')} />
               <Text style={{ color: '#999', fontSize: 15, marginLeft: 7, flex: 1 }}>余额支付</Text>
               <Image style={{ width: 21, height: 21, marginRight: 20 }} source={require('#/home/selectBtn.png')} />
             </TouchableOpacity>
@@ -207,6 +207,7 @@ export default class PayCloudPhone extends BaseNavNavgator {
         {/* 兑换优惠券 */}
         <ConvertDiscount
             ref={modal => this.convertDiscount = modal}
+            passCallback={()=>console.log('兑换了一个优惠券,但是我们什么后续动作也没有')}
         />
 
       </View>
@@ -242,14 +243,14 @@ export default class PayCloudPhone extends BaseNavNavgator {
    */
   discountPress = () => {
     let { nowSelectIndex, proList, proNum } = this.state;
-    let param_product = proList[nowSelectIndex];
+    let param_product = proList[nowSelectIndex || 0];
     param_product.orderNum = proNum;
     this.push(
         'DiscountList',
         {
           title: "选择优惠券",
           product: param_product,
-          chooseCallback:(discount) => {
+          chooseCallback:(discount:any) => {
             this.setState({ discount: discount})
           }
         }

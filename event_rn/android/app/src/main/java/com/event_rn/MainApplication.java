@@ -3,6 +3,7 @@ package com.event_rn;
 import android.app.Application;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.facebook.react.ReactApplication;
+import cn.reactnative.modules.update.UpdatePackage;
 import com.vydia.RNUploader.UploaderReactPackage;
 import com.rnfs.RNFSPackage;
 import io.github.elyx0.reactnativedocumentpicker.DocumentPickerPackage;
@@ -52,6 +53,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new UpdatePackage(),
             new UploaderReactPackage(),
             new RNFSPackage(),
             new DocumentPickerPackage(),

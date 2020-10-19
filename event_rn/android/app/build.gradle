@@ -158,6 +158,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-update')
     implementation project(':react-native-background-upload')
     implementation project(':react-native-fs')
     implementation project(':react-native-document-picker')

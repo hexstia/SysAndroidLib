@@ -2063,7 +2063,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/event_rn/framework/WeChatSDK1.8.3",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.1.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2114,7 +2114,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/event_rn/framework/WeChatSDK1.8.3",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.1.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

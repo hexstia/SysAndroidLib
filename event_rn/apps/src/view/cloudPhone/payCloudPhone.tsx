@@ -16,6 +16,7 @@ interface State {
   proList: Product[],
   payType: 'weixin' | 'zhifubao' | 'yue',
   proNum: number,
+  discountList: Discount[]
 }
 
 /**
@@ -30,6 +31,7 @@ export default class PayCloudPhone extends BaseNavNavgator {
     proList: [],
     payType: 'weixin',
     proNum: 1,
+    discountList: [] //优惠券列表
   }
 
   constructor(props: any) {
@@ -46,17 +48,62 @@ export default class PayCloudPhone extends BaseNavNavgator {
     this.setState({ refreshing: true });
 
     request.post('/tcssPlatform/product/proList', { typeId: 1 }, false).then(res => {
-      this.setState({ proList: res.list, refreshing: false, nowSelectIndex: (res.list && res.list.length > 0) ? 0 : undefined })
+      this.setState({ proList: res.list, refreshing: false, nowSelectIndex: (res.list && res.list.length > 0) ? 0 : undefined },()=>{
+        this.loadDiscountData();
+      })
     }).catch(err => {
       this.setState({ refreshing: false })
     })
 
   }
 
+  /**
+   * 加载优惠券信息
+   */
+  loadDiscountData = () => {
+    let { nowSelectIndex, proList } = this.state;
+    let currentPro = proList[nowSelectIndex || 0];
+    request.post('/client/coupon/list', { proTypeId: currentPro.typeId, useStatus: 2 }, false).then(result => {
+      this.setState({ discountList: result.list }, () => {
+        this.filterCanUseDiscounts();
+      });
+    }).catch(err => {
+
+    })
+  }
+
+  /**
+   * 筛选可使用的优惠券
+   * @return {Discount[]}
+   */
+  filterCanUseDiscounts = () => {
+    let { nowSelectIndex, proList, proNum, discountList } = this.state;
+    let currentPro = proList[nowSelectIndex || 0];
+
+    let canUseDiscounts = discountList.filter(function (item) {
+      let canUse = false;
+      if(item.charUseStatus == '2'){
+        if(item.couponType == 1){
+          canUse = true
+        }else {
+          if( currentPro != undefined ) {
+            canUse = currentPro.proPrice * proNum >= item.couponMinAmount;
+          }else {
+            canUse = true;
+          }
+        }
+      }
+      return canUse;
+    });
+
+    return canUseDiscounts;
+  }
+
   render() {
     let { refreshing, proList, watchMore, nowSelectIndex, payType, proNum, discount } = this.state;
     let vipText = '云手机授权，云端运行，三端互通设备\n升级，安卓系统';
     let proDatas = watchMore ? proList : proList.slice(0, 5);
+    let canUseDiscounts = this.filterCanUseDiscounts();
 
     let finalPrice = 0, //最终总价
         finalDiscount = 0, //最终优惠金额
@@ -68,7 +115,7 @@ export default class PayCloudPhone extends BaseNavNavgator {
     }
 
     // 计算使用优惠券之后的总价
-    if( discount != undefined && nowSelectIndex != undefined && discount.proTypeId == proList[nowSelectIndex].typeId ){
+    if( discount != undefined && nowSelectIndex != undefined ){
       if(discount.couponType == 2){ //如果是满减
         if(finalPrice >= discount.couponMinAmount) {
           finalDiscount = discount.couponValue;
@@ -109,7 +156,7 @@ export default class PayCloudPhone extends BaseNavNavgator {
                 let select = index == nowSelectIndex
                 return (
                   <TouchableOpacity style={{ marginTop: 10, marginHorizontal: 20, height: 40, borderRadius: 2, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderColor: select ? '#F2D7A0' : '#ccc', borderWidth: 0.5, backgroundColor: select ? '#FEFCEE' : '#fff' }}
-                    onPress={() => this.setState({ nowSelectIndex: index })}
+                    onPress={() => this.setState({ nowSelectIndex: index }, () => { this.filterCanUseDiscounts() }) }
                     key={pro.id}>
                     <Text style={{ color: select ? '#B3944C' : '#666', fontSize: 14, marginLeft: 15 }}>{pro.proName}</Text>
                     <Text style={{ color: select ? '#885C20' : '#FE5437', fontSize: 10, marginRight: 20 }}>￥<Text style={{ fontSize: 14 }}>{pro.proPrice}</Text>元</Text>
@@ -152,14 +199,23 @@ export default class PayCloudPhone extends BaseNavNavgator {
                               onPress={this.discountPress}>
               <Text style={{ color: '#333', fontSize: 15, marginLeft: 25 }}>优惠券</Text>
               <View style={{ flex: 1 , flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end'}}>
-                <TouchableOpacity style={{ width: 50, height: 25, backgroundColor: '#6498FF', borderRadius: 4, alignItems: 'center', justifyContent: 'center'}} onPress={()=>{ this.convertDiscount?.show() }}>
+
+                { canUseDiscounts.length > 0 && <Text style={{ color: '#666', fontSize: 14}}>可用优惠券({canUseDiscounts.length}张)</Text>}
+                <TouchableOpacity style={{ marginLeft: 6, width: 50, height: 25, backgroundColor: '#6498FF', borderRadius: 4, alignItems: 'center', justifyContent: 'center'}} onPress={()=>{ this.convertDiscount?.show() }}>
                   <Text style={{ fontSize: 13, color: '#fff'}}>兑换</Text>
                 </TouchableOpacity>
-                <Text style={{ marginLeft: 6, color: '#FE5437', fontSize: 14}}>{finalDiscount > 0 ? `-${finalDiscount}` : ''}</Text>
               </View>
 
               <Icon style={{ color: '#666', fontSize: 12, marginLeft: 3, marginRight: 20 }} iconCode={0xe649} />
             </TouchableOpacity>
+          }
+
+          {
+            finalDiscount > 0 &&
+            <View style={{ height: 40, flexDirection: 'row', alignItems: 'center', justifyContent:'space-between',  borderBottomColor: '#eee', borderBottomWidth: 1 }}>
+              <Text style={{ color: '#333', fontSize: 15, marginLeft: 25 }}>{discount.couponName}</Text>
+              <Text style={{ marginLeft: 6, color: '#FE5437', fontSize: 14, marginRight: 20}}>{`-${finalDiscount}`}</Text>
+            </View>
           }
 
 
@@ -207,7 +263,7 @@ export default class PayCloudPhone extends BaseNavNavgator {
         {/* 兑换优惠券 */}
         <ConvertDiscount
             ref={modal => this.convertDiscount = modal}
-            passCallback={()=>console.log('兑换了一个优惠券,但是我们什么后续动作也没有')}
+            passCallback={this.discountPassSuccess}
         />
 
       </View>
@@ -255,6 +311,28 @@ export default class PayCloudPhone extends BaseNavNavgator {
           }
         }
     )
+  }
+
+  /**
+   * 优惠券兑换成功回调
+   * @param discount  优惠券信息
+   */
+  discountPassSuccess = (discount:Discount) => {
+    let { nowSelectIndex, proList, proNum } = this.state;
+    let currentPro = proList[nowSelectIndex || 0];
+    if(discount.proTypeId == null || currentPro.typeId == discount.proTypeId){
+      if(discount.couponType == 2){ //如果该优惠券是满减类型，并且当前订单能够使用该优惠券
+        if( nowSelectIndex != undefined ){
+          let payPrice = proList[nowSelectIndex].proPrice * proNum;
+          if(payPrice >= discount.couponMinAmount) {
+            this.loadDiscountData();
+            this.setState({discount:discount});
+            return;
+          }
+        }
+      }
+    }
+    tips.showTips('该优惠卷无法在此订单使用');
   }
 
   /**

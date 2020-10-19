@@ -1,6 +1,7 @@
 
 import { BaseComponent, request } from 'dl-kit';
 import React from 'react';
+import { Discount } from 'global';
 import { Modal, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 interface State {
@@ -20,7 +21,7 @@ interface State {
 
 interface Props {
     // 兑换成功
-    passCallback: () => void
+    passCallback: (discount:Discount) => void
 }
 
 /**
@@ -119,7 +120,21 @@ export default class ConvertDiscount extends BaseComponent<Props> {
 
             // 兑换成功，立即回调
             this.setState({ visible: false, code: '' }, () => {
-                this.props.passCallback();
+                this.props.passCallback({
+                    id: result.id,
+                    //useStatus: number, //优惠券使用状态 1:未领取 2 领取了 3 使用了 4 禁用
+                    charUseStatus: result.charUseStatus, //优惠券使用状态 1:未领取 2 领取了 3 使用了 4 禁用  5 过期
+                    couponValue: result.couponValue, //优惠券抵扣金额
+                    couponMinAmount: result.couponMinAmount, //使用优惠券最低金额
+                    couponName: result.couponName, //优惠券名称
+                    couponType: result.couponType, //优惠券类型 1: 直减券 2: 满减券
+                    couponDesc: result.couponDesc, //优惠券使用规则
+                    startTime: result.startTime, //开始时间
+                    expireTime: result.expireTime, //过期时间
+                    getTime: result.getTime, //领券时间
+                    useTime: result.useTime, //使用时间
+                    proTypeId: result.proTypeId //商品分类ID
+                });
             })
 
         }).catch(err => {

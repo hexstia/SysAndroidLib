@@ -114,7 +114,7 @@ export default class DiscountList extends BaseNavNavgator {
             case 0: // 未使用
                 let allOrderList = [];
                 if(!! product ){ //如果携带有商品，则可使用的要加上商品类型进行过滤
-                    allOrderList = discountList.filter(order => (order.charUseStatus == '2' && order.proTypeId == product?.typeId ));
+                    allOrderList = discountList.filter(order => (order.charUseStatus == '2' && (order.proTypeId == null || order.proTypeId == product!.typeId) ));
                 }else {
                     allOrderList = discountList.filter(order => (order.charUseStatus == '2' ));
                 }
@@ -203,11 +203,15 @@ export default class DiscountList extends BaseNavNavgator {
         // 只有可以使用的优惠券允许点击并跳转
         let { product } = this.state;
         let canUse = false;
-        if( item.couponType == 1){
-            canUse = item.charUseStatus == '2';
-        }else {
-            if( product != undefined ) {
-                canUse = item.couponValue >= product.proPrice * product.orderNum;
+        if(item.charUseStatus == '2'){
+            if(item.couponType == 1){
+                canUse = true
+            }else {
+                if( product != undefined ) {
+                    canUse = product.proPrice * product.orderNum >= item.couponMinAmount;
+                }else {
+                    canUse = true;
+                }
             }
         }
 

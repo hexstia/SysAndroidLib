@@ -165,13 +165,14 @@ let loadLoginInfoFromLocal = async (callBack: (success: boolean) => void) => {
 let startWebsocket = () => {
   if (configs.token) {
     //启动websocket
-    startWebsocketConnection().then((msg: string) => {
+    startWebsocketConnection()
+    // .then((msg: string) => {
 
-    }).catch((err: { code: string }) => {
-      setTimeout(() => {
-        startWebsocket();
-      }, 3000);
-    })
+    // }).catch((err: { code: string }) => {
+    //   setTimeout(() => {
+    //     startWebsocket();
+    //   }, 3000);
+    // })
   } else {
     tips.showTips('未登录，不能开启socket')
   }
@@ -199,23 +200,18 @@ let getOrderStatusStr = (orderStatu: number) => {
   switch (orderStatu) {
     case 0:
       return '支付失败'
-      break;
 
     case 10:
       return '已下单'
-      break;
 
     case 15:
       return '未支付'
-      break;
 
     case 20:
       return '支付完成'
-      break;
 
     case 30:
       return '订单完成'
-      break;
   }
 
 }
@@ -228,19 +224,15 @@ let getDiscountStatusStr = (discountStatus: number) => {
   switch (discountStatus) {
     case 0:
       return '已过期'
-      break;
 
     case 10:
       return '已作废'
-      break;
 
     case 15:
       return '未使用'
-      break;
 
     case 20:
       return '已使用'
-      break;
 
   }
 

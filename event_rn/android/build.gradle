@@ -23,6 +23,7 @@ buildscript {
 allprojects {
     repositories {
         maven { url 'http://docker.91lanjiang.com:8081/repository/maven-snapshots/' }
+//        maven { url 'http://docker.91lanjiang.com:8081/repository/maven-releases/' }
 
         mavenLocal()
         google()

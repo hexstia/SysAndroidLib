@@ -183,10 +183,8 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
     implementation 'io.netty:netty-all:4.1.39.Final'
-//    implementation 'com.lanjiang:ad_app_client_sdk:5.0.9-SNAPSHOT'
     implementation 'com.lanjiang:ad_app_client_sdk:1.5.1-SNAPSHOT'
-
-//    implementation 'cn.lemon:countdownview:0.2.0'
+//    implementation 'com.lanjiang:ad_app_client_sdk:3.0.1@aar'
 
     compile 'com.tencent.bugly:crashreport:latest.release' //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.1.9
     compile 'com.tencent.bugly:nativecrashreport:latest.release' //其中latest.release指代最新Bugly NDK版本号，也可以指定明确的版本号，例如3.0

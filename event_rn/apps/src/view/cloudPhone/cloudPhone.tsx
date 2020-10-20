@@ -147,7 +147,6 @@ export default class CloudPhone extends BaseNavNavgator {
                 })
     
             }).catch((err: { code: string }) => {
-                startWebsocketConnection()
                 // socket未连接，等三秒再试试
                 setTimeout(() => {
                     this.getAllScreenshot()
@@ -311,7 +310,7 @@ export default class CloudPhone extends BaseNavNavgator {
                             if (onLine) {
                                 startWebsocketConnection()
                             }
-                        }, 1000);
+                        }, 3000);
                         break;
 
                     case 'webSocektOnError':
@@ -320,7 +319,7 @@ export default class CloudPhone extends BaseNavNavgator {
                             if (onLine) {
                                 startWebsocketConnection()
                             }
-                        }, 1000);
+                        }, 3000);
                         break;
                 }
 
@@ -711,16 +710,13 @@ export default class CloudPhone extends BaseNavNavgator {
                 tips.hideLoading()
                 this.enterCloudPhoneLoading = false
             }).catch(err => {
-
                 tips.hideLoading()
                 this.enterCloudPhoneLoading = false
-
                 if (this.state.onLine) {
                     startWebsocketConnection()
                 } else {
                     tips.showTips('当前账号已离线，请刷新')
                 }
-
             })
         }
     }

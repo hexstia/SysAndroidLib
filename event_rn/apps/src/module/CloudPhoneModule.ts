@@ -77,15 +77,9 @@ export function enterCloudPhone(phone: CloudPhoneModal) {
             CloudPhoneModule.startDumpScreen({ deviceName: phone.deviceName, deviceId: phone.deviceId, id: phone.id }).then(() => {
                 resolve()
             }).catch((err: { code: string }) => {
-                // if (err.code == '未启动websocket线程') {
-                //     CloudPhoneModule.startWebsocketConnection({ token: configs.token })
-                // }
                 reject(err)
             })
         }).catch((err: { code: string }) => {
-            // if (err.code == '未启动websocket线程') {
-            //     CloudPhoneModule.startWebsocketConnection({ token: configs.token })
-            // }
             reject(err)
         })
     })

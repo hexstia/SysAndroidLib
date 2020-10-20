@@ -49,7 +49,7 @@ export default class Login extends BaseNavNavgator {
                     {/* 顶部背景图 */}
                     <ImageBackground style={{ marginTop: 0, width: defaultStyle.device.width, height: 184 }}
                         source={require('#/login/topBG.png')} >
-                        <Text style={{ marginTop: 60, marginLeft: 30, fontSize: 22, color: '#fff' }}>嗨，欢迎登录云手机！测试版本4</Text>
+                        <Text style={{ marginTop: 60, marginLeft: 30, fontSize: 22, color: '#fff' }}>嗨，欢迎登录云手机！</Text>
                     </ImageBackground>
 
                     {/* 输入部分 */}

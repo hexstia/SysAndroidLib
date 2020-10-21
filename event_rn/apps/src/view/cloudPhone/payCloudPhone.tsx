@@ -332,7 +332,6 @@ export default class PayCloudPhone extends BaseNavNavgator {
         }
       }
     }
-    tips.showTips('该优惠卷无法在此订单使用');
   }
 
   /**

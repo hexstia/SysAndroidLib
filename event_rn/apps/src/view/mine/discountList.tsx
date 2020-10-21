@@ -1,6 +1,6 @@
 
 import dayjs from 'dayjs';
-import { BaseNavNavgator, DefaultListView, request } from 'dl-kit';
+import { BaseNavNavgator, DefaultListView, request, tips } from 'dl-kit';
 import { Discount, Product } from 'global';
 import React from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
@@ -218,6 +218,8 @@ export default class DiscountList extends BaseNavNavgator {
         if( canUse ){
             this.state.chooseCallback && this.state.chooseCallback(item);
             this.navigate('PayCloudPhone',{discount:item});
+        }else{
+            tips.showTips('该优惠卷无法使用');
         }
     };
 

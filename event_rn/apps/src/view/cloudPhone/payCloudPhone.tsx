@@ -320,18 +320,27 @@ export default class PayCloudPhone extends BaseNavNavgator {
   discountPassSuccess = (discount:Discount) => {
     let { nowSelectIndex, proList, proNum } = this.state;
     let currentPro = proList[nowSelectIndex || 0];
+    let canUse = false;
     if(discount.proTypeId == null || currentPro.typeId == discount.proTypeId){
       if(discount.couponType == 2){ //如果该优惠券是满减类型，并且当前订单能够使用该优惠券
         if( nowSelectIndex != undefined ){
           let payPrice = proList[nowSelectIndex].proPrice * proNum;
           if(payPrice >= discount.couponMinAmount) {
-            this.loadDiscountData();
-            this.setState({discount:discount});
-            return;
+            canUse = true;
           }
         }
+      }else if(discount.couponType == 1) { //如果是直减类型
+        canUse = true;
       }
     }
+
+    if ( canUse ) {
+      this.loadDiscountData();
+      this.setState({discount:discount});
+    } else {
+      tips.showTips('该优惠卷无法在此订单使用');
+    }
+
   }
 
   /**

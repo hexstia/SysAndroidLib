@@ -167,7 +167,7 @@ export default class DiscountList extends BaseNavNavgator {
 
                 <View style={{ backgroundColor: canUse ? '#6498FF' : '#fff', width:95, justifyContent:'center', alignItems:'center'}}>
                     <Text style={{ color: canUse ? '#fff' : '#999', fontSize: 18, fontWeight: 'bold'}}>￥<Text style={{ fontSize: 26}}>{item.couponValue}</Text></Text>
-                    {item.couponType == 2 && <Text style={{ color: canUse ? '#fff' : '#999', fontSize: 9, marginTop:3}}>满{item.couponMinAmount}可使用</Text>}
+                    <Text style={{ color: canUse ? '#fff' : '#999', fontSize: 9, marginTop:3}}>{item.couponType == 2 ? `满${item.couponMinAmount}可使用` : '无门槛'}</Text>
                     {
                         canUse &&
                         <View style={{ marginTop: 3, backgroundColor:'#fff', height:15, paddingHorizontal:6, paddingVertical:2, borderRadius:4}}>

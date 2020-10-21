@@ -213,7 +213,7 @@ export default class PayCloudPhone extends BaseNavNavgator {
           {
             finalDiscount > 0 &&
             <View style={{ height: 40, flexDirection: 'row', alignItems: 'center', justifyContent:'space-between',  borderBottomColor: '#eee', borderBottomWidth: 1 }}>
-              <Text style={{ color: '#333', fontSize: 15, marginLeft: 25 }}>{discount.couponName}</Text>
+              <Text style={{ color: '#333', fontSize: 15, marginLeft: 25 }}>{discount?.couponName}</Text>
               <Text style={{ marginLeft: 6, color: '#FE5437', fontSize: 14, marginRight: 20}}>{`-${finalDiscount}`}</Text>
             </View>
           }

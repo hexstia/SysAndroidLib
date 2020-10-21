@@ -23,6 +23,10 @@ export default class PayResult extends BaseNavNavgator {
         <Icon style={{ color: '#333', fontSize: 16 }} iconCode={0xe648} />
       </TouchableOpacity>
     )
+
+    setTimeout(() => {
+      msg.emit('phoneListChange')
+    }, 1000);
   }
 
   componentWillMount() {

@@ -1,5 +1,5 @@
 
-import { BaseNavNavgator, configs, DefaultListView, defaultStyle, ImageBtn, msg, request, tips } from 'dl-kit';
+import { BaseNavNavgator, configs, DefaultListView, defaultStyle, ImageBtn, request, tips } from 'dl-kit';
 import { Banner, CloudPhoneModal } from 'global';
 import React from 'react';
 import { Image, ImageBackground, Platform, Text, TouchableOpacity, View } from 'react-native';
@@ -88,20 +88,29 @@ export default class CloudPhone extends BaseNavNavgator {
 
     constructor(props: any) {
         super(props)
-        if (configs.token) {
-            this.loadData()
-            this.addEventListener()
-            msg.on('phoneListChange', ()=>{
-                this.loadData();
-                setTimeout(this.loadData, 1500);
-            })
-        }
+        // if (configs.token) {
+        //     this.loadData()
+        //     this.addEventListener()
+        //     // msg.on('phoneListChange', ()=>{
+        //     //     console.log('收到手机列表改变消息刷新列表')
+        //     //     this.loadData();
+        //     //     setTimeout(this.loadData, 1500);
+        //     // })
+        // }
         this.loadBanner()
     }
 
-    componentWillUnmount() {
-        msg.off('phoneListChange', this.loadData)
+    viewWillFocus(){
+        console.log('获得焦点,刷新')
+        if (configs.token) {
+            this.loadData()
+            this.addEventListener()
+        }
     }
+
+    // componentWillUnmount() {
+    //     msg.off('phoneListChange', this.loadData)
+    // }
 
     /**
     *  获取云手机列表
@@ -147,6 +156,7 @@ export default class CloudPhone extends BaseNavNavgator {
                 })
     
             }).catch((err: { code: string }) => {
+                startWebsocketConnection();
                 // socket未连接，等三秒再试试
                 setTimeout(() => {
                     this.getAllScreenshot()

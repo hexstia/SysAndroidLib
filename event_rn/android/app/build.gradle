@@ -121,7 +121,7 @@ android {
         applicationId "com.ruisasi.blueclient"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 11
+        versionCode 12
         versionName "1.1.2"
         ndk {
             // 设置支持的SO库架构

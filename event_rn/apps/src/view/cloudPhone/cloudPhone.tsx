@@ -85,18 +85,11 @@ export default class CloudPhone extends BaseNavNavgator {
     enterCloudPhoneLoading: boolean = false;
     // 是否需要刷新列表数据
     needRefreshPhoneList: boolean = false;
+    // 申请云手机时,存储回调在此
+    applyCallback:{[key:string]:()=>void} = {}
 
     constructor(props: any) {
         super(props)
-        // if (configs.token) {
-        //     this.loadData()
-        //     this.addEventListener()
-        //     // msg.on('phoneListChange', ()=>{
-        //     //     console.log('收到手机列表改变消息刷新列表')
-        //     //     this.loadData();
-        //     //     setTimeout(this.loadData, 1500);
-        //     // })
-        // }
         this.loadBanner()
     }
 
@@ -107,10 +100,6 @@ export default class CloudPhone extends BaseNavNavgator {
             this.addEventListener()
         }
     }
-
-    // componentWillUnmount() {
-    //     msg.off('phoneListChange', this.loadData)
-    // }
 
     /**
     *  获取云手机列表
@@ -146,6 +135,7 @@ export default class CloudPhone extends BaseNavNavgator {
 
         // 有云手机的情况下,查看手机截图
         if(this.state.phoneList && this.state.phoneList.length > 0){
+        
             checkSocketConnect().then(v => {
                 this.state.phoneList.map((p, index) => {
                     if (p.status != 10 && p.status != 15 && p.status != 20) {
@@ -310,6 +300,26 @@ export default class CloudPhone extends BaseNavNavgator {
                         } else if (messageData.method == 'installApkReceive') {
                             // 设备被占用
                             tips.showTips('安装成功！')
+                        }else if (messageData.method == 'apply') {
+                            if(messageData.code === "200"){
+                                console.log('申请云手机成功')
+                                let controlDevice:number[] = messageData.data.controlDevice;
+                                for(let i = 0;i<controlDevice.length;i++){
+                                    let deviceId = controlDevice[i] + ''
+                                    for (const key in this.applyCallback) {
+                                        if(deviceId == key){
+                                            console.log('处理申请完云手机的后续操作')
+                                            let callback = this.applyCallback[key]
+                                            callback();
+                                            delete this.applyCallback[key]
+                                        }
+                                    }
+                                }
+
+                            }else{
+                                console.log('申请云手机失败')
+                                tips.showTips('云手机申请失败');
+                            }   
                         }
 
                         break
@@ -334,7 +344,7 @@ export default class CloudPhone extends BaseNavNavgator {
                 }
 
             } catch (error) {
-                // console.log('socket消息解析失败', socketMessage);
+                console.log('socket消息解析失败', socketMessage);
             }
         })
     }
@@ -640,21 +650,12 @@ export default class CloudPhone extends BaseNavNavgator {
 
             switch (action) {
                 case 'reStart': // 重启
-                    let messageData = {
-                        method: 'apply',
-                        type: 'cloudPhone',
-                        data: {
-                            device: [cloudPhone.deviceId],
-                            selectAll: ''
-                        }
-                    }
 
-                    sendWebsocketData(JSON.stringify(messageData)).then(v => {
+                    this.applyPhone(cloudPhone.deviceId,()=>{
                         request.post('/cloudPhone/phone/resetDevice', { deviceIds: cloudPhone.deviceId, type: 1 }, true).then(result => {
                             this.setState({ reStartPhoneIds: [...reStartPhoneIds, cloudPhone.deviceId] })
                         })
                     })
-
                     break;
 
                 case 'upFile':
@@ -681,15 +682,7 @@ export default class CloudPhone extends BaseNavNavgator {
                     break;
 
                 case 'renew': // 恢复出厂设置
-                    let messageData2 = {
-                        method: 'apply',
-                        type: 'cloudPhone',
-                        data: {
-                            device: [cloudPhone.deviceId],
-                            selectAll: ''
-                        }
-                    }
-                    sendWebsocketData(JSON.stringify(messageData2)).then(v => {
+                    this.applyPhone(cloudPhone.deviceId,()=>{
                         request.post('/cloudPhone/phone/resetDevice', { deviceIds: cloudPhone.deviceId, type: 2 }, true).then(result => {
                             this.setState({ renewPhoneIds: [...renewPhoneIds, cloudPhone.deviceId] })
                         })
@@ -714,21 +707,43 @@ export default class CloudPhone extends BaseNavNavgator {
     enterCloudPhone = (phone: CloudPhoneModal) => {
         if (this.checkCloudPhone(phone) && !this.enterCloudPhoneLoading) {
 
-            this.enterCloudPhoneLoading = true
-            tips.showLoading('打开中...')
-            enterCloudPhone(phone).then(() => {
-                tips.hideLoading()
-                this.enterCloudPhoneLoading = false
-            }).catch(err => {
-                tips.hideLoading()
-                this.enterCloudPhoneLoading = false
-                if (this.state.onLine) {
-                    startWebsocketConnection()
-                } else {
-                    tips.showTips('当前账号已离线，请刷新')
-                }
+            this.applyPhone(phone.deviceId,()=>{
+                this.enterCloudPhoneLoading = true
+                tips.showLoading('打开中...')
+                enterCloudPhone(phone).then(() => {
+                    tips.hideLoading()
+                    this.enterCloudPhoneLoading = false
+                }).catch(err => {
+                    tips.hideLoading()
+                    this.enterCloudPhoneLoading = false
+                    if (this.state.onLine) {
+                        tips.showTips('打开失败,请重试!')
+                        startWebsocketConnection()
+                    } else {
+                        tips.showTips('当前账号已离线，请刷新')
+                    }
+                })
             })
         }
+    }
+
+    /**
+     *  申请云手机
+     */
+    applyPhone = (deviceId:number,callback:()=>void)=>{
+        let messageData2 = {
+            method: 'apply',
+            type: 'cloudPhone',
+            data: {
+                device: [deviceId],
+                selectAll: ''
+            }
+        }
+        sendWebsocketData(JSON.stringify(messageData2)).then(res=>{
+            this.applyCallback[`${deviceId}`] = callback
+        }).catch(err=>{
+            tips.showTips(err.code || '申请手机权限失败')
+        })
     }
 
     /**
@@ -743,15 +758,7 @@ export default class CloudPhone extends BaseNavNavgator {
     */
     getScreenshot = (phone: CloudPhoneModal) => {
 
-        let messageData = {
-            method: 'apply',
-            type: 'cloudPhone',
-            data: {
-                device: [phone.deviceId],
-                selectAll: '1'
-            }
-        }
-        sendWebsocketData(JSON.stringify(messageData)).then(v => {
+        this.applyPhone(phone.deviceId,()=>{
             let param = { screenStatus: 2, height: 668, width: 375, deviceId: phone.deviceId }
             request.post('/cloudPhone/phone/screenshotCloudphone', param, false).then(result => {
                 // console.log(result)

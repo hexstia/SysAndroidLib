@@ -87,7 +87,6 @@ class App extends Component<Props, {}> {
   /**
    *  热更新部分
    */
-
   componentDidMount() {
     // 检查热更新
     this.checkUpdate();

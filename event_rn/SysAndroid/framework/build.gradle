@@ -1,0 +1,54 @@
+apply plugin: 'com.android.library'
+apply plugin: 'maven'
+android {
+    compileSdkVersion 28
+    lintOptions {
+        abortOnError false
+    }
+
+    defaultConfig {
+        minSdkVersion 26
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'com.android.support:appcompat-v7:28.0.0-rc02'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}
+
+uploadArchives { //新增 ，因为Android Studio gradle 支持maven插件，所以可以添加此task
+    configuration = configurations.archives
+    repositories {
+        mavenDeployer {
+            repository(url: mavenSnapshotUrl) {
+                authentication(userName:maven_local_username,
+                        password: maven_local_password)
+            }
+            pom.project {
+                version snapshotVersionName
+                artifactId maven_pom__artifactId
+                groupId maven_pom_groupId
+                packaging maven_pom__packaging
+                description maven_pom__description
+            }
+        }
+    }
+}

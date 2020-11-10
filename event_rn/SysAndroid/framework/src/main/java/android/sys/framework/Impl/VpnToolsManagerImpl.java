@@ -1,9 +1,10 @@
 package android.sys.framework.Impl;
 
 import android.content.Context;
-import android.sys.framework.net.VpnToolsManager;
+import android.sys.framework.base.AbstractManager;
+import android.sys.framework.net.IVpnToolsManager;
 
-public class VpnToolsManagerImpl implements VpnToolsManager {
+public class VpnToolsManagerImpl extends AbstractManager implements IVpnToolsManager {
 
 
     @Override

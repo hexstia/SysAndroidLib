@@ -2,7 +2,7 @@ package android.sys.framework.net;
 
 import android.content.Context;
 
-public interface VpnToolsManager {
+public interface IVpnToolsManager {
 
     /**
      * 初始化vpn相关的类，通过反射

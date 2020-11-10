@@ -52,3 +52,16 @@ uploadArchives { //新增 ，因为Android Studio gradle 支持maven插件，所
         }
     }
 }
+// 添加源码 到aar
+task androidSourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.sourceFiles
+}
+artifacts {
+    archives androidSourcesJar
+}
+//tasks.withType(Jar){jarTask->
+//    if(jarTask.name.equals('packageReleaseJar')){
+//        jarTask.from android.sourceSets.main.java.srcDirs
+//    }
+//}

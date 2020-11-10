@@ -1,6 +1,7 @@
 package android.sys.framework.Impl;
 
-import android.sys.framework.tools.OtherToolsManager;
+import android.sys.framework.base.AbstractManager;
+import android.sys.framework.tools.IOtherToolsManager;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,7 +16,7 @@ import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
 
-public class OtherToolsManagerImpl implements OtherToolsManager {
+public class OtherToolsManagerImpl extends AbstractManager implements IOtherToolsManager {
     private static    KeyManagerFactory kmf = null;
     private static TrustManagerFactory tmf = null;
 

@@ -10,7 +10,7 @@ import java.security.cert.CertificateException;
 
 import javax.net.ssl.SSLContext;
 
-public interface OtherToolsManager {
+public interface IOtherToolsManager {
 
     /**
      *  与websocket相关  wss 和https 会用到，网络通讯的安全ssl ，初始化文件的西南西

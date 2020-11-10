@@ -1,6 +1,6 @@
 package android.sys.framework.audio;
 
-public interface AudioToolsManager {
+public interface IAudioToolsManager {
 
 
 }

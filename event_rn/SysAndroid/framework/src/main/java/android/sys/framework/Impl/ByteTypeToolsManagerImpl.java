@@ -132,6 +132,100 @@ public class ByteTypeToolsManagerImpl  extends AbstractManager implements IByteT
         return bs;
     }
 
+    /**
+     *  将数组转换为整型值，去数组的从索引0开始长度为4 的内容转换为整型（大端模式）
+     * @param bs 并指定数组本身（引用）
+     * @return 得到的整型值
+     */
+    @Override
+    public int bigBytesToInt(byte[] bs) {
+
+        return bigBytesToInt(bs,0);
+    }
+    /**
+     *  将数组转换为整型值，去数组的从索引0开始长度为4 的内容转换为整型（小端模式）
+     * @param bs 并指定数组本身（引用）
+     * @return 得到的整型值
+     */
+    @Override
+    public int littleBytesToInt(byte[] bs) {
+        return littleBytesToInt(bs,0);
+    }
+    /**
+     *  将数组转换为整型值，去数组的从索引0开始长度为2 的内容转换为整型（大端模式）
+     * @param bs 并指定数组本身（引用）
+     * @return 得到的整型值
+     */
+    @Override
+    public int bigBytesToInt2(byte[] bs) {
+       return bigBytesToInt2(bs,0);
+    }
+    /**
+     *  将数组转换为整型值，去数组的从索引0开始长度为2 的内容转换为整型（小端模式）
+     * @param bs 并指定数组本身（引用）
+     * @return 得到的整型值
+     */
+    @Override
+    public int littleBytesToInt2(byte[] bs) {
+        return littleBytesToInt2(bs,0);
+    }
+    /**
+     *  将数组转换为整型值，去数组的从索引index开始长度为4 的内容转换为整型（大端模式）
+     * @param bs 并指定数组本身（引用）
+     * @return 得到的整型值
+     */
+    @Override
+    public int bigBytesToInt(byte[] bs, int index) {
+        int i0= bs[index+3] & 0xFF  ;
+
+        int i1 = (bs[index+2] & 0xFF) << 8 ;
+
+        int i2 = (bs[index+1] & 0xFF) << 16 ;
+
+        int i3 = (bs[index] & 0xFF) << 24 ;
+        return i3|i2|i1|i0;
+    }
+    /**
+     *  将数组转换为整型值，去数组的从索引index开始长度为4 的内容转换为整型（小端模式）
+     * @param bs 并指定数组本身（引用）
+     * @return 得到的整型值
+     */
+    @Override
+    public int littleBytesToInt(byte[] bs, int index) {
+
+        int i3 = (bs[index++] & 0xFF) << 24 ;
+
+        int i2 = (bs[index++] & 0xFF) << 16 ;
+
+        int i1 = (bs[index++] & 0xFF) << 8 ;
+
+        int i0= bs[index] & 0xFF  ;
+        return i0|i1|i2|i3;
+    }
+
+    /**
+     *  将数组转换为整型值，去数组的从索引index开始长度为2 的内容转换为整型（大端模式）
+     * @param bs 并指定数组本身（引用）
+     * @return 得到的整型值
+     */
+    @Override
+    public int bigBytesToInt2(byte[] bs,int index){
+        int i0= bs[index+1] & 0xFF  ;
+        int i1 = (bs[index] & 0xFF) << 8 ;
+        return i1|i0;
+    }
+    /**
+     *  将数组转换为整型值，去数组的从索引index开始长度为2 的内容转换为整型（小端模式）
+     * @param bs 并指定数组本身（引用）
+     * @return 得到的整型值
+     */
+    @Override
+    public int littleBytesToInt2(byte[] bs,int index){
+        int i0= bs[index+1] & 0xFF  ;
+        int i1 = (bs[index] & 0xFF) << 8 ;
+        return i0|i1;
+    }
+
     /***********************************************************************************/
     /***
      * 单例实现方式

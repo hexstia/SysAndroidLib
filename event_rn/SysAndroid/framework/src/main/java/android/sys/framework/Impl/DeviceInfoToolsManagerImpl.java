@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.PowerManager;
 import android.sys.framework.base.AbstractManager;
-import android.sys.framework.deviceInfo.IDeviceInfoManager;
+import android.sys.framework.deviceInfo.IDeviceInfoToolsManager;
 
 import java.lang.reflect.Field;
 
@@ -15,7 +15,7 @@ import static android.sys.framework.package_manager.PackageInfos.CLASSENAME_INTE
 import static android.sys.framework.package_manager.PackageInfos.EXTRA_KEY_CONFIRM;
 import static android.sys.framework.package_manager.PackageInfos.EXTRA_REASON;
 
-public class DeviceInfoManagerImpl extends AbstractManager implements IDeviceInfoManager {
+public class DeviceInfoToolsManagerImpl extends AbstractManager implements IDeviceInfoToolsManager {
     private  Context context;
     /**
      *  设备进行重启

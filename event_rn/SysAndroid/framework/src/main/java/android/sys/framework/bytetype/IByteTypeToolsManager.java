@@ -77,6 +77,53 @@ public interface IByteTypeToolsManager {
      */
     byte[] bigIntToBytes2(byte[] bs ,int i,int index);
 
+    /**
+     *  将数组转换为整型值，去数组的从索引0开始长度为4 的内容转换为整型（大端模式）
+     * @param bs 并指定数组本身（引用）
+     * @return 得到的整型值
+     */
+    int bigBytesToInt(byte[] bs);
+    /**
+     *  将数组转换为整型值，去数组的从索引0开始长度为4 的内容转换为整型（小端模式）
+     * @param bs 并指定数组本身（引用）
+     * @return 得到的整型值
+     */
+    int littleBytesToInt(byte[] bs);
+    /**
+     *  将数组转换为整型值，去数组的从索引0开始长度为2 的内容转换为整型（大端模式）
+     * @param bs 并指定数组本身（引用）
+     * @return 得到的整型值
+     */
+    int bigBytesToInt2(byte[] bs);
+    /**
+     *  将数组转换为整型值，去数组的从索引0开始长度为2 的内容转换为整型（小端模式）
+     * @param bs 并指定数组本身（引用）
+     * @return 得到的整型值
+     */
+    int littleBytesToInt2(byte[] bs);
+    /**
+     *  将数组转换为整型值，去数组的从索引index开始长度为4 的内容转换为整型（大端模式）
+     * @param bs 并指定数组本身（引用）
+     * @return 得到的整型值
+     */
+    int bigBytesToInt(byte[] bs,int index);
+    /**
+     *  将数组转换为整型值，去数组的从索引index开始长度为4 的内容转换为整型（小端模式）
+     * @param bs 并指定数组本身（引用）
+     * @return 得到的整型值
+     */
 
-
+    int littleBytesToInt(byte[] bs,int index);
+    /**
+     *  将数组转换为整型值，去数组的从索引index开始长度为2 的内容转换为整型（大端模式）
+     * @param bs 并指定数组本身（引用）
+     * @return 得到的整型值
+     */
+    int bigBytesToInt2(byte[] bs,int index);
+    /**
+     *  将数组转换为整型值，去数组的从索引index开始长度为2 的内容转换为整型（小端模式）
+     * @param bs 并指定数组本身（引用）
+     * @return 得到的整型值
+     */
+    int littleBytesToInt2(byte[] bs,int index);
 }

@@ -1,6 +1,6 @@
 package android.sys.framework.deviceInfo;
 
-public interface IDeviceInfoManager {
+public interface IDeviceInfoToolsManager {
     /**
      *  设备进行重启
      * @return

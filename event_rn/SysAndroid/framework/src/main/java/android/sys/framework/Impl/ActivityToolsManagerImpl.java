@@ -5,7 +5,9 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.sys.framework.activity.ActivityToolsManager;
+import android.sys.framework.activity.IActivityToolsManager;
+import android.sys.framework.base.AbstractManager;
+import android.sys.framework.base.BaseManagerImpl;
 import android.sys.framework.package_manager.PackageInfos;
 
 import java.lang.reflect.InvocationTargetException;
@@ -14,10 +16,14 @@ import java.util.List;
 
 import static android.sys.framework.package_manager.PackageInfos.PACKAGENAME_ACTIVITYMANAGER;
 
-public class ActivityToolsManagerImpl implements ActivityToolsManager {
+public class ActivityToolsManagerImpl extends AbstractManager implements IActivityToolsManager {
 
     private Context context;
     ActivityManager mActivityManager ;
+    public void test(){
+        System.out.println("测试函数");
+    }
+
     /**
      *  回到Android的主桌面功能，相当于物理按键Home
      *
@@ -116,6 +122,29 @@ public class ActivityToolsManagerImpl implements ActivityToolsManager {
         return true;
     }
 
+/***********************************************************************************/
+    /***
+     * 单例实现方式
+     */
+    private static class InnerSingleClass{
+        private static ActivityToolsManagerImpl INSTANCE ;
+        private static void innerInstance(){
+            INSTANCE = new ActivityToolsManagerImpl();
+        }
+    }
+    static {
+        ActivityToolsManagerImpl.InnerSingleClass.innerInstance();
+    }
+    public  static   ActivityToolsManagerImpl  creatSingle(Context context){
+        ActivityToolsManagerImpl bmi =  ActivityToolsManagerImpl.InnerSingleClass.INSTANCE;
+        bmi.setContext(context);
+        return bmi;
+    }
+    /**
+     *  单例私有化，不可创建实例
+     */
+    private ActivityToolsManagerImpl(){};
 
+/***********************************************************************************/
 
 }

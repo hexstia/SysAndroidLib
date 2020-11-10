@@ -4,7 +4,9 @@ import android.app.ActivityManager;
 
 import java.lang.reflect.InvocationTargetException;
 
-public interface ActivityToolsManager {
+public interface IActivityToolsManager {
+
+    void test();
     /**
      *  打开指定的app，
      * @param packageName 根据包名来判断，打开的页面为<main></>

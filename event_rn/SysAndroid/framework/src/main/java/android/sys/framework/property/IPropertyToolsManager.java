@@ -1,4 +1,4 @@
 package android.sys.framework.property;
 
-public class IPropertyToolsManager {
+public interface IPropertyToolsManager {
 }

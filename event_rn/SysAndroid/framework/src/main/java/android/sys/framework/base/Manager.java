@@ -25,4 +25,20 @@ public interface Manager {
      * @see IActivityToolsManager
      */
     String INPUTEVENT_MANAGER = "inputEvent";
+    String AUDIO_MANAGER = "audio";
+    String BYTETYPE_MANAGER = "bytetype";
+    String DEVICEINFO_MANAGER = "deviceInfo";
+    String DISPLAY_MANAGER = "display";
+    String FILE_MANAGER = "file";
+    String JSON_MANAGER = "json";
+    String NET_MANAGER = "net";
+    String POWER_MANAGER = "power";
+    String PROPERTY_MANAGER = "property";
+    String SURFACE_MANAGER = "surface";
+    String TOOLS_MANAGER = "tools";
+    String UTILS_MANAGER = "utils";
+    String VIDEO_MANAGER = "video";
+    String WINDOW_MANAGER = "window";
+
+
 }

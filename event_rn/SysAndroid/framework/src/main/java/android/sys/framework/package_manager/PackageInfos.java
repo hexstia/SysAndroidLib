@@ -48,7 +48,6 @@ public class PackageInfos {
     public static final String  EXTRA_KEY_CONFIRM ="EXTRA_KEY_CONFIRM";
 
 
-
     /**
      *  任务键功能 ，包名 （用来显示任务列表），
      */

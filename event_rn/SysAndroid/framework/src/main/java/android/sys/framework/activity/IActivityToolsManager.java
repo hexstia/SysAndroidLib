@@ -52,4 +52,11 @@ public interface IActivityToolsManager {
      */
      void removeAllTask(int maxNum) throws ClassNotFoundException,NoSuchMethodException,IllegalAccessException, InvocationTargetException;
 
+    /**
+     *  获取当前窗口的顶层Acitvity的包名
+     * @return 包名
+     */
+     String getTopAcitvityPackageName();
+
+
 }

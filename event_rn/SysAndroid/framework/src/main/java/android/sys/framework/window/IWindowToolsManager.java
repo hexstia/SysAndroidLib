@@ -1,4 +1,39 @@
 package android.sys.framework.window;
 
+import android.graphics.Point;
+
 public interface IWindowToolsManager {
+
+    /**
+     * 相当于命令 wm size w x y 例如 wm size 1080x2246 (注意有延迟，因为属于进程操作，修改本机的设备尺寸)
+     * @param w 宽度 pix
+     * @param h 高度 pix
+     * @throws Exception
+     */
+        void setWmSize(int w,int h)throws Exception;
+
+    /**
+     * 相当于命令 wm density  例如 wm density 120  (注意有延迟，因为属于进程操作，修改本机的设备尺寸)
+     * @param d 密度 density
+     * @throws Exception
+     */
+     void setWmDensity(int d)throws Exception;
+
+
+
+    /**
+     * 该函数相当于命令 wm size 获得的内容 覆盖的尺寸，前提是之前执行过wm size修改过尺寸 例如wm size 1080x2246
+     *  (注意有延迟，因为属于进程操作，修改本机的设备尺寸)
+     * @return 屏幕的尺寸 包含宽高
+     * @throws Exception
+     */
+    public Point getOverrideSize()throws Exception;
+
+
+    /**
+     * 该函数相当于命令 wm size 获得的内容 物理的尺寸  (注意有延迟，因为属于进程操作，修改本机的设备尺寸)
+     * @return 屏幕的尺寸 包含宽高
+     * @throws Exception
+     */
+    public Point getPhysicalSize()throws Exception;
 }

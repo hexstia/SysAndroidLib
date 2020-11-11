@@ -19,7 +19,7 @@ import static android.sys.framework.package_manager.PackageInfos.PACKAGENAME_ACT
 public class ActivityToolsManagerImpl extends AbstractManager implements IActivityToolsManager {
 
     private Context context;
-    ActivityManager mActivityManager ;
+    private ActivityManager mActivityManager ;
     public void test(){
         System.out.println("测试函数");
     }
@@ -122,6 +122,16 @@ public class ActivityToolsManagerImpl extends AbstractManager implements IActivi
         return true;
     }
 
+    /**
+     *  获取当前窗口的顶层Acitvity的包名
+     * @return 包名
+     */
+    @Override
+    public String getTopAcitvityPackageName(){
+        List<ActivityManager.RunningTaskInfo> runningTasks = mActivityManager.getRunningTasks(1);
+        return runningTasks.get(0).topActivity.getPackageName();
+    }
+
 /***********************************************************************************/
     /***
      * 单例实现方式
@@ -138,6 +148,7 @@ public class ActivityToolsManagerImpl extends AbstractManager implements IActivi
     public  static   ActivityToolsManagerImpl  creatSingle(Context context){
         ActivityToolsManagerImpl bmi =  ActivityToolsManagerImpl.InnerSingleClass.INSTANCE;
         bmi.setContext(context);
+        bmi.mActivityManager = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
         return bmi;
     }
     /**

@@ -8,7 +8,7 @@ public interface IVpnToolsManager {
      * 初始化vpn相关的类，通过反射
      * @return
      */
-    boolean initVpn(Context context);
+    boolean initVpn();
 
     /**
      * 创建VPN的配置文件
@@ -32,17 +32,30 @@ public interface IVpnToolsManager {
     /**
      * 连接vpn
      *
-     * @param context
      * @param profile com.android.internal.net.VpnProfile的实例
      * @return true:连接成功，false:连接失败
      */
-    boolean connect(Context context, Object profile) ;
+    boolean connect( Object profile) ;
 
     /**
      * 断开vpn连接
      *
-     * @param context
      * @return true:已断开，false:断开失败
      */
-    boolean disConnect(Context context) ;
+    boolean disConnect();
+
+    /**
+     * 判断该vpn是否在使用中，也就是当前设备开启再使用vpn中。。。
+     * @return
+     */
+    boolean isVpnUser();
+    /**
+     * @return 返回一个已存在的vpn实例
+     */
+     Object getVpnProfile();
+
+    /**
+     * @return 返回第index 个已存在的vpn实例
+     */
+     Object getVpnProfile(int index) ;
 }

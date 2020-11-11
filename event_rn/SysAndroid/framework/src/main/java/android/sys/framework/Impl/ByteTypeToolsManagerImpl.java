@@ -225,6 +225,26 @@ public class ByteTypeToolsManagerImpl  extends AbstractManager implements IByteT
         int i1 = (bs[index] & 0xFF) << 8 ;
         return i0|i1;
     }
+    /**
+     *  去掉short的符合数据
+     * @param value
+     * @return
+     */
+    @Override
+    public int toUnsigned(short value) {
+        return value & 0xffff;
+    }
+
+
+    /**
+     *  去掉byte的符合数据
+     * @param value
+     * @return
+     */
+    @Override
+    public int toUnsigned(byte value) {
+        return value & 0xff;
+    }
 
     /***********************************************************************************/
     /***

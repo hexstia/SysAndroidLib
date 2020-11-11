@@ -2,10 +2,16 @@ package android.sys.framework.Impl;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.PowerManager;
 import android.sys.framework.base.AbstractManager;
 import android.sys.framework.deviceInfo.IDeviceInfoToolsManager;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.lang.reflect.Field;
 
 import static android.sys.framework.package_manager.PackageInfos.ACTION_FACTORY_RESET;
@@ -52,6 +58,44 @@ public class DeviceInfoToolsManagerImpl extends AbstractManager implements IDevi
         context.sendBroadcast(intent);
         return true;
     }
+    /**
+     *  根据网卡 通过读取文件来获取mac， 准确性高，但是需要对文件读取权限
+     * @param netInterface
+     * @return mac值
+     */
+    @Override
+    public String getFileMac(String netInterface) {
+        File file = new File("/sys/class/net/"+netInterface+"/address");
+        String strs = null;
+        if(file.exists()){
+            try {
+                FileReader fos = new FileReader(file);
+                char[] str = new char[17];
+                fos.read(str);
+                strs = new String(str);
+                return strs.toUpperCase();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }else{
+
+        }
+        return strs;
+    }
+    /**
+     * 根据wifiManager 获取wifi的mac地址，本质是根据网卡来获取mac
+     * @return mac值
+     */
+    @Override
+    public String getWifiMac() {
+        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+        boolean hasMacAddress = wifiInfo != null;
+        return hasMacAddress ? wifiInfo.getMacAddress() : null;
+    }
+
     public String getIntentAction(String classname, String action) {
         String actionName = null;
         try {
@@ -64,4 +108,30 @@ public class DeviceInfoToolsManagerImpl extends AbstractManager implements IDevi
             return actionName;
         }
     }
+/***********************************************************************************/
+    /***
+     * 单例实现方式
+     */
+    private static class InnerSingleClass{
+        private static DeviceInfoToolsManagerImpl INSTANCE ;
+        private static void innerInstance(){
+            INSTANCE = new DeviceInfoToolsManagerImpl();
+        }
+    }
+    static {
+        DeviceInfoToolsManagerImpl.InnerSingleClass.innerInstance();
+    }
+    public  static   DeviceInfoToolsManagerImpl  creatSingle(Context context){
+        DeviceInfoToolsManagerImpl bmi =  DeviceInfoToolsManagerImpl.InnerSingleClass.INSTANCE;
+        bmi.setContext(context);
+        return bmi;
+    }
+    /**
+     *  单例私有化，不可创建实例
+     */
+    private DeviceInfoToolsManagerImpl(){};
+
+/***********************************************************************************/
+
+
 }

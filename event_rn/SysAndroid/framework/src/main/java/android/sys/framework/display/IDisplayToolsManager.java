@@ -1,5 +1,7 @@
 package android.sys.framework.display;
 
+import android.util.DisplayMetrics;
+
 public interface IDisplayToolsManager {
 
     /**
@@ -18,4 +20,10 @@ public interface IDisplayToolsManager {
      * @return
      */
     int getDisplayInfoRotation();
+
+    /**
+     *  获取真实的宽高值
+     * @return
+     */
+    DisplayMetrics getWH();
 }

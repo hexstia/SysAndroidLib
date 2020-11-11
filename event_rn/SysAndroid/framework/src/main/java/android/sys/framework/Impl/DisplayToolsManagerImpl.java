@@ -4,6 +4,11 @@ import android.content.Context;
 import android.os.IInterface;
 import android.sys.framework.base.AbstractManager;
 import android.sys.framework.display.IDisplayToolsManager;
+import android.util.DisplayMetrics;
+import android.view.Display;
+import android.view.WindowManager;
+
+import java.lang.reflect.Method;
 
 public class DisplayToolsManagerImpl extends AbstractManager implements IDisplayToolsManager {
     private  IInterface displayManager;
@@ -57,6 +62,28 @@ public class DisplayToolsManagerImpl extends AbstractManager implements IDisplay
             throw new AssertionError(e);
         }
         return rotation;
+    }
+
+    /**
+     *  获取真实的宽高值
+     * @return
+     */
+    @Override
+    public DisplayMetrics getWH(){
+        WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+        Display display = windowManager.getDefaultDisplay();
+        DisplayMetrics dm = new DisplayMetrics();
+        try {
+            @SuppressWarnings("rawtypes")
+            Class c = Class.forName("android.view.Display");
+            @SuppressWarnings("unchecked")
+            Method method = c.getMethod("getRealMetrics", DisplayMetrics.class);
+            method.invoke(display, dm);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return dm;
     }
 
     /***********************************************************************************/

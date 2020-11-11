@@ -126,4 +126,21 @@ public interface IByteTypeToolsManager {
      * @return 得到的整型值
      */
     int littleBytesToInt2(byte[] bs,int index);
+
+    /**
+     *  去掉short的符合数据
+     * @param value
+     * @return
+     */
+      int toUnsigned(short value) ;
+
+      /**
+     *  去掉byte的符合数据
+     * @param value
+     * @return
+     */
+      int toUnsigned(byte value) ;
+
+
+
 }

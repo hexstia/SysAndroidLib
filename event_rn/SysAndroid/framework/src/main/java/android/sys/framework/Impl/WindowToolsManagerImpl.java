@@ -134,6 +134,7 @@ public class WindowToolsManagerImpl  extends AbstractManager implements IWindowT
     }
 
 
+
     /***********************************************************************************/
     /***
      * 单例实现方式

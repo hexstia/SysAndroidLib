@@ -1,6 +1,7 @@
 package android.sys.framework.window;
 
 import android.graphics.Point;
+import android.view.IRotationWatcher;
 
 public interface IWindowToolsManager {
 
@@ -36,4 +37,25 @@ public interface IWindowToolsManager {
      * @throws Exception
      */
     public Point getPhysicalSize()throws Exception;
+
+    /**
+     *  通过反射windowManager的getRotation的方法来获得 横竖屏（旋转）方向状态
+     * @return
+     */
+     int getRotation();
+
+    /**
+     *  通过反射  调用注册binder来实现横竖屏的监听方法
+     *  Binder的注册方法 ：
+     *  new IRotationWatcher.Stub() {
+     *             @Override
+     *             public void onRotationChanged(int rotation) throws RemoteException {
+     *                 synchronized (xxx.this) {
+     *
+     *                     }
+     *                 }
+     *             }
+     *
+     */
+    void registerRotationWatcher(IRotationWatcher rotationWatcher) ;
 }

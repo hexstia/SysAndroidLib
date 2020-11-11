@@ -7,6 +7,7 @@ import android.os.IInterface;
 import android.sys.framework.base.AbstractManager;
 import android.sys.framework.window.IWindowToolsManager;
 import android.view.Display;
+import android.view.IRotationWatcher;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -59,6 +60,50 @@ public class WindowToolsManagerImpl  extends AbstractManager implements IWindowT
         Point baseSize = new Point();
         getBaseDisplaySizemeth.invoke(mWm,Display.DEFAULT_DISPLAY,baseSize);
         return baseSize;
+    }
+
+    /**
+     *  通过反射windowManager的getRotation的方法来获得 横竖屏（旋转）方向状态
+     * @return
+     */
+    @Override
+    public int getRotation() {
+        try {
+            Class<?> cls = getWindowManager().getClass();
+            try {
+                return (Integer) cls.getMethod("getRotation").invoke(getWindowManager());
+            } catch (NoSuchMethodException e) {
+                // method changed since this commit:
+                // https://android.googlesource.com/platform/frameworks/base/+/8ee7285128c3843401d4c4d0412cd66e86ba49e3%5E%21/#F2
+                return (Integer) cls.getMethod("getDefaultDisplayRotation").invoke(getWindowManager());
+            }
+        } catch (Exception e) {
+            throw new AssertionError(e);
+        }
+    }
+    /**
+     *  通过反射  调用注册binder来实现横竖屏的监听方法
+     *  Binder的注册方法 ：
+     *  new IRotationWatcher.Stub() {
+     *             @Override
+     *             public void onRotationChanged(int rotation) throws RemoteException {
+     *                 synchronized (xxx.this) {
+     *                     }
+     *                 }
+     *             }
+     */
+    @Override
+    public void registerRotationWatcher(IRotationWatcher rotationWatcher) {
+        try {
+            Class<?> cls = getWindowManager().getClass();
+            try {
+                cls.getMethod("watchRotation", IRotationWatcher.class).invoke(getWindowManager(), rotationWatcher);
+            } catch (NoSuchMethodException e) {
+                cls.getMethod("watchRotation", IRotationWatcher.class, int.class).invoke(getWindowManager(), rotationWatcher, 0);
+            }
+        } catch (Exception e) {
+            throw new AssertionError(e);
+        }
     }
 
     /**

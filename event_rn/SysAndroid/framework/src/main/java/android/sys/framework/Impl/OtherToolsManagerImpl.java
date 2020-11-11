@@ -1,5 +1,6 @@
 package android.sys.framework.Impl;
 
+import android.content.Context;
 import android.sys.framework.base.AbstractManager;
 import android.sys.framework.tools.IOtherToolsManager;
 
@@ -86,4 +87,29 @@ public class OtherToolsManagerImpl extends AbstractManager implements IOtherTool
         sslContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
         return sslContext;
     }
+
+    /***********************************************************************************/
+    /***
+     * 单例实现方式
+     */
+    private static class InnerSingleClass{
+        private static OtherToolsManagerImpl INSTANCE ;
+        private static void innerInstance(){
+            INSTANCE = new OtherToolsManagerImpl();
+        }
+    }
+    static {
+        OtherToolsManagerImpl.InnerSingleClass.innerInstance();
+    }
+    public  static   OtherToolsManagerImpl  creatSingle(Context context){
+        OtherToolsManagerImpl bmi =  OtherToolsManagerImpl.InnerSingleClass.INSTANCE;
+        bmi.setContext(context);
+        return bmi;
+    }
+    /**
+     *  单例私有化，不可创建实例
+     */
+    private OtherToolsManagerImpl(){};
+
+/***********************************************************************************/
 }

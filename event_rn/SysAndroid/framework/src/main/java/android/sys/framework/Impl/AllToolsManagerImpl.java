@@ -8,6 +8,7 @@ import android.sys.framework.base.AbstractManager;
 import android.sys.framework.base.BaseManager;
 import android.sys.framework.base.Manager;
 import android.sys.framework.inputevent.IInputEventToolsManager;
+import android.view.InputEvent;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -59,10 +60,20 @@ public class AllToolsManagerImpl extends AbstractManager  implements IAllToolsMa
         actM.removeAllTask(maxNum);
     }
 
+    @Override
+    public String getTopAcitvityPackageName() {
+        return null;
+    }
+
     private  void createAllSingleInstance(Context context){
         BaseManager bm = BaseManager.getInstance(context);
         actM = (IActivityToolsManager) bm.getManager(Manager.ACTIVITY_MANAGER);
         inputM = (IInputEventToolsManager) bm.getManager(Manager.INPUTEVENT_MANAGER);
+    }
+
+    @Override
+    public boolean injectInputEvent(InputEvent inputEvent, int mode) {
+        return false;
     }
 
     /***********************************************************************************/

@@ -1,6 +1,8 @@
 package android.sys.framework.Impl;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Binder;
 import android.sys.framework.base.AbstractManager;
 import android.sys.framework.package_manager.IPackageToolsManager;
@@ -52,6 +54,25 @@ public class PackageToolsManagerImpl extends AbstractManager implements IPackage
         res = true;
         return res;
     }
+
+    /**
+     *  获取uid 根据包名，也就是获取对应包名 uid
+     * @param packageName
+     * @return
+     */
+    @Override
+    public int getUidByPackageName(String packageName) {
+            int uid = -1;
+            PackageManager packageManager = getContext().getPackageManager();
+            try {
+                PackageInfo packageInfo = packageManager.getPackageInfo(packageName, PackageManager.GET_META_DATA);
+
+                uid = packageInfo.applicationInfo.uid;
+            } catch (PackageManager.NameNotFoundException e) {
+            }
+            return uid;
+    }
+
     private Class<?>[] getParamTypes(Class<?> cls, String mName) {
         Class<?> cs[] = null;
         Method[] mtd = cls.getMethods();

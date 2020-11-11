@@ -28,4 +28,11 @@ public interface IDeviceInfoToolsManager {
      */
     String getWifiMac();
 
+    /**
+     *   获取内网IP的 ，遍历所有网卡的内网IP
+     * @return
+     */
+
+    String getLocalIP() ;
+
 }

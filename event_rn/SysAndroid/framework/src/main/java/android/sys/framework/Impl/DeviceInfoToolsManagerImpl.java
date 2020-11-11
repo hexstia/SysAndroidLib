@@ -13,6 +13,11 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Enumeration;
 
 import static android.sys.framework.package_manager.PackageInfos.ACTION_FACTORY_RESET;
 import static android.sys.framework.package_manager.PackageInfos.ACTION_REQUEST_SHUTDOWN;
@@ -96,7 +101,7 @@ public class DeviceInfoToolsManagerImpl extends AbstractManager implements IDevi
         return hasMacAddress ? wifiInfo.getMacAddress() : null;
     }
 
-    public String getIntentAction(String classname, String action) {
+    private String getIntentAction(String classname, String action) {
         String actionName = null;
         try {
             Class<?> objClass = Class.forName(classname);//classname
@@ -108,6 +113,29 @@ public class DeviceInfoToolsManagerImpl extends AbstractManager implements IDevi
             return actionName;
         }
     }
+
+    /**
+     *   获取内网IP的 ，遍历所有网卡的内网IP
+     * @return 如果失败则返回null
+     */
+    @Override
+   public String getLocalIP() {
+        try {
+            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
+                NetworkInterface intf = en.nextElement();
+                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
+                    InetAddress inetAddress = enumIpAddr.nextElement();
+                    if (!inetAddress.isLoopbackAddress() && (inetAddress instanceof Inet4Address)) {
+                        return inetAddress.getHostAddress();
+                    }
+                }
+            }
+        } catch (SocketException ex) {
+            ex.printStackTrace();
+        }
+    return null;
+    }
+
 /***********************************************************************************/
     /***
      * 单例实现方式

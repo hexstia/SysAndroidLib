@@ -18,7 +18,6 @@ import static android.sys.framework.package_manager.PackageInfos.PACKAGENAME_ACT
 
 public class ActivityToolsManagerImpl extends AbstractManager implements IActivityToolsManager {
 
-    private Context context;
     private ActivityManager mActivityManager ;
     public void test(){
         System.out.println("测试函数");
@@ -33,7 +32,7 @@ public class ActivityToolsManagerImpl extends AbstractManager implements IActivi
         Intent ib = new Intent(Intent.ACTION_MAIN);
         ib.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         ib.addCategory(Intent.CATEGORY_HOME);
-        context.startActivity(ib);
+        getContext().startActivity(ib);
         return true;
     }
 
@@ -48,7 +47,7 @@ public class ActivityToolsManagerImpl extends AbstractManager implements IActivi
         try {
             Intent intent = new Intent();
             intent.setComponent(componetName);
-            context.startActivity(intent);
+            getContext().startActivity(intent);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -103,11 +102,11 @@ public class ActivityToolsManagerImpl extends AbstractManager implements IActivi
      */
     @Override
     public boolean openSpecialApp(String packageName) {
-        PackageManager packageManager = context.getPackageManager();
+        PackageManager packageManager = getContext().getPackageManager();
         Intent intent;
         intent = packageManager.getLaunchIntentForPackage(packageName);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
+        getContext().startActivity(intent);
         return true;
     }
 

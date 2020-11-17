@@ -27,14 +27,13 @@ import static android.sys.framework.package_manager.PackageInfos.EXTRA_KEY_CONFI
 import static android.sys.framework.package_manager.PackageInfos.EXTRA_REASON;
 
 public class DeviceInfoToolsManagerImpl extends AbstractManager implements IDeviceInfoToolsManager {
-    private  Context context;
     /**
      *  设备进行重启
      * @return
      */
     @Override
     public boolean deviceReboot() {
-        PowerManager pManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        PowerManager pManager = (PowerManager) getContext().getSystemService(Context.POWER_SERVICE);
         pManager.reboot("Reboot");
         return true;
     }
@@ -46,7 +45,7 @@ public class DeviceInfoToolsManagerImpl extends AbstractManager implements IDevi
     public boolean deviceShutDown() {
         Intent intent = new Intent(getIntentAction(CLASSENAME_INTENT,ACTION_REQUEST_SHUTDOWN));
         intent.putExtra(getIntentAction(CLASSENAME_INTENT,EXTRA_KEY_CONFIRM), false);
-        context.startActivity(intent);
+        getContext().startActivity(intent);
         return true;
     }
     /**
@@ -55,12 +54,11 @@ public class DeviceInfoToolsManagerImpl extends AbstractManager implements IDevi
      */
     @Override
     public boolean deviceRecoveryReset() {
-
         Intent intent = new Intent(getIntentAction(CLASSENAME_INTENT, ACTION_FACTORY_RESET));
         intent.setPackage(ANDROID);
         intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
         intent.putExtra(getIntentAction(CLASSENAME_INTENT, EXTRA_REASON), "MasterClearConfirm");
-        context.sendBroadcast(intent);
+        getContext().sendBroadcast(intent);
         return true;
     }
     /**
@@ -95,7 +93,7 @@ public class DeviceInfoToolsManagerImpl extends AbstractManager implements IDevi
      */
     @Override
     public String getWifiMac() {
-        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        WifiManager wifiManager = (WifiManager) getContext().getSystemService(Context.WIFI_SERVICE);
         WifiInfo wifiInfo = wifiManager.getConnectionInfo();
         boolean hasMacAddress = wifiInfo != null;
         return hasMacAddress ? wifiInfo.getMacAddress() : null;

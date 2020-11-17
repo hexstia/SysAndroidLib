@@ -2,7 +2,7 @@ package android.sys.framework.Impl;
 
 import android.content.Context;
 import android.sys.framework.base.AbstractManager;
-import android.sys.framework.tools.IOtherToolsManager;
+import android.sys.framework.other.IOtherToolsManager;
 
 import java.io.IOException;
 import java.io.InputStream;

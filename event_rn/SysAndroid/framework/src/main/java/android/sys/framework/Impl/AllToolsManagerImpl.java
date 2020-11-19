@@ -1,7 +1,9 @@
 package android.sys.framework.Impl;
 
 import android.app.ActivityManager;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.IBinder;
@@ -108,6 +110,11 @@ public class AllToolsManagerImpl extends AbstractManager  implements IAllToolsMa
     @Override
     public String getTopAcitvityPackageName() {
         return actM.getTopAcitvityPackageName();
+    }
+
+    @Override
+    public ComponentName startCommponetAsUser(Intent intent, int userid, String methodName) {
+        return actM.startCommponetAsUser(intent,userid,methodName);
     }
 
     private  void createAllSingleInstance(Context context){

@@ -94,11 +94,11 @@ public class ByteTypeToolsManagerImpl  extends AbstractManager implements IByteT
      */
     @Override
     public byte[] bigIntToBytes(byte[] bs, int i, int index) {
-        int add = 4;
-        bs[index+(add++)] = (byte)i ;
-        bs[index+(add++)] = (byte)(i >> 8) ;
-        bs[index+(add++)] = (byte)(i >> 16) ;
-        bs[index+(add++)] = (byte)(i >> 24) ;
+        int add = 3;
+        bs[index+(add--)] = (byte)i ;
+        bs[index+(add--)] = (byte)(i >> 8) ;
+        bs[index+(add--)] = (byte)(i >> 16) ;
+        bs[index+(add)] = (byte)(i >> 24) ;
         return bs;
     }
     /**
@@ -113,7 +113,7 @@ public class ByteTypeToolsManagerImpl  extends AbstractManager implements IByteT
     public byte[] littleIntToBytes2(byte[] bs, int i, int index) {
         int add = 0;
         bs[index+(add++)] = (byte)i ;
-        bs[index+(add++)] = (byte)(i >> 8) ;
+        bs[index+(add)] = (byte)(i >> 8) ;
         return bs;
     }
     /**
@@ -126,9 +126,9 @@ public class ByteTypeToolsManagerImpl  extends AbstractManager implements IByteT
      */
     @Override
     public byte[] bigIntToBytes2(byte[] bs, int i, int index) {
-        int add = 2;
-        bs[index+(add++)] = (byte)i ;
-        bs[index+(add++)] = (byte)(i >> 8) ;
+        int add = 1;
+        bs[index+(add--)] = (byte)i ;
+        bs[index+(add)] = (byte)(i >> 8) ;
         return bs;
     }
 
@@ -189,6 +189,7 @@ public class ByteTypeToolsManagerImpl  extends AbstractManager implements IByteT
      *  将数组转换为整型值，去数组的从索引index开始长度为4 的内容转换为整型（小端模式）
      * @param bs 并指定数组本身（引用）
      * @return 得到的整型值
+     *
      */
     @Override
     public int littleBytesToInt(byte[] bs, int index) {
@@ -221,8 +222,8 @@ public class ByteTypeToolsManagerImpl  extends AbstractManager implements IByteT
      */
     @Override
     public int littleBytesToInt2(byte[] bs,int index){
-        int i0= bs[index+1] & 0xFF  ;
-        int i1 = (bs[index] & 0xFF) << 8 ;
+        int i0= bs[index] & 0xFF  ;
+        int i1 = (bs[index+1] & 0xFF) << 8 ;
         return i0|i1;
     }
     /**

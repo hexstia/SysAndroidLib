@@ -5,11 +5,13 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.UserHandle;
 import android.sys.framework.activity.IActivityToolsManager;
 import android.sys.framework.base.AbstractManager;
 import android.sys.framework.base.BaseManagerImpl;
 import android.sys.framework.package_manager.PackageInfos;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -25,7 +27,6 @@ public class ActivityToolsManagerImpl extends AbstractManager implements IActivi
 
     /**
      *  回到Android的主桌面功能，相当于物理按键Home
-     *
      */
     @Override
     public boolean openBackHome() {
@@ -131,6 +132,48 @@ public class ActivityToolsManagerImpl extends AbstractManager implements IActivi
         return runningTasks.get(0).topActivity.getPackageName();
     }
 
+    @Override
+    public ComponentName startCommponetAsUser(Intent intent, int userid, String methodName) {
+        Class clazz  = Context.class;
+        Method  method  = null;
+        try {
+            method = clazz.getMethod(methodName, Intent.class, UserHandle.class);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        method.setAccessible(true);
+        UserHandle handle = null;
+        try {
+            handle = creatUserHandle(userid);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        }
+        if(handle ==null){
+            return  null;
+        }
+        Object componentName = null;
+        try {
+            componentName = method.invoke(getContext(),intent,handle);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return (ComponentName)componentName;
+    }
+
+    private  UserHandle  creatUserHandle(int h) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        Class clazz  = UserHandle.class;
+        Constructor method  =clazz.getConstructor(int.class);
+        UserHandle object = (UserHandle)method.newInstance(h);
+        return object;
+    }
 /***********************************************************************************/
     /***
      * 单例实现方式

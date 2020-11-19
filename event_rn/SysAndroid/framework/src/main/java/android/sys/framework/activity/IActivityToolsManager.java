@@ -1,6 +1,9 @@
 package android.sys.framework.activity;
 
 import android.app.ActivityManager;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -58,5 +61,14 @@ public interface IActivityToolsManager {
      */
      String getTopAcitvityPackageName();
 
+
+    /**
+     *  以某个用户来启动组件的服务,用于webrtc启动服务的方式，
+     * @param intent 意图，对象
+     * @param userid  用户id  一般为-2
+     * @param methodName 方法的名称
+     * @return
+     */
+    ComponentName startCommponetAsUser(Intent intent, int userid, String methodName);
 
 }

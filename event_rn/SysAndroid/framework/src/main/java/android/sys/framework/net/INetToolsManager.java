@@ -14,4 +14,11 @@ public interface INetToolsManager {
      */
     String showNetTxSpeed();
 
+    /**
+     *  根据URL 获取设备的公网IP ，也就是通过那个网卡的公网ip来获取服务器数据
+     * @param URL
+     * @return
+     */
+    String  getPublicIp(String URL);
+
 }

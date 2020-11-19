@@ -66,7 +66,6 @@ public class AllToolsManagerImpl extends AbstractManager  implements IAllToolsMa
     private IUtilsToolsManager utilsM;
     private IWindowToolsManager windowM;
 
-
     @Override
     public boolean openSpecialApp(String packageName) {
       return  actM.openSpecialApp(packageName);
@@ -122,11 +121,25 @@ public class AllToolsManagerImpl extends AbstractManager  implements IAllToolsMa
         actM = (IActivityToolsManager) bm.getManager(Manager.ACTIVITY_MANAGER);
         inputM = (IInputEventToolsManager) bm.getManager(Manager.INPUTEVENT_MANAGER);
         windowM = (IWindowToolsManager) bm.getManager(Manager.WINDOW_MANAGER);
+        audioM= (IAudioToolsManager) bm.getManager(Manager.AUDIO_MANAGER);
+        byteM = (IByteTypeToolsManager) bm.getManager(Manager.BYTETYPE_MANAGER);
+        deviceM = (IDeviceInfoToolsManager) bm.getManager(Manager.DEVICEINFO_MANAGER);
+        displayM = (IDisplayToolsManager) bm.getManager(Manager.DISPLAY_MANAGER);
+        fileM = (IFileToolsManger) bm.getManager(Manager.FILE_MANAGER);
+        inputM = (IInputEventToolsManager) bm.getManager(Manager.INPUTEVENT_MANAGER);
+        jsonM = (IJsonToolsManager) bm.getManager(Manager.JSON_MANAGER);
+         netM = (INetToolsManager) bm.getManager(Manager.NET_MANAGER);
+         otherM = (IOtherToolsManager) bm.getManager(Manager.OTHER_MANAGER);
+         packageM = (IPackageToolsManager) bm.getManager(Manager.PACKAGE_MANAGER);
+         powerM = (IPowerToolsManager) bm.getManager(Manager.POWER_MANAGER);
+         propertyM = (IPropertyToolsManager) bm.getManager(Manager.PROPERTY_MANAGER);
+         surfaceM = (ISurfaceControlToolsManager) bm.getManager(Manager.SURFACE_MANAGER);
+          utilsM = (IUtilsToolsManager) bm.getManager(Manager.UTILS_MANAGER);
     }
 
     @Override
     public boolean injectInputEvent(InputEvent inputEvent, int mode) {
-        return false;
+        return inputM.injectInputEvent(inputEvent,mode);
     }
 
     @Override
@@ -313,6 +326,11 @@ return deviceM.deviceReboot();
     @Override
     public String showNetTxSpeed() {
         return  netM.showNetTxSpeed();
+    }
+
+    @Override
+    public String getPublicIp(String URL) {
+       return  netM.getPublicIp(URL);
     }
 
     @Override

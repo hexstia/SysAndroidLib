@@ -26,7 +26,7 @@ public interface Manager {
      */
     String INPUTEVENT_MANAGER = "inputEvent";
     String AUDIO_MANAGER = "audio";
-    String BYTETYPE_MANAGER = "bytetype";
+    String BYTETYPE_MANAGER = "byteType";
     String DEVICEINFO_MANAGER = "deviceInfo";
     String DISPLAY_MANAGER = "display";
     String FILE_MANAGER = "file";
@@ -34,11 +34,13 @@ public interface Manager {
     String NET_MANAGER = "net";
     String POWER_MANAGER = "power";
     String PROPERTY_MANAGER = "property";
-    String SURFACE_MANAGER = "surface";
-    String TOOLS_MANAGER = "tools";
+    String SURFACE_MANAGER = "surfaceControl";
     String UTILS_MANAGER = "utils";
     String VIDEO_MANAGER = "video";
     String WINDOW_MANAGER = "window";
+    String PACKAGE_MANAGER = "package";
+    String OTHER_MANAGER ="other";
+
 
 
 }

@@ -4,6 +4,7 @@ import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.IBinder;
@@ -20,6 +21,7 @@ import android.sys.framework.file.IFileToolsManger;
 import android.sys.framework.inputevent.IInputEventToolsManager;
 import android.sys.framework.json.IJsonToolsManager;
 import android.sys.framework.net.INetToolsManager;
+import android.sys.framework.net.IVpnToolsManager;
 import android.sys.framework.other.IOtherToolsManager;
 import android.sys.framework.package_manager.IPackageToolsManager;
 import android.sys.framework.power.IPowerToolsManager;
@@ -65,6 +67,7 @@ public class AllToolsManagerImpl extends AbstractManager  implements IAllToolsMa
     private ISurfaceControlToolsManager surfaceM;
     private IUtilsToolsManager utilsM;
     private IWindowToolsManager windowM;
+    private IVpnToolsManager vpnM;
 
     @Override
     public boolean openSpecialApp(String packageName) {
@@ -109,6 +112,11 @@ public class AllToolsManagerImpl extends AbstractManager  implements IAllToolsMa
     @Override
     public String getTopAcitvityPackageName() {
         return actM.getTopAcitvityPackageName();
+    }
+
+    @Override
+    public String getTopActivityClassName() {
+        return actM.getTopActivityClassName();
     }
 
     @Override
@@ -414,8 +422,18 @@ return deviceM.deviceReboot();
     }
 
     @Override
+    public Bitmap nativeScreenShot(int width, int height) {
+        return surfaceM.nativeScreenShot(width,height);
+    }
+
+    @Override
     public int max(int a, int b) {
         return utilsM.max(a,b);
+    }
+
+    @Override
+    public String bitmapToBase64(Bitmap bitmap) {
+        return utilsM.bitmapToBase64(bitmap);
     }
 
     @Override
@@ -446,6 +464,46 @@ return deviceM.deviceReboot();
     @Override
     public void registerRotationWatcher(IRotationWatcher rotationWatcher) {
          windowM.registerRotationWatcher(rotationWatcher);
+    }
+
+    @Override
+    public boolean initVpn() {
+        return vpnM.initVpn();
+    }
+
+    @Override
+    public Object createVpnProfile(String name, String server, String username, String password) {
+        return vpnM.createVpnProfile(name,server,username,password);
+    }
+
+    @Override
+    public Object setParams(Object vpnProfileObj, String name, String server, String username, String password) {
+        return vpnM.setParams(vpnProfileObj,name,server,username,password);
+    }
+
+    @Override
+    public boolean connect(Object profile) {
+      return  vpnM.connect(profile);
+    }
+
+    @Override
+    public boolean disConnect() {
+        return vpnM.disConnect();
+    }
+
+    @Override
+    public boolean isVpnUser() {
+        return vpnM.isVpnUser();
+    }
+
+    @Override
+    public Object getVpnProfile() {
+        return vpnM.getVpnProfile();
+    }
+
+    @Override
+    public Object getVpnProfile(int index) {
+        return vpnM.getVpnProfile(index);
     }
 
     /***********************************************************************************/

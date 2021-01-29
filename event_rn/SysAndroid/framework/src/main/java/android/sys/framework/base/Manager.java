@@ -40,6 +40,7 @@ public interface Manager {
     String WINDOW_MANAGER = "window";
     String PACKAGE_MANAGER = "package";
     String OTHER_MANAGER ="other";
+    String VPN_MANAGER ="vpn";
 
 
 

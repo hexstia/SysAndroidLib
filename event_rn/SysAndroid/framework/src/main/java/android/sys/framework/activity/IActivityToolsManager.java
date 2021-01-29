@@ -61,6 +61,12 @@ public interface IActivityToolsManager {
      */
      String getTopAcitvityPackageName();
 
+    /**
+     *  获取当前窗口的顶层Acitvity的类名
+     * @return 包名
+     */
+    String getTopActivityClassName();
+
 
     /**
      *  以某个用户来启动组件的服务,用于webrtc启动服务的方式，

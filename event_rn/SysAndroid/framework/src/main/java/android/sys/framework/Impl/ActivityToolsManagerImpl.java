@@ -133,6 +133,12 @@ public class ActivityToolsManagerImpl extends AbstractManager implements IActivi
     }
 
     @Override
+    public String getTopActivityClassName() {
+        List<ActivityManager.RunningTaskInfo> runningTasks = mActivityManager.getRunningTasks(1);
+        return runningTasks.get(0).topActivity.getClassName();
+    }
+
+    @Override
     public ComponentName startCommponetAsUser(Intent intent, int userid, String methodName) {
         Class clazz  = Context.class;
         Method  method  = null;

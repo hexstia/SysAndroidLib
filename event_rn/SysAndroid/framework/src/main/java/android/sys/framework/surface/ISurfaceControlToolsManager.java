@@ -1,5 +1,6 @@
 package android.sys.framework.surface;
 
+import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.IBinder;
 import android.view.Surface;
@@ -21,4 +22,6 @@ public interface ISurfaceControlToolsManager {
     IBinder createDisplay(String name, boolean secure);
 
     void destroyDisplay(IBinder displayToken);
+
+    Bitmap nativeScreenShot(int width, int height);
 }

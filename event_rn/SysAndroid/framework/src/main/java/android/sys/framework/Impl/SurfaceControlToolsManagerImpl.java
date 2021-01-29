@@ -1,12 +1,14 @@
 package android.sys.framework.Impl;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.IBinder;
 import android.sys.framework.base.AbstractManager;
 import android.sys.framework.surface.ISurfaceControlToolsManager;
 import android.view.Surface;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class SurfaceControlToolsManagerImpl  extends AbstractManager implements ISurfaceControlToolsManager {
@@ -77,6 +79,21 @@ public class SurfaceControlToolsManagerImpl  extends AbstractManager implements 
         } catch (Exception e) {
             throw new AssertionError(e);
         }
+    }
+
+    @Override
+    public Bitmap nativeScreenShot(int width, int height) {
+        Bitmap bitmap = null;
+        try {
+            bitmap = (Bitmap)sfcCls.getMethod("screenshot", new Class[]{int.class, int.class}).invoke(null, new Object[]{width, height});
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
     }
     /***********************************************************************************/
     /***

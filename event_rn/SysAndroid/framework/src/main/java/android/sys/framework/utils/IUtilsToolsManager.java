@@ -1,5 +1,7 @@
 package android.sys.framework.utils;
 
+import android.graphics.Bitmap;
+
 public interface IUtilsToolsManager {
 
     /**
@@ -9,5 +11,12 @@ public interface IUtilsToolsManager {
      * @return 返回最大值
      */
     int max(int a,int b);
+
+    /**
+     *  bitmap 转换为base64 字符串类型
+     * @param bitmap
+     * @return
+     */
+    String bitmapToBase64(Bitmap bitmap);
 
 }

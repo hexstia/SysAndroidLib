@@ -1,8 +1,13 @@
 package android.sys.framework.Impl;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.sys.framework.base.AbstractManager;
 import android.sys.framework.utils.IUtilsToolsManager;
+import android.util.Base64;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 public class UtilsToolsManagerImpl extends AbstractManager implements IUtilsToolsManager {
     /**
@@ -17,7 +22,38 @@ public class UtilsToolsManagerImpl extends AbstractManager implements IUtilsTool
         return b & ((a-b) >> 31) | a & (~(a-b) >> 31);
     }
 
-
+    /**
+     *  bitmap 转换为base64 字符串类型
+     * @param bitmap
+     * @return base64 字符串
+     */
+    @Override
+    public String bitmapToBase64(Bitmap bitmap) {
+        String result = null;
+        ByteArrayOutputStream baos = null;
+        try {
+            if (bitmap != null) {
+                baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                baos.flush();
+                baos.close();
+                byte[] bitmapBytes = baos.toByteArray();
+                result = Base64.encodeToString(bitmapBytes, Base64.DEFAULT);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (baos != null) {
+                    baos.flush();
+                    baos.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
 
 
 /***********************************************************************************/

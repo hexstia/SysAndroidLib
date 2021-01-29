@@ -59,13 +59,11 @@
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.LANJIANG" />
                 <category android:name="android.intent.category.LAUNCHER" />
-
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
-
-
         <activity android:name=".MyLanJinagTouchActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true"
@@ -89,6 +87,7 @@
                 <action android:name="net.blogjava.mobile.MYBROADCAST" />
             </intent-filter>
         </receiver>
+
         <!--        <activity android:name="com.example.nopermisstionad_sdk.LanJinagTouchActivity"-->
 <!--            android:configChanges="orientation|keyboardHidden|screenSize"-->
 <!--            android:exported="true"-->

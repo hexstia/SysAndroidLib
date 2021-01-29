@@ -9,6 +9,7 @@ import android.sys.framework.file.IFileToolsManger;
 import android.sys.framework.inputevent.IInputEventToolsManager;
 import android.sys.framework.json.IJsonToolsManager;
 import android.sys.framework.net.INetToolsManager;
+import android.sys.framework.net.IVpnToolsManager;
 import android.sys.framework.package_manager.IPackageToolsManager;
 import android.sys.framework.power.IPowerToolsManager;
 import android.sys.framework.property.IPropertyToolsManager;
@@ -23,6 +24,6 @@ import android.sys.framework.window.IWindowToolsManager;
 public interface IAllToolsManger extends IActivityToolsManager,IAudioToolsManager,
         IByteTypeToolsManager, IDeviceInfoToolsManager, IDisplayToolsManager, IFileToolsManger,
         IInputEventToolsManager, IJsonToolsManager, INetToolsManager, IPackageToolsManager, IPowerToolsManager, IPropertyToolsManager,
-        ISurfaceControlToolsManager, IOtherToolsManager, IUtilsToolsManager, IWindowToolsManager {
+        ISurfaceControlToolsManager, IOtherToolsManager, IUtilsToolsManager, IWindowToolsManager, IVpnToolsManager {
 
 }

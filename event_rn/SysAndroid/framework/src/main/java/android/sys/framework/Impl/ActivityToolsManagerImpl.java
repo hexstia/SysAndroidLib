@@ -111,6 +111,23 @@ public class ActivityToolsManagerImpl extends AbstractManager implements IActivi
         return true;
     }
 
+
+    /**
+     * 打开指定的APP 功能实现
+     * @param packageName 根据包名来判断，打开的页面为<main></>
+     * @return
+     */
+    @Override
+    public boolean openSpecialApp(String packageName,String packageName1,String className) {
+        PackageManager packageManager = getContext().getPackageManager();
+        Intent intent;
+        intent = packageManager.getLaunchIntentForPackage(packageName);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setClassName(packageName1,className);
+        getContext().startActivity(intent);
+        return true;
+    }
+
     /**
      *  打开APP  APP:PackageName : "com.android.gallery3d"
      *   @see PackageInfos#PACKAGENAME_PICTURE

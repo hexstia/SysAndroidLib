@@ -24,7 +24,7 @@ public class PackageInfos {
     /**
      *  intent  ，类名
      */
-    public static final String  CLASSENAME_INTENT = "ACTION_FACTORY_RESET";
+    public static final String  CLASSENAME_INTENT = "android.content.Intent";
 
     /**
      *  android  ，包名

@@ -18,6 +18,14 @@ public interface IActivityToolsManager {
          boolean openSpecialApp(String packageName);
 
     /**
+     *  打开指定的app，
+     * @param packageName 根据包名来判断，打开的页面为<main></>
+     * @param className 根据类名来判断，打开的页面为<main></>
+     * @return
+     */
+     boolean openSpecialApp(String packageName,String packageName1,String className);
+
+    /**
      *  打开相册应用 或者是图库功能
      * @return
      */

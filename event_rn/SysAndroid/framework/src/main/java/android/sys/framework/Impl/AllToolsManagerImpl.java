@@ -75,6 +75,11 @@ public class AllToolsManagerImpl extends AbstractManager  implements IAllToolsMa
     }
 
     @Override
+    public boolean openSpecialApp(String packageName,String packagename1 ,String className) {
+        return  actM.openSpecialApp(packageName,packagename1,className);
+    }
+
+    @Override
     public boolean openPictureApp() {
      return  actM.openPictureApp();
     }
